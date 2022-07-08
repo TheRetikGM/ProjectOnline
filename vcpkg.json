@@ -1,0 +1,14 @@
+{
+  "name": "first-window",
+  "version": "0.1.0",
+  "dependencies": [
+    "sdl2",
+	"sdl2-image",
+    "glm",
+    "freetype",
+    {
+      "name": "imgui",
+      "features": ["freetype", "opengl3-binding", "sdl2-renderer-binding"]
+    }
+  ]
+}

@@ -9,3 +9,8 @@ install_manifest.txt
 compile_commands.json
 CTestTestfile.cmake
 _deps
+[bB][uU][iI][lL][dD]
+[bB][uU][iI][lL][dD][dD][iI][rR]
+.vs
+vcpkg
+.cache

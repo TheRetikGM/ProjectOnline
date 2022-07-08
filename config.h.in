@@ -1,0 +1,4 @@
+#pragma once
+
+#define SOURCE_DIR "@SOURCE_DIR@"
+#define ASSETS_DIR SOURCE_DIR "/assets/"
