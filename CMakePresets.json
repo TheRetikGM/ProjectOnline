@@ -7,18 +7,28 @@
   },
   "configurePresets": [
     {
-      "name": "default",
-      "displayName": "Default Config",
-      "description": "Default build using Make and vcpkg",
-      "generator": "Unix Makefiles",
+      "name": "linux-debug",
+      "displayName": "Linux - Debug",
+      "description": "Linux debug preset",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "name": "linux-release",
+      "displayName": "Linux - Release",
+      "description": "Linux release preset",
+      "generator": "Ninja",
       "binaryDir": "${sourceDir}/build",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release"
       }
     },
     {
-      "name": "default-msvc",
-      "displayName": "Default MSVC",
+      "name": "windows-msvc",
+      "displayName": "Windows msvc",
       "description": "Default build using Visual Studio and vcpkg",
       "generator": "Visual Studio 17 2022",
       "binaryDir": "${sourceDir}/build"

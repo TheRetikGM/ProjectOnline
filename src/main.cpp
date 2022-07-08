@@ -23,7 +23,7 @@ int main(int argc, char **argv)
 	}
 
 	// Create window.
-	uint32_t window_flags = SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE;
+	uint32_t window_flags = SDL_WINDOW_SHOWN;
 	window = SDL_CreateWindow("SDL first window", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WINDOW_WIDTH, WINDOW_HEIGHT, window_flags);
 	if (!window)
 	{
