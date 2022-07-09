@@ -1,5 +1,5 @@
 {
-	"name": "first-window",
+	"name": "ren-dependencies",
 	"version": "0.1.0",
 	"dependencies": [
 		"sdl2",
@@ -7,6 +7,7 @@
 		"glm",
 		"box2d",
 		"freetype",
+		"entt",
 		{
 			"name": "imgui",
 			"features": [

@@ -73,8 +73,9 @@ void GameCore::Loop()
         uint64_t ticks_delta = current_ticks - m_lastFrameTicks;
         m_lastFrameTicks = current_ticks;
         float delta_time = ticks_delta / 1000.0f;   // Convert from milliseconds to seconds.
-        
+
         // Clear window.
+        SDL_SetRenderDrawColor(m_context.renderer, m_clearColor.r, m_clearColor.g, m_clearColor.b, m_clearColor.a);
         SDL_RenderClear(m_context.renderer);
 
         // Poll events.

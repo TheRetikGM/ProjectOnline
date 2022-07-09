@@ -14,8 +14,8 @@ namespace Ren
     // Could be loaded from file or sth.
     struct GameDefinition
     {
-        SDLContextDef context_def;
-        uint32_t init_flags{ REN_INIT_IMGUI | REN_INIT_BOX2D };
+        SDLContextDef   context_def;
+        uint32_t        init_flags{ REN_INIT_IMGUI | REN_INIT_BOX2D };
         ImGuiContextDef imgui_def;
     };
 
@@ -23,7 +23,6 @@ namespace Ren
     {
         inline bool key_pressed(const SDL_Event& e, SDL_Keycode key) { return e.type == SDL_KEYDOWN && e.key.keysym.sym == key && e.key.repeat == 0; }
         inline bool key_released(const SDL_Event& e, SDL_Keycode key) { return e.type == SDL_KEYUP && e.key.keysym.sym == key && e.key.repeat == 0;}
-        inline bool key_held(const SDL_Event& e, SDL_Keycode key) { return e.type == SDL_KEYDOWN && e.key.keysym.sym == key && e.key.repeat > 0; }
     }
 
     class GameCore
@@ -43,7 +42,8 @@ namespace Ren
 
     protected:
         // Set this to false, if you want to end loop.
-        bool m_run = true;
+        bool         m_run{ true };
+        glm::ivec4   m_clearColor{ 0x0, 0x0, 0x0, 0xff };
         KeyInterface m_input;
 
         virtual void onInit() {}
@@ -56,7 +56,6 @@ namespace Ren
         virtual void onDestroy() {}
 
         inline const SDLContext& getContext() { return m_context; }
-        inline void setClearColor(glm::ivec4 color) { m_clearColor = color; SDL_SetRenderDrawColor(m_context.renderer, color.r, color.g, color.b, color.a); };
         inline glm::ivec2 getWindowSize() { return m_context.definition.window_size; }
         inline SDL_Renderer* getRenderer() { return m_context.renderer; }
 
@@ -65,7 +64,6 @@ namespace Ren
         SDLContext      m_context;
         GameDefinition  m_gameDefinition;
         uint64_t        m_lastFrameTicks{ 0 };
-        glm::ivec4      m_clearColor{ 0x0, 0x0, 0x0, 0xff };
 
         // Dear ImGui context.
         ImGuiContext m_imguiContext;

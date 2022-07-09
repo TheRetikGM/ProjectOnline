@@ -20,7 +20,7 @@ endif()
 set(CMAKE_TOOLCHAIN_FILE "${CMAKE_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake" CACHE STRING "Path to vcpkg cmake module")
 
 # Begin project definitions.
-project(FirstWindow)
+project(SDLDemo)
 
 # Specify the C++ standard.
 set(CMAKE_CXX_STANDARD 17)

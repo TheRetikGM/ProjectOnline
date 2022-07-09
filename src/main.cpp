@@ -20,7 +20,7 @@ protected:
 		// Create texture from loaded_img.
 		m_texture = IMG_LoadTexture(getRenderer(), ASSETS_DIR "awesomeface.png");
 
-		setClearColor({ 100, 100, 100, 255 });
+		m_clearColor = { 100, 100, 100, 255 };
 	}
 	void onDestroy() override
 	{
@@ -28,13 +28,7 @@ protected:
 	}
 	void onEvent(const SDL_Event& e)
 	{
-		if (e.type == SDL_QUIT)
-				m_run = false;
-		if (e.type == SDL_KEYDOWN)
-		{
-			if (e.key.keysym.sym == SDLK_ESCAPE)
-				m_run = false;
-		}
+		m_run = !(Ren::Utils::key_pressed(e, SDLK_ESCAPE) || e.type == SDL_QUIT);
 	}
 
 	void onUpdate(float dt) override
@@ -48,13 +42,14 @@ protected:
 			m_rectPos.x -= move_speed * dt;
 		if (m_input.KeyHeld(SDLK_d))
 			m_rectPos.x += move_speed * dt;
-		//std::printf("Delta: %f, Rect pos: [%f, %f]\n", dt, m_rectPos.x, m_rectPos.y);
 	}
 	void onRender(SDL_Renderer* renderer) override
 	{
 		// Render texture.
 		SDL_Rect rect{ (int)m_rectPos.x, (int)m_rectPos.y, 200, 200 };
-		SDL_RenderCopy(renderer, m_texture, NULL, &rect);		
+		SDL_RenderCopy(renderer, m_texture, NULL, &rect);
+		SDL_SetRenderDrawColor(renderer, 255, 0, 255, 255);
+		SDL_RenderDrawRect(renderer, &rect);
 	}
 	void onImGui(Ren::ImGuiContext& context) override
 	{
@@ -75,6 +70,7 @@ int main(int argc, char **argv)
 	{
 		game.Init({ WINDOW_WIDTH, WINDOW_HEIGHT });
 		game.Loop();
+		game.Destroy();
 	}
 	catch(const std::exception& e)
 	{
@@ -85,6 +81,5 @@ int main(int argc, char **argv)
 		std::cerr << "Invalid exception caught!" << '\n';
 	}
 	
-	game.Destroy();
 	return 0;
 }
