@@ -26,16 +26,14 @@ project(FirstWindow)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-# Find dependencies.
-find_package(freetype CONFIG REQUIRED)
-find_package(glm REQUIRED)
-find_package(SDL2 CONFIG REQUIRED)
-find_package(sdl2-image CONFIG REQUIRED)
-find_package(imgui CONFIG REQUIRED)
-
 # Set includes.
 include_directories(
 	${CMAKE_BINARY_DIR}		# To find generated configure file.
+)
+
+# Define REN_DEBUG if building Debug configuration.
+add_compile_definitions(
+	"$<$<CONFIG:Debug>:REN_DEBUG>"
 )
 
 # Go to src subdirectory, to add all source files and executable.

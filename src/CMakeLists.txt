@@ -1,10 +1,18 @@
-# Add executable.
+# Find dependencies.
+find_package(freetype CONFIG REQUIRED)
+find_package(glm REQUIRED)
+find_package(SDL2 CONFIG REQUIRED)
+find_package(sdl2-image CONFIG REQUIRED)
+find_package(imgui CONFIG REQUIRED)
+find_package(box2d CONFIG REQUIRED)
+
+# Add executable and add its sources in subdirectories.
 set(SOURCE_FILES
 	main.cpp
 	${CMAKE_BINARY_DIR}/config.h
 )
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
-add_subdirectory(test_dir)
+add_subdirectory(Ren)
 
 # Set include directories.
 target_include_directories(${PROJECT_NAME}
@@ -18,4 +26,5 @@ target_link_libraries(${PROJECT_NAME}
 	PRIVATE SDL2::SDL2main
 	PRIVATE SDL2::SDL2_image
 	PRIVATE imgui::imgui
+	PRIVATE box2d::box2d
 )
