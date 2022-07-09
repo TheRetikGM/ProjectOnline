@@ -1,6 +1,5 @@
 #pragma once
 #include "Core.h"
-#include <bitset>
 #include <SDL2/SDL.h>
 
 namespace Ren
@@ -9,8 +8,9 @@ namespace Ren
     // Use this, if you cannot (or don't want to) use SDL_Event.
     class KeyInterface
     {
-        std::bitset<322> m_keys;   // 322 SDLK_DOWN keys.
-        std::bitset<322> m_keysProcessed;
+        const static size_t NUM_KEYS = 322;
+        bool m_keys[NUM_KEYS];
+        bool m_keysProcessed[NUM_KEYS];
     public:
 
         KeyInterface()
@@ -19,22 +19,22 @@ namespace Ren
 
         void Clear()
         {
-            m_keys.reset();
-            m_keysProcessed.reset();
+            std::memset(m_keys, 0, sizeof(m_keys));
+            std::memset(m_keysProcessed, 0, sizeof(m_keysProcessed));
         }
         void OnEvent(const SDL_Event& e)
         {
             switch(e.type)
             {
             case SDL_KEYDOWN:
-                if (e.key.keysym.sym < m_keys.size() && e.key.repeat == 0)
-                    m_keys.set(e.key.keysym.sym);
+                if (e.key.keysym.sym < SDL_Keycode(NUM_KEYS) && e.key.repeat == 0)
+                    m_keys[e.key.keysym.sym] = true;
                 break;
             case SDL_KEYUP:
-                if (e.key.keysym.sym < m_keys.size() && e.key.repeat == 0)
+                if (e.key.keysym.sym < NUM_KEYS && e.key.repeat == 0)
                 {
-                    m_keys.reset(e.key.keysym.sym);
-                    m_keysProcessed.reset(e.key.keysym.sym);
+                    m_keys[e.key.keysym.sym] = false;
+                    m_keysProcessed[e.key.keysym.sym] = false;
                 }
                 break;
             default:
@@ -45,9 +45,9 @@ namespace Ren
         // Check if key was pressed (will evaluate to true only once when holding the key).
         inline bool KeyPressed(const SDL_Keycode& key)
         {
-            if (m_keys.test(key) && !m_keysProcessed.test(key))
+            if (m_keys[key] && !m_keysProcessed[key])
             {
-                m_keysProcessed.set(key);
+                m_keysProcessed[key] = true;
                 return true;
             }
             return false;
@@ -56,7 +56,7 @@ namespace Ren
         // Check if key is being held down.
         inline bool KeyHeld(const SDL_KeyCode& key)
         {
-            return m_keys.test(key);
+            return m_keys[key];
         }
     };
 }

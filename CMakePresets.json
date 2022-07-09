@@ -49,8 +49,20 @@
       "generator": "Visual Studio 17 2022",
       "binaryDir": "${sourceDir}/build",
       "cacheVariables": {
-        "CMAKE_CONFIGURATION_TYPES": "Release;Debug;PackageRelease;PackageDebug"
+        "CMAKE_CONFIGURATION_TYPES":  "Debug;Release"
       }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "Debug",
+      "configuration": "Debug",
+      "configurePreset":  "windows-msvc"
+    },
+    {
+      "name": "Release",
+      "configuration": "Release",
+      "configurePreset": "windows-msvc"
     }
   ]
 }
