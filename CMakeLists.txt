@@ -31,14 +31,21 @@ include_directories(
 	${CMAKE_BINARY_DIR}		# To find generated configure file.
 )
 
+
 # Define REN_DEBUG if building Debug configuration.
 add_compile_definitions(
-	"$<$<CONFIG:Debug>:REN_DEBUG>"
+	"$<$<CONFIG:Debug,PackageDebug>:REN_DEBUG>"
+	"$<$<CONFIG:PackageDebug,PackageRelease>:REN_INSTALL>"
 )
-
+	
 # Go to src subdirectory, to add all source files and executable.
 add_subdirectory(src)
 
 # Generate configure file.
 set(SOURCE_DIR ${CMAKE_SOURCE_DIR})
 configure_file(config.h.in config.h)
+
+# Install defines.
+install(TARGETS "${PROJECT_NAME}" DESTINATION bin)
+install(DIRECTORY "${CMAKE_SOURCE_DIR}/assets" DESTINATION .)
+include(CPack)

@@ -27,11 +27,30 @@
       }
     },
     {
+      "name": "linux-package-debug",
+      "inherits": "linux-debug",
+      "displayName": "Linux - Debug package",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "PackageDebug"
+      }
+    },
+    {
+      "name": "linux-package-release",
+      "inherits": "linux-release",
+      "displayName": "Linux - Release package",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "PackageRelease"
+      }
+    },
+    {
       "name": "windows-msvc",
       "displayName": "Windows msvc",
       "description": "Default build using Visual Studio and vcpkg",
       "generator": "Visual Studio 17 2022",
-      "binaryDir": "${sourceDir}/build"
+      "binaryDir": "${sourceDir}/build",
+      "cacheVariables": {
+        "CMAKE_CONFIGURATION_TYPES": "Release;Debug;PackageRelease;PackageDebug"
+      }
     }
   ]
 }
