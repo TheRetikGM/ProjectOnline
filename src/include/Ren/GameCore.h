@@ -8,6 +8,9 @@
 
 #define REN_INIT_IMGUI (1 << 0)
 #define REN_INIT_BOX2D (1 << 1)
+// TODO: Implement these
+// #define REN_INIT_FREETYPE (1 << 2)
+// #define REN_INIT_ENTT     (1 << 3)
 
 namespace Ren
 {

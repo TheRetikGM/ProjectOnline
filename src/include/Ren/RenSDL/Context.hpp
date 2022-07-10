@@ -13,7 +13,7 @@
 
 #define INVALID_WINDOW_SIZE glm::ivec2(-1, -1)
 #define WINDOWPOS_UNDEFINED glm::ivec2(SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED)
-#define WINDOWPOS_CENTERED glm::ivec2(SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED)
+#define WINDOWPOS_CENTERED  glm::ivec2(SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED)
 
 namespace Ren
 {
@@ -83,6 +83,7 @@ namespace Ren
     // Check https://github.com/ocornut/imgui/blob/master/examples/example_sdl_sdlrenderer/main.cpp for more info.
 
     // TODO: Implement custom styling.
+    // FIXME: Name collides with ImGuiStyle from imgui.h. For now it is fixed by using namespace Ren, but it would be cleaner to think of another name.
     enum class ImGuiStyle : uint8_t { dark, light, classic };
 
     struct ImGuiContextDef
@@ -91,6 +92,7 @@ namespace Ren
         ImGuiConfigFlags config_flags = ImGuiConfigFlags_DockingEnable | ImGuiConfigFlags_ViewportsEnable;
     };
     // Imgui context.
+    // FIXME: Name collides with ImGuiContext from imgui.h. For now it is fixed by using namespace Ren, but it would be cleaner to think of another name.
     struct ImGuiContext
     {
         ImGuiContextDef definition;
