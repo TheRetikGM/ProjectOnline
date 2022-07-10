@@ -14,16 +14,29 @@ class Game : public Ren::GameCore
 {
 	SDL_Texture* m_texture{ nullptr };
 	glm::vec2 m_rectPos{ 100, 100 };
+	TTF_Font* m_font{ nullptr };
+	SDL_Texture* m_textTexture{ nullptr };
+	glm::ivec2 m_textTextureSize{ 0, 0 };
 protected:
 	void onInit() override
 	{
+		// Set background color.
+		m_clearColor = { 100, 100, 100, 255 };
+
 		// Create texture from loaded_img.
 		m_texture = IMG_LoadTexture(getRenderer(), ASSETS_DIR "awesomeface.png");
 
-		m_clearColor = { 100, 100, 100, 255 };
+		// Load font and create texture with text.
+		m_font = TTF_OpenFont(ASSETS_DIR "fonts/DejaVuSansCondensed.ttf", 24);
+		SDL_Surface* tmp_surface = TTF_RenderText_Solid(m_font, "WSAD for movement, 'i' to toggle imgui demo window, ESC to exit", { 0x0, 0xff, 0x0, 0xff });	// Green text.
+		m_textTexture = SDL_CreateTextureFromSurface(getRenderer(), tmp_surface);
+		m_textTextureSize = { tmp_surface->w, tmp_surface->h };
+		SDL_FreeSurface(tmp_surface);
 	}
 	void onDestroy() override
 	{
+		SDL_DestroyTexture(m_textTexture);
+		TTF_CloseFont(m_font);
 		SDL_DestroyTexture(m_texture);
 	}
 	void onEvent(const SDL_Event& e)
@@ -47,9 +60,13 @@ protected:
 	{
 		// Render texture.
 		SDL_Rect rect{ (int)m_rectPos.x, (int)m_rectPos.y, 200, 200 };
-		SDL_RenderCopy(renderer, m_texture, NULL, &rect);
+		SDL_RenderCopy(renderer, m_texture, nullptr, &rect);
 		SDL_SetRenderDrawColor(renderer, 255, 0, 255, 255);
 		SDL_RenderDrawRect(renderer, &rect);
+		
+		// Render text.
+		rect = { 10, 10, m_textTextureSize.x, m_textTextureSize.y };
+		SDL_RenderCopy(renderer, m_textTexture, nullptr, &rect);
 	}
 	void onImGui(Ren::ImGuiContext& context) override
 	{

@@ -1,6 +1,7 @@
 #pragma once
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
 #include <glm/glm.hpp>
 #include <cstdint>
 #include "Ren/Core.h"
@@ -47,10 +48,15 @@ namespace Ren
             // Create Window
             REN_ASSERT(def.window_size != INVALID_WINDOW_SIZE, "Window size is not set!");
             window = SDL_CreateWindow(def.window_name.c_str(), def.window_pos.x, def.window_pos.y, def.window_size.x, def.window_size.y, def.window_flags);
-            REN_ASSERT(window, "Window creation failed! Error: " + std::string(SDL_GetError()));
+            REN_ASSERT(window != nullptr, "Window creation failed! Error: " + std::string(SDL_GetError()));
 
             // Initialize IMG loading.
             REN_ASSERT(IMG_Init(def.img_init_flags) & def.img_init_flags, "SDL_image not initialized! Error: " + std::string(IMG_GetError()));
+
+            // Initialize TTF.
+            REN_ASSERT(TTF_Init() != -1, "SDL_ttf initialization failed! TTF_Error: " + std::string(TTF_GetError()));
+
+            // TODO: Initialize SDL_net and SDL_mixer.
 
             // Create renderer.
             renderer = SDL_CreateRenderer(window, -1, def.renderer_flags);
@@ -62,6 +68,7 @@ namespace Ren
         inline void Destroy()
         {
             SDL_DestroyRenderer(renderer);
+            TTF_Quit();
             IMG_Quit();
             SDL_DestroyWindow(window);
             SDL_Quit();
@@ -74,7 +81,6 @@ namespace Ren
     //////// Dear ImGui ////////
     ////////////////////////////
     // Check https://github.com/ocornut/imgui/blob/master/examples/example_sdl_sdlrenderer/main.cpp for more info.
-    //       ^ is also referenced in Loop() and destroy_imgui();
 
     // TODO: Implement custom styling.
     enum class ImGuiStyle : uint8_t { dark, light, classic };
