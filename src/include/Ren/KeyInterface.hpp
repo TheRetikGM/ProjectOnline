@@ -1,6 +1,7 @@
 #pragma once
 #include "Core.h"
 #include <SDL2/SDL.h>
+#include <cstring>  // std::memset
 
 namespace Ren
 {
