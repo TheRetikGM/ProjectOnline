@@ -25,7 +25,7 @@ namespace Ren
     namespace Utils
     {
         inline bool key_pressed(const SDL_Event& e, SDL_Keycode key) { return e.type == SDL_KEYDOWN && e.key.keysym.sym == key && e.key.repeat == 0; }
-        inline bool key_released(const SDL_Event& e, SDL_Keycode key) { return e.type == SDL_KEYUP && e.key.keysym.sym == key && e.key.repeat == 0;}
+        inline bool key_released(const SDL_Event& e, SDL_Keycode key) { return e.type == SDL_KEYUP && e.key.keysym.sym == key && e.key.repeat == 0; }
     }
 
     class GameCore
@@ -39,7 +39,6 @@ namespace Ren
         // Init game core with custom settings.
         void Init(const GameDefinition& def);
         void Destroy();
-
         // Begin main loop. To exit set m_run to false.
         void Loop();
 

@@ -31,7 +31,6 @@ include_directories(
 	${CMAKE_BINARY_DIR}		# To find generated configure file.
 )
 
-
 # Define REN_DEBUG if building Debug configuration.
 add_compile_definitions(
 	"$<$<CONFIG:Debug,PackageDebug>:REN_DEBUG>"

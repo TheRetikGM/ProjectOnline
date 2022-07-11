@@ -11,11 +11,11 @@ find_package(box2d CONFIG REQUIRED)
 find_package(EnTT CONFIG REQUIRED)
 
 # Add executable and add its sources in subdirectories.
-set(SOURCE_FILES
+set(REN_SOURCE_FILES
 	main.cpp
 	${CMAKE_BINARY_DIR}/config.h
 )
-add_executable(${PROJECT_NAME} ${SOURCE_FILES})
+add_executable(${PROJECT_NAME} ${REN_SOURCE_FILES})
 add_subdirectory(Ren)
 
 # Set include directories.
