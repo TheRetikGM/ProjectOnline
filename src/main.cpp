@@ -6,74 +6,17 @@
 #include <entt/entt.hpp>
 #include "config.h"
 #include "Ren/GameCore.h"
+#include "Ren/ECS/Scene.hpp"
 
 // Window dimension constants.
 const int WINDOW_WIDTH = 1600;
 const int WINDOW_HEIGHT = 900;
 
-// EnTT Resource Management.
-struct TextureResource 
-{ 
-	SDL_Texture* texture{ nullptr }; 
-	glm::ivec2 size;
-
-	TextureResource(SDL_Texture* tex, glm::ivec2 size)
-		: texture(tex), size(size) {}
-};
-struct TextureLoader
+struct OutlineComponent
 {
-	using result_type = std::shared_ptr<TextureResource>;
-	
-	static void TextureDeleter(TextureResource* texture) 
-	{
-		SDL_DestroyTexture(texture->texture);
-		delete texture;
-	};
-
-	// Loader for sprite to be loaded from disk.
-	result_type operator()(SDL_Renderer* renderer, std::string path_to_texture)
-	{
-		// Load texture and get it's size.
-		auto texture_surface{ IMG_Load(path_to_texture.c_str()) };
-		auto texture{ SDL_CreateTextureFromSurface(renderer, texture_surface) };
-		REN_ASSERT(texture != nullptr, "Failed to load texture. Error: " + std::string(IMG_GetError()));
-		glm::ivec2 texture_size{ texture_surface->w, texture_surface->h };
-		SDL_FreeSurface(texture_surface);
-
-		// Shared_ptr with custom deleter, which properly deletes the texture.
-		return std::shared_ptr<TextureResource>(new TextureResource(texture, texture_size), TextureDeleter);
-	}
-
-	// Loader for texture, which is generated from some text.
-	result_type operator()(SDL_Renderer* renderer, TTF_Font* font, std::string text, glm::ivec4 color)
-	{
-		auto text_surface{ TTF_RenderText_Solid(font, text.c_str(), { (uint8_t)color.r, (uint8_t)color.g, (uint8_t)color.b, (uint8_t)color.a }) };
-		REN_ASSERT(text_surface != nullptr, "Cannot generate surface from text! Error: " + std::string(TTF_GetError()));
-		glm::ivec2 size{ text_surface->w, text_surface->h };
-		auto texture{ SDL_CreateTextureFromSurface(renderer, text_surface) };
-		SDL_FreeSurface(text_surface);
-
-		return std::shared_ptr<TextureResource>(new TextureResource(texture, size), TextureDeleter);
-	}
+	glm::ivec4 color = glm::ivec4(255);
 };
-using TextureCache = entt::resource_cache<TextureResource, TextureLoader>;
 using namespace entt::literals;
-
-// Components.
-struct TransformComponent
-{
-	glm::vec2 position{ .0f, .0f };
-	glm::vec2 scale { .0f, .0f };
-	int32_t layer{ 0 };
-	
-	TransformComponent(glm::vec2 pos = glm::vec2(0.0f), glm::vec2 scale = glm::vec2(10.0f), int32_t layer = 0)
-		: position(pos), scale(scale), layer(layer) {}
-};
-struct TextureComponent
-{
-	entt::resource<TextureResource> texture_handler;
-	bool outline = false;
-};
 
 class Game : public Ren::GameCore
 {
@@ -84,39 +27,39 @@ class Game : public Ren::GameCore
 
 	// EnTT //
 	// Stores all entities and manages their creation etc.
-	entt::registry m_registry{ entt::registry() };
+	Ren::Scene m_scene;
 	// Example entity.
-	entt::entity m_ent{ 0 };
-	// Cache for storing loaded texture resources.
-	TextureCache m_textureCache{};
+	Ren::Entity m_ent;
 protected:
 	void onInit() override
 	{
 		// Set background color.
 		m_clearColor = { 100, 100, 100, 255 };
 
-		// EnTT //
-		auto ret = m_textureCache.load("assets/awesomeface"_hs, getRenderer(), ASSETS_DIR "awesomeface.png");
-		REN_ASSERT(ret.second, "Texture resource was not loaded.");
+		m_scene.Init(getRenderer());
 
 		// Create awesomeface entity.
-		m_ent = m_registry.create();
-		m_registry.emplace<TransformComponent>(m_ent, glm::vec2(0.0f), glm::vec2(200.0f));
-		auto& face_tex = m_registry.emplace<TextureComponent>(m_ent);
-		face_tex.texture_handler = ret.first->second;
-		face_tex.outline = true;
+		m_ent = m_scene.CreateEntity({ glm::vec2(0.0f), glm::vec2(200.0f) });
+		m_ent.Add<Ren::SpriteComponent>(ASSETS_DIR "awesomeface.png");
+		m_ent.Add<OutlineComponent>().color = Ren::Colors4::Cyan;
+
+		// Create copy of awesomeface entity (the texture will get reused).
+		auto ent_copy = m_scene.CreateEntity({ glm::vec2(0.0f), glm::vec2(200.0f) });
+		ent_copy.Add<Ren::SpriteComponent>(ASSETS_DIR "awesomeface.png");
+		ent_copy.Get<Ren::TagComponent>().tag = "rotate";
 
 		// Load font and create entity with text texture.
 		m_font = TTF_OpenFont(ASSETS_DIR "fonts/DejaVuSansCondensed.ttf", 24);
 
-		auto text_ent{ m_registry.create() };
-		ret = m_textureCache.load("texts/intro1"_hs, getRenderer(), m_font, "WSAD for movement, 'i' to toggle imgui demo window, ESC to exit", glm::ivec4(0x0, 0xff, 0x0, 0xff));
+		auto ret = m_scene.GetTextureCache()->load("texts/intro1"_hs, getRenderer(), m_font, "WSAD for movement, 'i' to \n toggle imgui demo window, ESC to exit", glm::ivec4(0x0, 0xff, 0x0, 0xff));
 		REN_ASSERT(ret.second, "Failed to create text.");
-		auto& trans = m_registry.emplace<TransformComponent>(text_ent);
-		auto& tex = m_registry.emplace<TextureComponent>(text_ent);
-		tex.texture_handler = ret.first->second;
+
+		Ren::Entity text_ent = m_scene.CreateEntity();
+		auto& trans = text_ent.Get<Ren::TransformComponent>();
+		auto& tex = text_ent.Add<Ren::SpriteComponent>();
+		tex.texture_handle = *ret.first;
 		trans.position = { 10.0f, 10.0f };
-		trans.scale = tex.texture_handler->size;
+		trans.scale = tex.GetTextureResource()->size;
 		trans.layer = 2;
 	}
 	void onDestroy() override
@@ -124,8 +67,7 @@ protected:
 		SDL_DestroyTexture(m_textTexture);
 		TTF_CloseFont(m_font);
 
-		m_textureCache.clear();
-		m_registry.clear();
+		m_scene.Destroy();
 	}
 	void onEvent(const SDL_Event& e)
 	{
@@ -134,7 +76,7 @@ protected:
 
 	void onUpdate(float dt) override
 	{
-		auto& transform = m_registry.get<TransformComponent>(m_ent);
+		auto& transform = m_ent.Get<Ren::TransformComponent>();
 
 		float move_speed = 500.0f;
 		if (m_input.KeyHeld(SDLK_w))
@@ -145,24 +87,32 @@ protected:
 			transform.position.x -= move_speed * dt;
 		if (m_input.KeyHeld(SDLK_d))
 			transform.position.x += move_speed * dt;
+
+		// Rotate entities with 'rotate' tag.
+		const float rotation_speed = 90.0f;		// 90 degrees per second.
+		auto entities = m_scene.GetEntitiesByTag("rotate");
+		for (auto&& ent : *entities)
+			ent.Get<Ren::TransformComponent>().rotation += rotation_speed * dt;
 	}
 	void onRender(SDL_Renderer* renderer) override
 	{
 		// Sory by layer and render all texture components.
-		auto view = m_registry.view<TransformComponent, TextureComponent>();
-		m_registry.sort<TransformComponent>([](const auto& lhs, const auto& rhs){
+		auto view = m_scene.m_Registry->view<Ren::TransformComponent, Ren::SpriteComponent>();
+		m_scene.m_Registry->sort<Ren::TransformComponent>([](const auto& lhs, const auto& rhs){
 			return lhs.layer < rhs.layer;
 		});
 		for (auto&& ent : view)
 		{
 			auto [trans, tex] = view.get(ent);
 			SDL_Rect rect{ (int)trans.position.x, (int)trans.position.y, (int)trans.scale.x, (int)trans.scale.y };
-			SDL_RenderCopy(renderer, tex.texture_handler->texture, {}, &rect);
+			//SDL_RenderCopy(renderer, tex.GetTexture(), {}, &rect);
+			SDL_RenderCopyEx(renderer, tex.GetTexture(), nullptr, &rect, trans.rotation, nullptr, {});
 
-			if (tex.outline)
+			if (m_scene.m_Registry->any_of<OutlineComponent>(ent))
 			{
+				auto& outline = m_scene.m_Registry->get<OutlineComponent>(ent);
 				// Draw magenta outline.
-				SDL_SetRenderDrawColor(renderer, 255, 0, 255, 255);
+				SDL_SetRenderDrawColor(renderer, outline.color.r, outline.color.g, outline.color.b, outline.color.a);
 				SDL_RenderDrawRect(renderer, &rect);
 			}
 		}
