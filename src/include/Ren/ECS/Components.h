@@ -21,6 +21,7 @@ namespace Ren
             : position(pos), scale(scale), layer(layer) {}
     };
 
+    // TODO: Support multiple tags.
     struct TagComponent
     {
         std::string tag = UNDEFINED_TAG;
@@ -29,6 +30,7 @@ namespace Ren
         TagComponent(const std::string& tag_name) : tag(tag_name) {}
     };
 
+    // Base class for components, that has to load some texture.
     struct ImgComponent
     {
         std::filesystem::path img_path = UNDEFINED_PATH; 
@@ -47,4 +49,46 @@ namespace Ren
 
         SpriteComponent(std::filesystem::path img_path = UNDEFINED_PATH, glm::vec4 color = glm::vec4(255)) : color(color), ImgComponent(img_path) {}
     };
-}
+
+    ///////////////////////////////////////
+    ////////////// Scripting //////////////
+    ///////////////////////////////////////
+
+    // Static polymorphism RuntimeScript base class.
+    struct RuntimeScriptBase : entt::type_list<void(), void(), void(KeyInterface*, float), void(KeyInterface*, float)>
+    {
+        template<typename Base>
+        struct type: Base {
+            void OnAttach() { entt::poly_call<0>(*this); }
+            void OnDetach() { entt::poly_call<1>(*this); }
+            void OnUpdate(KeyInterface* input, float dt) { entt::poly_call<2>(*this, input, dt); }
+            void OnFixedUpdate(KeyInterface* input, float dt) { entt::poly_call<3>(*this, input, dt); }
+        };
+
+        template<typename Type>
+        using impl = entt::value_list<&Type::OnAttach, &Type::OnDetach, &Type::OnUpdate, &Type::OnFixedUpdate>;
+    };
+    using RuntimeScript = entt::poly<RuntimeScriptBase>;
+
+    struct ScriptComponent
+    {
+        RuntimeScript script;
+
+        template<typename T>
+        void Bind(const T& script)
+        {
+            this->script = script;
+            this->script->OnAttach();
+        }
+
+        void Unbind()
+        {
+            if (script)
+            {
+                script->OnDetach();
+                script.reset();
+            }
+        }
+    };
+
+} // namespace Ren

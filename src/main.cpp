@@ -12,6 +12,42 @@
 const int WINDOW_WIDTH = 1600;
 const int WINDOW_HEIGHT = 900;
 
+class CustomScript
+{
+public:
+	CustomScript(Ren::Entity ent) : m_ent(ent) {}
+
+	void OnAttach()
+	{
+		REN_STATUS("[CustomScript] -- attached.");
+	}
+	void OnDetach()
+	{
+		REN_STATUS("[CustomScript] -- detached.");
+	}
+	void OnUpdate(Ren::KeyInterface* input, float dt)
+	{
+		auto& transform = m_ent.Get<Ren::TransformComponent>();
+
+		float move_speed = 500.0f;
+		if (input->KeyHeld(SDLK_w))
+			transform.position.y -= move_speed * dt;
+		if (input->KeyHeld(SDLK_s))
+			transform.position.y += move_speed * dt;
+		if (input->KeyHeld(SDLK_a))
+			transform.position.x -= move_speed * dt;
+		if (input->KeyHeld(SDLK_d))
+			transform.position.x += move_speed * dt;
+	}
+	void OnFixedUpdate(Ren::KeyInterface* input, float dt)
+	{
+		REN_STATUS("[CustomScript] -- fixed updated.");
+	}
+private:
+	Ren::Entity m_ent;
+};
+
+
 struct OutlineComponent
 {
 	glm::ivec4 color = glm::ivec4(255);
@@ -42,6 +78,7 @@ protected:
 		m_ent = m_scene.CreateEntity({ glm::vec2(0.0f), glm::vec2(200.0f) });
 		m_ent.Add<Ren::SpriteComponent>(ASSETS_DIR "awesomeface.png");
 		m_ent.Add<OutlineComponent>().color = Ren::Colors4::Cyan;
+		m_ent.Add<Ren::ScriptComponent>().Bind(CustomScript(m_ent));
 
 		// Create copy of awesomeface entity (the texture will get reused).
 		auto ent_copy = m_scene.CreateEntity({ glm::vec2(0.0f), glm::vec2(200.0f) });
@@ -50,9 +87,9 @@ protected:
 
 		// Load font and create entity with text texture.
 		m_font = TTF_OpenFont(ASSETS_DIR "fonts/DejaVuSansCondensed.ttf", 24);
+		REN_ASSERT(m_font != nullptr, "Failed opening font. Error: " + std::string(TTF_GetError()));
 
 		auto ret = m_scene.GetTextureCache()->load("texts/intro1"_hs, getRenderer(), m_font, "WSAD for movement, 'i' to \n toggle imgui demo window, ESC to exit", glm::ivec4(0x0, 0xff, 0x0, 0xff));
-		REN_ASSERT(ret.second, "Failed to create text.");
 
 		Ren::Entity text_ent = m_scene.CreateEntity();
 		auto& trans = text_ent.Get<Ren::TransformComponent>();
@@ -76,23 +113,18 @@ protected:
 
 	void onUpdate(float dt) override
 	{
-		auto& transform = m_ent.Get<Ren::TransformComponent>();
-
-		float move_speed = 500.0f;
-		if (m_input.KeyHeld(SDLK_w))
-			transform.position.y -= move_speed * dt;
-		if (m_input.KeyHeld(SDLK_s))
-			transform.position.y += move_speed * dt;
-		if (m_input.KeyHeld(SDLK_a))
-			transform.position.x -= move_speed * dt;
-		if (m_input.KeyHeld(SDLK_d))
-			transform.position.x += move_speed * dt;
-
 		// Rotate entities with 'rotate' tag.
 		const float rotation_speed = 90.0f;		// 90 degrees per second.
 		auto entities = m_scene.GetEntitiesByTag("rotate");
 		for (auto&& ent : *entities)
 			ent.Get<Ren::TransformComponent>().rotation += rotation_speed * dt;
+
+		auto view = m_scene.m_Registry->view<Ren::ScriptComponent>();
+		for (auto&& ent : view)
+		{
+			auto [sc] = view.get(ent);
+			sc.script->OnUpdate(&m_input, dt);
+		}
 	}
 	void onRender(SDL_Renderer* renderer) override
 	{
@@ -105,7 +137,6 @@ protected:
 		{
 			auto [trans, tex] = view.get(ent);
 			SDL_Rect rect{ (int)trans.position.x, (int)trans.position.y, (int)trans.scale.x, (int)trans.scale.y };
-			//SDL_RenderCopy(renderer, tex.GetTexture(), {}, &rect);
 			SDL_RenderCopyEx(renderer, tex.GetTexture(), nullptr, &rect, trans.rotation, nullptr, {});
 
 			if (m_scene.m_Registry->any_of<OutlineComponent>(ent))
