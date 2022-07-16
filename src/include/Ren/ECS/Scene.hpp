@@ -131,7 +131,7 @@ namespace Ren
         {
             if (component->img_path != UNDEFINED_PATH)
             {
-                auto ret = m_textureCache->load(entt::hashed_string(component->img_path.c_str()), m_Renderer, component->img_path.c_str());
+                auto ret = m_textureCache->load(entt::hashed_string(component->img_path.string().c_str()), m_Renderer, component->img_path.string().c_str());
                 component->texture_handle = *ret.first;
             }
         }
