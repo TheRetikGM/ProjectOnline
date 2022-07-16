@@ -10,29 +10,33 @@ find_package(imgui CONFIG REQUIRED)
 find_package(box2d CONFIG REQUIRED)
 find_package(EnTT CONFIG REQUIRED)
 
-# Add executable and add its sources in subdirectories.
-set(REN_SOURCE_FILES
-	main.cpp
-	${CMAKE_BINARY_DIR}/config.h
+# Link libraries for both Ren and sandbox.
+link_libraries( 
+	freetype
+	SDL2::SDL2
+	SDL2::SDL2main
+	SDL2::SDL2_image
+	SDL2::SDL2_ttf
+	SDL2::SDL2_net
+	SDL2::SDL2_mixer
+	imgui::imgui
+	box2d::box2d
+	EnTT::EnTT
 )
-add_executable(${PROJECT_NAME} ${REN_SOURCE_FILES})
-add_subdirectory(Ren)
 
 # Set include directories.
-target_include_directories(${PROJECT_NAME}
-	PRIVATE include
-)
+include_directories(include)
 
-# Link executable.
-target_link_libraries(${PROJECT_NAME} 
-	PRIVATE freetype
-	PRIVATE SDL2::SDL2
-	PRIVATE SDL2::SDL2main
-	PRIVATE SDL2::SDL2_image
-	PRIVATE SDL2::SDL2_ttf
-	PRIVATE SDL2::SDL2_net
-	PRIVATE SDL2::SDL2_mixer
-	PRIVATE imgui::imgui
-	PRIVATE box2d::box2d
-	PRIVATE EnTT::EnTT
+########## Ren library ##########
+set(REN_SOURCE_FILES
+	${CMAKE_BINARY_DIR}/config.h
 )
+add_library(REN_LIB STATIC ${REN_SOURCE_FILES})
+add_subdirectory(Ren)
+
+
+########## Sandbox ##########
+add_executable(${PROJECT_NAME} "")
+add_subdirectory(sandbox)
+target_include_directories(${PROJECT_NAME} PRIVATE sandbox/include)
+target_link_libraries(${PROJECT_NAME} PRIVATE REN_LIB)

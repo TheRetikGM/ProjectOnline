@@ -1,52 +1,11 @@
 #include <iostream>
-#include <SDL.h>
-#include <SDL_image.h>
-#include <glm/glm.hpp>
-#include <box2d/box2d.h>
-#include <entt/entt.hpp>
-#include "config.h"
-#include "Ren/GameCore.h"
-#include "Ren/ECS/Scene.hpp"
+#include <Ren/Ren.h>
+
+#include "scripts/Movement.hpp"
 
 // Window dimension constants.
 const int WINDOW_WIDTH = 1600;
 const int WINDOW_HEIGHT = 900;
-
-class CustomScript
-{
-public:
-	CustomScript(Ren::Entity ent) : m_ent(ent) {}
-
-	void OnAttach()
-	{
-		REN_STATUS("[CustomScript] -- attached.");
-	}
-	void OnDetach()
-	{
-		REN_STATUS("[CustomScript] -- detached.");
-	}
-	void OnUpdate(Ren::KeyInterface* input, float dt)
-	{
-		auto& transform = m_ent.Get<Ren::TransformComponent>();
-
-		float move_speed = 500.0f;
-		if (input->KeyHeld(SDLK_w))
-			transform.position.y -= move_speed * dt;
-		if (input->KeyHeld(SDLK_s))
-			transform.position.y += move_speed * dt;
-		if (input->KeyHeld(SDLK_a))
-			transform.position.x -= move_speed * dt;
-		if (input->KeyHeld(SDLK_d))
-			transform.position.x += move_speed * dt;
-	}
-	void OnFixedUpdate(Ren::KeyInterface* input, float dt)
-	{
-		REN_STATUS("[CustomScript] -- fixed updated.");
-	}
-private:
-	Ren::Entity m_ent;
-};
-
 
 struct OutlineComponent
 {
@@ -78,7 +37,7 @@ protected:
 		m_ent = m_scene.CreateEntity({ glm::vec2(0.0f), glm::vec2(200.0f) });
 		m_ent.Add<Ren::SpriteComponent>(ASSETS_DIR "awesomeface.png");
 		m_ent.Add<OutlineComponent>().color = Ren::Colors4::Cyan;
-		m_ent.Add<Ren::ScriptComponent>().Bind(CustomScript(m_ent));
+		m_ent.Add<Ren::ScriptComponent>().Bind(MovementScript(m_ent));
 
 		// Create copy of awesomeface entity (the texture will get reused).
 		auto ent_copy = m_scene.CreateEntity({ glm::vec2(0.0f), glm::vec2(200.0f) });

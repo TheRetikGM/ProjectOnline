@@ -1,4 +1,4 @@
-target_sources(${PROJECT_NAME}
+target_sources(REN_LIB
     PRIVATE
         GameCore.cpp
 )
