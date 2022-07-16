@@ -54,40 +54,24 @@ namespace Ren
     ////////////// Scripting //////////////
     ///////////////////////////////////////
 
-    // Static polymorphism RuntimeScript base class.
-    struct RuntimeScriptBase : entt::type_list<void(), void(), void(KeyInterface*, float), void(KeyInterface*, float)>
+    class NativeScript;
+    struct NativeScriptComponent
     {
-        template<typename Base>
-        struct type: Base {
-            void OnAttach() { entt::poly_call<0>(*this); }
-            void OnDetach() { entt::poly_call<1>(*this); }
-            void OnUpdate(KeyInterface* input, float dt) { entt::poly_call<2>(*this, input, dt); }
-            void OnFixedUpdate(KeyInterface* input, float dt) { entt::poly_call<3>(*this, input, dt); }
-        };
-
-        template<typename Type>
-        using impl = entt::value_list<&Type::OnAttach, &Type::OnDetach, &Type::OnUpdate, &Type::OnFixedUpdate>;
-    };
-    using RuntimeScript = entt::poly<RuntimeScriptBase>;
-
-    struct ScriptComponent
-    {
-        RuntimeScript script;
+        NativeScript* script_instance{ nullptr };
 
         template<typename T>
-        void Bind(const T& script)
+        void Bind()
         {
-            this->script = script;
-            this->script->OnAttach();
+            REN_ASSERT(script_instance == nullptr, "There is already bound script to this component. Multiple bound scripts are not supported yet.");
+            script_instance = dynamic_cast<NativeScript*>(new T());
         }
 
         void Unbind()
         {
-            if (script)
-            {
-                script->OnDetach();
-                script.reset();
-            }
+            // NOTE: Warning should be fixed after removing Scene's dependency on this file.
+            //  That way, we could include NativeScript.h without creating cycling includes.
+            if (script_instance)
+                delete script_instance;
         }
     };
 

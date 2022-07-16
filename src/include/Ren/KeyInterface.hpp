@@ -44,7 +44,7 @@ namespace Ren
         }
 
         // Check if key was pressed (will evaluate to true only once when holding the key).
-        inline bool KeyPressed(const SDL_Keycode& key)
+        inline bool KeyPressed(const SDL_KeyCode& key)
         {
             if (m_keys[key] && !m_keysProcessed[key])
             {

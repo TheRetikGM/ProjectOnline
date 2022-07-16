@@ -1,38 +1,33 @@
 #pragma once
 #include <Ren/ECS/Scene.hpp>
+#include <Ren/ECS/NativeScript.h>
 #include "sandbox.h"
 
-class MovementScript
+class NativeMovement : public Ren::NativeScript
 {
 public:
-	MovementScript(Ren::Entity ent) : m_ent(ent) {}
+    void OnInit() override
+    {
+        SAND_STATUS("Native movement script initialized.");
+    }
 
-	void OnAttach()
-	{
-		SAND_STATUS("MovementScript attached.");
-	}
-	void OnDetach()
-	{
-		SAND_STATUS("MovementScript detached.");
-	}
-	void OnUpdate(Ren::KeyInterface* input, float dt)
-	{
-		auto& transform = m_ent.Get<Ren::TransformComponent>();
+    void OnDestroy() override
+    {
+        SAND_STATUS("Native movement script destroyed.");
+    }
+
+    void OnUpdate(float dt) override
+    {
+        auto& transform = self.Get<Ren::TransformComponent>();
 
 		float move_speed = 500.0f;
-		if (input->KeyHeld(SDLK_w))
+		if (KeyHeld(SDLK_w))
 			transform.position.y -= move_speed * dt;
-		if (input->KeyHeld(SDLK_s))
+		if (KeyHeld(SDLK_s))
 			transform.position.y += move_speed * dt;
-		if (input->KeyHeld(SDLK_a))
+		if (KeyHeld(SDLK_a))
 			transform.position.x -= move_speed * dt;
-		if (input->KeyHeld(SDLK_d))
+		if (KeyHeld(SDLK_d))
 			transform.position.x += move_speed * dt;
-	}
-	void OnFixedUpdate(Ren::KeyInterface* input, float dt)
-	{
-		SAND_STATUS("MovementScript fixed updated.");
-	}
-private:
-	Ren::Entity m_ent;
+    }
 };

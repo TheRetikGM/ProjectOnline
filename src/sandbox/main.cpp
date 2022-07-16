@@ -37,7 +37,7 @@ protected:
 		m_ent = m_scene.CreateEntity({ glm::vec2(0.0f), glm::vec2(200.0f) });
 		m_ent.Add<Ren::SpriteComponent>(ASSETS_DIR "awesomeface.png");
 		m_ent.Add<OutlineComponent>().color = Ren::Colors4::Cyan;
-		m_ent.Add<Ren::ScriptComponent>().Bind(MovementScript(m_ent));
+		m_ent.Add<Ren::NativeScriptComponent>().Bind<NativeMovement>();
 
 		// Create copy of awesomeface entity (the texture will get reused).
 		auto ent_copy = m_scene.CreateEntity({ glm::vec2(0.0f), glm::vec2(200.0f) });
@@ -47,9 +47,7 @@ protected:
 		// Load font and create entity with text texture.
 		m_font = TTF_OpenFont(ASSETS_DIR "fonts/DejaVuSansCondensed.ttf", 24);
 		REN_ASSERT(m_font != nullptr, "Failed opening font. Error: " + std::string(TTF_GetError()));
-
 		auto ret = m_scene.GetTextureCache()->load("texts/intro1"_hs, getRenderer(), m_font, "WSAD for movement, 'i' to \n toggle imgui demo window, ESC to exit", glm::ivec4(0x0, 0xff, 0x0, 0xff));
-
 		Ren::Entity text_ent = m_scene.CreateEntity();
 		auto& trans = text_ent.Get<Ren::TransformComponent>();
 		auto& tex = text_ent.Add<Ren::SpriteComponent>();
@@ -57,9 +55,28 @@ protected:
 		trans.position = { 10.0f, 10.0f };
 		trans.scale = tex.GetTextureResource()->size;
 		trans.layer = 2;
+
+		// Setup native script component.
+		// FIXME: Move this somewhere else.
+		auto view = m_scene.m_Registry->view<Ren::NativeScriptComponent>();
+		for (auto&& ent : view)
+		{
+			auto [script] = view.get(ent);
+			script.script_instance->m_entity = Ren::Entity(ent, &m_scene);
+			script.script_instance->m_input = &m_input;
+			script.script_instance->OnInit();
+		}
 	}
 	void onDestroy() override
 	{
+		// Destroy native script component.
+		auto view = m_scene.m_Registry->view<Ren::NativeScriptComponent>();
+		for (auto&& ent : view)
+		{
+			auto [script] = view.get(ent);
+			script.script_instance->OnDestroy();
+		}
+
 		SDL_DestroyTexture(m_textTexture);
 		TTF_CloseFont(m_font);
 
@@ -78,11 +95,11 @@ protected:
 		for (auto&& ent : *entities)
 			ent.Get<Ren::TransformComponent>().rotation += rotation_speed * dt;
 
-		auto view = m_scene.m_Registry->view<Ren::ScriptComponent>();
+		auto view = m_scene.m_Registry->view<Ren::NativeScriptComponent>();
 		for (auto&& ent : view)
 		{
 			auto [sc] = view.get(ent);
-			sc.script->OnUpdate(&m_input, dt);
+			sc.script_instance->OnUpdate(dt);
 		}
 	}
 	void onRender(SDL_Renderer* renderer) override

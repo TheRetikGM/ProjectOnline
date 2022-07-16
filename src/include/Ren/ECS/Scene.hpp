@@ -74,7 +74,6 @@ namespace Ren
             // Automatically load textures on construct. If path is not provided, then the texture has to be loaded manually with Scene::LoadTexture().
             m_Registry->on_construct<ImgComponent>().connect<&Scene::onTextureConstruct<ImgComponent>>(this);
             m_Registry->on_construct<SpriteComponent>().connect<&Scene::onTextureConstruct<SpriteComponent>>(this);
-            m_Registry->on_destroy<ScriptComponent>().connect<&Scene::onScriptDestruct>(this);
         }
         // Removes all entities and their components.
         inline void Destroy()
@@ -147,11 +146,6 @@ namespace Ren
         inline void onTextureConstruct(entt::registry& reg, entt::entity ent)
         {
             LoadTexture(dynamic_cast<ImgComponent*>(&reg.get<T>(ent)));
-        }
-
-        inline void onScriptDestruct(entt::registry& reg, entt::entity ent)
-        {
-            reg.get<ScriptComponent>(ent).Unbind();
         }
     };
 
