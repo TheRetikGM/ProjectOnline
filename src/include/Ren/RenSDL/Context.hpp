@@ -43,7 +43,8 @@ namespace Ren
         inline void Init(const SDLContextDef& def)
         {
             // Initialize SDL
-            REN_ASSERT(SDL_Init(def.sdl_init_flags) >= 0, "SDL initialization failed! Error: " + std::string(SDL_GetError()));
+            int init_result = SDL_Init(def.sdl_init_flags);
+            REN_ASSERT(init_result >= 0, "SDL initialization failed! Error: " + std::string(SDL_GetError()));
 
             // Create Window
             REN_ASSERT(def.window_size != INVALID_WINDOW_SIZE, "Window size is not set!");
@@ -51,10 +52,12 @@ namespace Ren
             REN_ASSERT(window != nullptr, "Window creation failed! Error: " + std::string(SDL_GetError()));
 
             // Initialize IMG loading.
-            REN_ASSERT(IMG_Init(def.img_init_flags) & def.img_init_flags, "SDL_image not initialized! Error: " + std::string(IMG_GetError()));
+            int img_init_result = IMG_Init(def.img_init_flags);
+            REN_ASSERT(img_init_result & def.img_init_flags, "SDL_image not initialized! Error: " + std::string(IMG_GetError()));
 
             // Initialize TTF.
-            REN_ASSERT(TTF_Init() != -1, "SDL_ttf initialization failed! TTF_Error: " + std::string(TTF_GetError()));
+            int ttf_init_result = TTF_Init();
+            REN_ASSERT(ttf_init_result != -1, "SDL_ttf initialization failed! TTF_Error: " + std::string(TTF_GetError()));
 
             // TODO: Initialize SDL_net and SDL_mixer.
 
