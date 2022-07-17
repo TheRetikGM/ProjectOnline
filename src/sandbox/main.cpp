@@ -58,7 +58,7 @@ protected:
 
 		// Create awesomeface entity.
 		m_ent = m_scene->CreateEntity({ glm::vec2(0.0f), glm::vec2(200.0f) });
-		m_ent.Add<Ren::SpriteComponent>(ASSETS_DIR "awesomeface.png");
+		m_ent.Add<Ren::SpriteComponent>(ASSETS_DIR "awesomeface.png").color = Ren::Colors3::Magenta;
 		m_ent.Add<OutlineComponent>().color = Ren::Colors4::Cyan;
 		m_ent.Add<Ren::NativeScriptComponent>().Bind<MovementScript>();
 

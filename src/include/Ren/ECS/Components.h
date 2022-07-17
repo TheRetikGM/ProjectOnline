@@ -45,9 +45,9 @@ namespace Ren
 
     struct SpriteComponent : public ImgComponent
     {
-        glm::ivec4 color = glm::ivec4(255);
+        glm::ivec3 color = glm::ivec3(255);
 
-        SpriteComponent(std::filesystem::path img_path = UNDEFINED_PATH, glm::vec4 color = glm::vec4(255)) : color(color), ImgComponent(img_path) {}
+        SpriteComponent(std::filesystem::path img_path = UNDEFINED_PATH, glm::vec3 color = glm::vec3(255)) : color(color), ImgComponent(img_path) {}
     };
 
     ///////////////////////////////////////

@@ -19,6 +19,8 @@ void RenderSystem::Render()
     {
         auto [trans, tex] = view.get(ent);
         SDL_Rect rect{ (int)trans.position.x, (int)trans.position.y, (int)trans.scale.x, (int)trans.scale.y };
+
+        SDL_SetTextureColorMod(tex.GetTexture(), tex.color.r, tex.color.g, tex.color.b);
         SDL_RenderCopyEx(m_renderer, tex.GetTexture(), nullptr, &rect, trans.rotation, nullptr, {});
     }
 }
