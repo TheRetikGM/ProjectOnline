@@ -1,9 +1,9 @@
 #pragma once
-#include <Ren/ECS/Scene.hpp>
+#include <Ren/ECS/Scene.h>
 #include <Ren/ECS/NativeScript.h>
 #include "sandbox.h"
 
-class NativeMovement : public Ren::NativeScript
+class MovementScript : public Ren::NativeScript
 {
 public:
     void OnInit() override

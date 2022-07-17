@@ -1,8 +1,11 @@
 #pragma once
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-#include "Ren/Core.h"
+#include <SDL2/SDL_ttf.h>
+#include <entt/entt.hpp>
 #include <glm/glm.hpp>
+
+#include "Ren/Core.h"
 
 namespace Ren
 {

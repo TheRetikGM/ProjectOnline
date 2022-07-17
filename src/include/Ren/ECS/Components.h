@@ -66,13 +66,7 @@ namespace Ren
             script_instance = dynamic_cast<NativeScript*>(new T());
         }
 
-        void Unbind()
-        {
-            // NOTE: Warning should be fixed after removing Scene's dependency on this file.
-            //  That way, we could include NativeScript.h without creating cycling includes.
-            if (script_instance)
-                delete script_instance;
-        }
+        void Unbind();
     };
 
 } // namespace Ren

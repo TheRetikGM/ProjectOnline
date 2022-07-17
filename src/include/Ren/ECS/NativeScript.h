@@ -3,10 +3,12 @@
 #include <string>
 #include <cstdint>
 #include "Ren/KeyInterface.hpp"
-#include "Scene.hpp"
+#include "Scene.h"
 
 namespace Ren
 {
+    class NativeScriptSystem;
+
     class NativeScript
     {
     public:
@@ -18,7 +20,7 @@ namespace Ren
         // TODO:
         // void OnFixedUpdate(float dt) {}
         // void OnCollision(...) {}
-//    protected:
+    protected:
         KeyInterface* m_input;
         Entity& self = m_entity;
         
@@ -26,9 +28,9 @@ namespace Ren
         inline T& GetComponent() { self.Get<T>(); }
         inline bool KeyPressed(const SDL_KeyCode& key) { return m_input->KeyPressed(key); }
         inline bool KeyHeld(const SDL_KeyCode& key) { return m_input->KeyHeld(key); }
-//    private:
+    private:
         Entity m_entity;
 
-        friend class Ren::Scene;
+        friend class Ren::NativeScriptSystem;
     };
 }
