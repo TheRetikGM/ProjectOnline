@@ -6,20 +6,31 @@
 
 using namespace Ren;
 
-///////////////////////
-/////// INIT //////////
-///////////////////////
-void GameCore::Init(const GameDefinition& def)
+GameCore::GameCore(const GameDefinition& def)
+    : m_gameDefinition(def)
 {
-    m_gameDefinition = def;
-
     // Initialize subsystems.
     m_context.Init(m_gameDefinition.context_def);
     if (def.init_flags & REN_INIT_IMGUI)
         m_imguiContext.Init(m_context.window, m_context.renderer, m_gameDefinition.imgui_def);
     if (def.init_flags & REN_INIT_BOX2D)
         init_box2d();
-    
+}
+GameCore::~GameCore()
+{
+    // Destroy subsystems.
+    if (m_gameDefinition.init_flags & REN_INIT_IMGUI)
+        m_imguiContext.Destroy();
+    if (m_gameDefinition.init_flags & REN_INIT_BOX2D)
+        destroy_box2d();
+    m_context.Destroy();
+}
+
+///////////////////////
+/////// INIT //////////
+///////////////////////
+void GameCore::Init()
+{
     // Save init ticks, so that first delta isn't as big as initialization time.
     m_lastFrameTicks = SDL_GetTicks();
 
@@ -42,14 +53,7 @@ void GameCore::Destroy()
 {
     // User defined destroy.
     onDestroy();
-
-    // Destroy subsystems.
-    if (m_gameDefinition.init_flags & REN_INIT_IMGUI)
-        m_imguiContext.Destroy();
-    if (m_gameDefinition.init_flags & REN_INIT_BOX2D)
-        destroy_box2d();
-    m_context.Destroy();
-    
+   
     m_initialized = false;
     REN_STATUS("Game core destroyed.");
 }

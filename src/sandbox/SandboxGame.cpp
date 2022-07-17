@@ -1,8 +1,9 @@
 #include <iostream>
 #include <Ren/Ren.h>
-#include <Ren/ECS/ComponentSystems.h>
 
 #include "scripts/Movement.hpp"
+
+using namespace entt::literals;
 
 // Window dimension constants.
 const int WINDOW_WIDTH = 1600;
@@ -33,7 +34,6 @@ private:
 	SDL_Renderer* m_renderer = nullptr;
 };
 
-using namespace entt::literals;
 
 class Game : public Ren::GameCore
 {
@@ -120,26 +120,17 @@ protected:
 		if (show_demo)
 			ImGui::ShowDemoWindow();
 	}
+public:
+	Game(const Ren::GameDefinition& def) : Ren::GameCore(def) {}
+	Game(glm::ivec2 window_size) : Ren::GameCore(window_size) {}
 };
 
-int main(int argc, char **argv) 
-{
-	Game game;
 
-	try
-	{
-		game.Init({ WINDOW_WIDTH, WINDOW_HEIGHT });
-		game.Loop();
-		game.Destroy();
-	}
-	catch(const std::exception& e)
-	{
-		std::cerr << "Exception caught! Message: " << e.what() << '\n';
-	}
-	catch(...)
-	{
-		std::cerr << "Invalid exception caught!" << '\n';
-	}
+Ren::GameCore* CreateGame()
+{
+	Ren::GameDefinition def;
+	def.context_def.window_size = { WINDOW_WIDTH, WINDOW_HEIGHT };
+	def.context_def.window_name = "Demo project";
 	
-	return 0;
+	return new Game(def);
 }

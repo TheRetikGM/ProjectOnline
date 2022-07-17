@@ -8,6 +8,7 @@
 #include <entt/entt.hpp>
 
 #include "Core.h"
+#include "Startup.hpp"
 #include "GameCore.h"
-#include "KeyInterface.hpp"
 #include "ECS/Scene.h"
+#include "ECS/NativeScript.h"

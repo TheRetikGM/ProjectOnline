@@ -25,7 +25,7 @@ namespace Ren
         Entity& self = m_entity;
         
         template<typename T>
-        inline T& GetComponent() { self.Get<T>(); }
+        inline T& GetComponent() { return self.Get<T>(); }
         inline bool KeyPressed(const SDL_KeyCode& key) { return m_input->KeyPressed(key); }
         inline bool KeyHeld(const SDL_KeyCode& key) { return m_input->KeyHeld(key); }
     private:

@@ -1,5 +1,4 @@
 #pragma once
-#include <Ren/ECS/Scene.h>
 #include <Ren/ECS/NativeScript.h>
 #include "sandbox.h"
 
@@ -18,7 +17,7 @@ public:
 
     void OnUpdate(float dt) override
     {
-        auto& transform = self.Get<Ren::TransformComponent>();
+        auto& transform = GetComponent<Ren::TransformComponent>();
 
 		float move_speed = 500.0f;
 		if (KeyHeld(SDLK_w))

@@ -17,8 +17,11 @@ namespace Ren
     // Could be loaded from file or sth.
     struct GameDefinition
     {
+        // Define window and SDL specs.
         SDLContextDef   context_def;
+        // Init flags for the Ren engine.
         uint32_t        init_flags{ REN_INIT_IMGUI | REN_INIT_BOX2D };
+        // Definition of the Ren imgui context.
         ImGuiContextDef imgui_def;
     };
 
@@ -31,13 +34,14 @@ namespace Ren
     class GameCore
     {
     public:
-        GameCore() {}
-        virtual ~GameCore() {}
+        // Create game core with default settings.
+        GameCore(glm::ivec2 window_size) : GameCore(GameDefinition{ {WINDOWPOS_UNDEFINED, window_size} }) {}
+        // Create game core with custom settings.
+        GameCore(const GameDefinition& def);
+        virtual ~GameCore();
 
-        // Init game core with default settings.
-        void Init(glm::ivec2 window_size) { Init(GameDefinition{ {WINDOWPOS_UNDEFINED, window_size} }); }
-        // Init game core with custom settings.
-        void Init(const GameDefinition& def);
+        // Init game core.
+        void Init();
         void Destroy();
         // Begin main loop. To exit set m_run to false.
         void Loop();
@@ -47,6 +51,8 @@ namespace Ren
         bool         m_run{ true };
         glm::ivec4   m_clearColor{ 0x0, 0x0, 0x0, 0xff };
         KeyInterface m_input;
+
+        /* User-defined functions */
 
         virtual void onInit() {}
         virtual void onUpdate(float dt) {}
