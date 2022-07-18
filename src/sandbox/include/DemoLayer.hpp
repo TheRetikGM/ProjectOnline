@@ -20,7 +20,7 @@ struct OutlineRenderCommand
 		, outline(ent.Get<OutlineComponent>())
 	{}
 	
-	int GetLayer() const { return trans.layer; }
+	inline int GetLayer() const { return trans.layer; }
 	void Render(SDL_Renderer* renderer)
 	{
 		SDL_Rect rect{ (int)trans.position.x, (int)trans.position.y, (int)trans.scale.x, (int)trans.scale.y };

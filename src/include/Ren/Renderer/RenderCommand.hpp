@@ -5,6 +5,9 @@
 
 namespace Ren
 {
+    // Define base class for render commands using static polymorphism implemented using EnTT::poly
+    // This class defines that when some structure has Render() and GetLayer() member functions, they can be used as render commands.
+    // --> For details check docs: https://github.com/skypjack/entt/wiki/Crash-Course:-poly
     struct RenderCommandPoly : entt::type_list<void(SDL_Renderer*), int() const> 
     {
         template<typename Base>
@@ -18,6 +21,9 @@ namespace Ren
     };
     using RenderCommand = entt::poly<RenderCommandPoly>;
 
+    // Basic Commands //
+
+    // Command used to render a sprite.
     struct SpriteRenderCommand
     {
         TransformComponent& transform;
