@@ -1,6 +1,8 @@
 #pragma once
 #include <Ren/Ren.h>
 
+#include "scripts/Movement.hpp"
+
 using namespace entt::literals;
 
 struct OutlineComponent
@@ -49,8 +51,8 @@ public:
         // Set background color.
 		m_GameCore->m_ClearColor = { 100, 100, 100, 255 };
 
-		m_scene = new Ren::Scene(m_GameCore->GetRenderer(), &m_GameCore->m_Input);
-		m_scene->AddSystem<OutlineSystem>(m_GameCore->GetRenderer());
+		m_scene = new Ren::Scene(GetRenderer(), GetInput());
+		m_scene->AddSystem<OutlineSystem>(GetRenderer());
 
 		// Create awesomeface entity.
 		m_ent = m_scene->CreateEntity({ glm::vec2(0.0f), glm::vec2(200.0f) });
@@ -66,7 +68,7 @@ public:
 		// Load font and create entity with text texture.
 		m_font = TTF_OpenFont(ASSETS_DIR "fonts/DejaVuSansCondensed.ttf", 24);
 		REN_ASSERT(m_font != nullptr, "Failed opening font. Error: " + std::string(TTF_GetError()));
-		auto ret = m_scene->GetTextureCache()->load("texts/intro1"_hs, m_GameCore->GetRenderer(), m_font, "WSAD for movement, 'i' to \n toggle imgui demo window, ESC to exit", glm::ivec4(0x0, 0xff, 0x0, 0xff));
+		auto ret = m_scene->GetTextureCache()->load("texts/intro1"_hs, GetRenderer(), m_font, "WSAD for movement, 'i' to \n toggle imgui demo window, ESC to exit", glm::ivec4(0x0, 0xff, 0x0, 0xff));
 		Ren::Entity text_ent = m_scene->CreateEntity();
 		auto& trans = text_ent.Get<Ren::TransformComponent>();
 		auto& tex = text_ent.Add<Ren::SpriteComponent>();
@@ -88,9 +90,10 @@ public:
 
 		delete m_scene;
     }
-    void OnEvent(const Ren::Event& e) override
+    void OnEvent(Ren::Event& e) override
     {
-        m_GameCore->m_Run = !Ren::Utils::key_pressed(e.sdl_event, SDLK_ESCAPE);
+        if (!(m_GameCore->m_Run = !Ren::Utils::key_pressed(e.sdl_event, SDLK_ESCAPE)))
+            e.handled = true;
     }
     void OnUpdate(float dt) override
     {
@@ -109,7 +112,7 @@ public:
     void OnImGui(Ren::ImGuiContext& context) override
     {
         static bool show_demo = false;
-		if (m_GameCore->m_Input.KeyPressed(SDLK_i))
+		if (KeyPressed(SDLK_i))
 			show_demo = !show_demo;
 		
 		if (show_demo)

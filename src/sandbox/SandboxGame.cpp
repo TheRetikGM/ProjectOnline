@@ -1,8 +1,7 @@
 #include <iostream>
 #include <Ren/Ren.h>
-#include <Ren/Layers.h>
+#include <Ren/Layer.h>
 
-#include "scripts/Movement.hpp"
 #include "DemoLayer.hpp"
 
 // Window dimension constants.

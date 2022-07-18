@@ -1,38 +1,12 @@
 #pragma once
-#include <vector>
 #include <list>
 #include <string>
 
 #include "Core.h"
-#include "RenSDL/Event.hpp"
-#include "RenSDL/Context.hpp"
 
 namespace Ren
 {
-    class GameCore;
-    class Layer
-    {
-    public:
-        GameCore* m_GameCore{ nullptr };
-        bool m_Enabled{ true };
-
-        Layer(const std::string& name) : m_name(name) {}
-        virtual ~Layer() {}
-    
-        virtual void OnInit() {}
-        virtual void OnDestroy() {}
-        virtual void OnEvent(const Ren::Event& e) {}
-        virtual void OnUpdate(float dt) {}
-        virtual void OnRender(SDL_Renderer* renderer) {}
-        virtual void OnImGui(Ren::ImGuiContext& context) {}
-
-        inline const std::string& GetName() const { return m_name; }
-    protected:
-        // Name of the layer.
-        std::string m_name{ "Layer" };
-    
-        friend class Ren::GameCore;
-    };
+    class Layer;
 
     class LayerStack
     {

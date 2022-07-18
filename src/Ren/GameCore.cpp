@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <imgui_impl_sdl.h>
 #include <imgui_impl_sdlrenderer.h>
+#include "Ren/Layer.h"
 
 using namespace Ren;
 
@@ -143,3 +144,6 @@ void GameCore::Loop()
         SDL_RenderPresent(m_context.renderer);
     }
 }
+
+void GameCore::PushLayer(Layer* layer) { m_layerStack.PushLayer(layer); layer->m_GameCore = this; }
+void GameCore::PushOverlay(Layer* layer) { m_layerStack.PushOverlay(layer); layer->m_GameCore = this; }

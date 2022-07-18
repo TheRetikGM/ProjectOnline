@@ -1,6 +1,7 @@
 target_sources(REN_LIB
     PRIVATE
         GameCore.cpp
-        Layers.cpp
+        Layer.cpp
+        LayerStack.cpp
 )
 add_subdirectory(ECS)

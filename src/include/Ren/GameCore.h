@@ -5,7 +5,7 @@
 #include <imgui.h>
 
 #include "RenSDL/Context.hpp"
-#include "Layers.h"
+#include "LayerStack.h"
 #include "KeyInterface.hpp"
 
 #define REN_INIT_IMGUI (1 << 0)
@@ -53,8 +53,8 @@ namespace Ren
         // Begin main loop. To exit set m_run to false.
         void Loop();
 
-        inline void PushLayer(Layer* layer) { m_layerStack.PushLayer(layer); layer->m_GameCore = this; }
-        inline void PushOverlay(Layer* layer) { m_layerStack.PushOverlay(layer); layer->m_GameCore = this; }
+        void PushLayer(Layer* layer);
+        void PushOverlay(Layer* layer);
         inline LayerStack& GetLayerStack() { return m_layerStack; };
 
         /* User-defined functions */
