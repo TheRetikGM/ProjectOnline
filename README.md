@@ -21,7 +21,7 @@ Inspired by http://lazyfoo.net/tutorials/SDL
 
 ## TODO list
 - [ ] Support already installed VCPKG, instead of downloading it
-- [ ] Layering system + event catching
+- [x] ~~Layering system + event catching~~
 - [ ] Proper log handling.
 - [x] ~~Move function calls from REN_ASSERT (as they could get removed with some compilers).~~
 - [x] ~~Sandbox~~
@@ -36,4 +36,5 @@ Inspired by http://lazyfoo.net/tutorials/SDL
 - [ ] Basic scene editing (far ahead)
 - [ ] Box2D implementation
 - [ ] Basic networking
+- [ ] Centralized rendering
  

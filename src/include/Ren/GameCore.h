@@ -3,7 +3,9 @@
 #include <cstdint>
 #include <glm/glm.hpp>
 #include <imgui.h>
+
 #include "RenSDL/Context.hpp"
+#include "Layers.h"
 #include "KeyInterface.hpp"
 
 #define REN_INIT_IMGUI (1 << 0)
@@ -34,6 +36,11 @@ namespace Ren
     class GameCore
     {
     public:
+        // Set this to false, if you want to end loop.
+        bool         m_Run{ true };
+        glm::ivec4   m_ClearColor{ 0x0, 0x0, 0x0, 0xff };
+        KeyInterface m_Input;
+
         // Create game core with default settings.
         GameCore(glm::ivec2 window_size) : GameCore(GameDefinition{ {WINDOWPOS_UNDEFINED, window_size} }) {}
         // Create game core with custom settings.
@@ -46,32 +53,31 @@ namespace Ren
         // Begin main loop. To exit set m_run to false.
         void Loop();
 
-    protected:
-        // Set this to false, if you want to end loop.
-        bool         m_run{ true };
-        glm::ivec4   m_clearColor{ 0x0, 0x0, 0x0, 0xff };
-        KeyInterface m_input;
+        inline void PushLayer(Layer* layer) { m_layerStack.PushLayer(layer); layer->m_GameCore = this; }
+        inline void PushOverlay(Layer* layer) { m_layerStack.PushOverlay(layer); layer->m_GameCore = this; }
+        inline LayerStack& GetLayerStack() { return m_layerStack; };
 
         /* User-defined functions */
 
-        virtual void onInit() {}
-        virtual void onUpdate(float dt) {}
+        virtual void OnInit() {}
+        virtual void OnUpdate(float dt) {}
         // FIXME: Not implemented yet.
-        virtual void onFixedUpdate(float dt) {}
-        virtual void onRender(SDL_Renderer* renderer) {}
-        virtual void onImGui(Ren::ImGuiContext& context) {}
-        virtual void onEvent(const SDL_Event& e) {}
-        virtual void onDestroy() {}
+        virtual void OnFixedUpdate(float dt) {}
+        virtual void OnRender(SDL_Renderer* renderer) {}
+        virtual void OnImGui(Ren::ImGuiContext& context) {}
+        virtual void OnEvent(const SDL_Event& e) {}
+        virtual void OnDestroy() {}
 
-        inline const SDLContext& getContext() { return m_context; }
-        inline glm::ivec2 getWindowSize() { return m_context.definition.window_size; }
-        inline SDL_Renderer* getRenderer() { return m_context.renderer; }
+        inline const SDLContext& GetContext() { return m_context; }
+        inline glm::ivec2 GetWindowSize() { return m_context.definition.window_size; }
+        inline SDL_Renderer* GetRenderer() { return m_context.renderer; }
 
     private:
         bool            m_initialized{ false };
         SDLContext      m_context;
         GameDefinition  m_gameDefinition;
         uint64_t        m_lastFrameTicks{ 0 };
+        LayerStack      m_layerStack{};
 
         // Dear ImGui context.
         ImGuiContext m_imguiContext;

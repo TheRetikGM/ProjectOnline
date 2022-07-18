@@ -34,8 +34,10 @@ void GameCore::Init()
     // Save init ticks, so that first delta isn't as big as initialization time.
     m_lastFrameTicks = SDL_GetTicks();
 
-    // User defined init.
-    onInit();
+    // Call user defined inits on all layers and core layer.
+    OnInit();
+    for (auto&& layer : m_layerStack)
+        layer->OnInit();
 
     m_initialized = true;
     REN_STATUS("Game core initialized.");
@@ -51,9 +53,12 @@ void GameCore::init_box2d()
 ///////////////////////
 void GameCore::Destroy()
 {
-    // User defined destroy.
-    onDestroy();
-   
+    // User destroy all layers in reverse order.
+    for (auto it = m_layerStack.rbegin(); it != m_layerStack.rend(); it++)
+        (*it)->OnDestroy();
+    OnDestroy();
+
+    m_layerStack.clear();
     m_initialized = false;
     REN_STATUS("Game core destroyed.");
 }
@@ -70,7 +75,7 @@ void GameCore::Loop()
     REN_ASSERT(m_initialized, "Game not initialized! Call GameCore::Init() first.");
 
 
-    while (m_run)
+    while (m_Run)
     {
         // Calculate delta time.
         uint64_t current_ticks = SDL_GetTicks64();
@@ -79,16 +84,35 @@ void GameCore::Loop()
         float delta_time = ticks_delta / 1000.0f;   // Convert from milliseconds to seconds.
 
         // Clear window.
-        SDL_SetRenderDrawColor(m_context.renderer, m_clearColor.r, m_clearColor.g, m_clearColor.b, m_clearColor.a);
+        SDL_SetRenderDrawColor(m_context.renderer, m_ClearColor.r, m_ClearColor.g, m_ClearColor.b, m_ClearColor.a);
         SDL_RenderClear(m_context.renderer);
 
         // Poll events.
         SDL_Event e;
+        // Event processing order: ImGui -> Layers in reverse (overlay -> normal layers) -> core layer -> input
         while (SDL_PollEvent(&e))
         {
+            // If the event is QUIT, then don't process it any further. We always want a way to the close application without killing it.
+            if (e.type == SDL_QUIT) {
+                m_Run = false;
+                break;
+            }
+
+            // TODO: Check if imgui used the event and prevent other layers from accessing it.
             ImGui_ImplSDL2_ProcessEvent(&e);
-            m_input.OnEvent(e);
-            onEvent(e);
+            
+            Event ren_event{ e, false };
+            // Pass events to all layers in reverse order, because overlay layers should get the events first.
+            for (auto it = m_layerStack.rbegin(); it != m_layerStack.rend(); it++)
+            {
+                (*it)->OnEvent(ren_event);
+                if (ren_event.handled)
+                    break;
+            }
+            if (!ren_event.handled)
+                OnEvent(e);
+            if (!ren_event.handled)
+                m_Input.OnEvent(e);
         }
         
         // Start the Dear ImGui frame
@@ -96,14 +120,20 @@ void GameCore::Loop()
         ImGui_ImplSDL2_NewFrame();
         ImGui::NewFrame();
 
-        // User defined update.
-        onUpdate(delta_time);
+        // User defined update of all layers.
+        for (auto&& layer : m_layerStack)
+            layer->OnUpdate(delta_time);
+        OnUpdate(delta_time);
 
-        // User defined render.
-        onRender(m_context.renderer);
+        // User defined render of all layers.
+        for (auto&& layer : m_layerStack)
+            layer->OnRender(m_context.renderer);
+        OnRender(m_context.renderer);
         
-        // User defined imgui actions.
-        onImGui(m_imguiContext);
+        // User defined imgui actions of all layers.
+        for (auto&& layer : m_layerStack)
+            layer->OnImGui(m_imguiContext);
+        OnImGui(m_imguiContext);
         
         // Render Dear ImGui.
         ImGui::Render();
