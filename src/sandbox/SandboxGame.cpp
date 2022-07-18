@@ -1,6 +1,7 @@
 #include <iostream>
 #include <Ren/Ren.h>
 #include <Ren/Layer.h>
+#include <Ren/Renderer/Renderer.h>
 
 #include "DemoLayer.hpp"
 

@@ -1,6 +1,7 @@
 #include "Ren/ECS/ComponentSystems.h"
 #include "Ren/ECS/Scene.h"
 #include "Ren/ECS/NativeScript.h"
+#include "Ren/Renderer/Renderer.h"
 
 using namespace Ren;
 
@@ -8,20 +9,11 @@ using namespace Ren;
 
 void RenderSystem::Render()
 {
-    // Sort component by layer.
-    m_scene->m_Registry->sort<TransformComponent>([](const auto& lhs, const auto& rhs){
-        return lhs.layer < rhs.layer;
-    });
-
     // Render all sprites.
     auto view = m_scene->SceneView<TransformComponent, SpriteComponent>();
     for (auto&& ent : view)
     {
-        auto [trans, tex] = view.get(ent);
-        SDL_Rect rect{ (int)trans.position.x, (int)trans.position.y, (int)trans.scale.x, (int)trans.scale.y };
-
-        SDL_SetTextureColorMod(tex.GetTexture(), tex.color.r, tex.color.g, tex.color.b);
-        SDL_RenderCopyEx(m_renderer, tex.GetTexture(), nullptr, &rect, trans.rotation, nullptr, {});
+        Renderer::SubmitCommand(SpriteRenderCommand{Entity{ ent, m_scene }});
     }
 }
 

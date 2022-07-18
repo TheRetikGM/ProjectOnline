@@ -36,5 +36,5 @@ Inspired by http://lazyfoo.net/tutorials/SDL
 - [ ] Basic scene editing (far ahead)
 - [ ] Box2D implementation
 - [ ] Basic networking
-- [ ] Centralized rendering
+- [x] ~~Centralized rendering~~
  

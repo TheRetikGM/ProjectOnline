@@ -42,6 +42,8 @@ namespace Ren
         // Create context with custom presets.
         inline void Init(const SDLContextDef& def)
         {
+            this->definition = def;
+
             // Initialize SDL
             int init_result = SDL_Init(def.sdl_init_flags);
             REN_ASSERT(init_result >= 0, "SDL initialization failed! Error: " + std::string(SDL_GetError()));

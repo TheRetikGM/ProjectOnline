@@ -1,5 +1,6 @@
 #pragma once
 #include <Ren/Ren.h>
+#include <Ren/Renderer/Renderer.h>
 
 #include "scripts/Movement.hpp"
 
@@ -8,6 +9,24 @@ using namespace entt::literals;
 struct OutlineComponent
 {
 	glm::ivec4 color = glm::ivec4(255);
+};
+struct OutlineRenderCommand
+{
+	Ren::TransformComponent& trans;
+	OutlineComponent& outline;
+
+	OutlineRenderCommand(Ren::Entity ent)
+		: trans(ent.Get<Ren::TransformComponent>())
+		, outline(ent.Get<OutlineComponent>())
+	{}
+	
+	int GetLayer() const { return trans.layer; }
+	void Render(SDL_Renderer* renderer)
+	{
+		SDL_Rect rect{ (int)trans.position.x, (int)trans.position.y, (int)trans.scale.x, (int)trans.scale.y };
+		SDL_SetRenderDrawColor(renderer, outline.color.r, outline.color.g, outline.color.b, outline.color.a);
+		SDL_RenderDrawRect(renderer, &rect);
+	}
 };
 class OutlineSystem : public Ren::ComponentSystem
 {
@@ -18,13 +37,7 @@ public:
 	{
 		auto view = m_scene->SceneView<OutlineComponent, Ren::TransformComponent>();
 		for (auto&& ent : view)
-		{
-			auto [outline, trans] = view.get(ent);
-			SDL_Rect rect{ (int)trans.position.x, (int)trans.position.y, (int)trans.scale.x, (int)trans.scale.y };
-			// Draw magenta outline.
-			SDL_SetRenderDrawColor(m_renderer, outline.color.r, outline.color.g, outline.color.b, outline.color.a);
-			SDL_RenderDrawRect(m_renderer, &rect);
-		}
+			Ren::Renderer::SubmitCommand(OutlineRenderCommand{Ren::Entity{ ent, m_scene }});
 	}
 private:
 	SDL_Renderer* m_renderer = nullptr;
@@ -59,11 +72,14 @@ public:
 		m_ent.Add<Ren::SpriteComponent>(ASSETS_DIR "awesomeface.png").color = Ren::Colors3::Magenta;
 		m_ent.Add<OutlineComponent>().color = Ren::Colors4::Cyan;
 		m_ent.Add<Ren::NativeScriptComponent>().Bind<MovementScript>();
+		m_ent.Get<Ren::TagComponent>().tag = "awesomeface";
+		m_ent.Get<Ren::TransformComponent>().layer = 2;
 
 		// Create copy of awesomeface entity (the texture will get reused).
 		auto ent_copy = m_scene->CreateEntity({ glm::vec2(0.0f), glm::vec2(200.0f) });
 		ent_copy.Add<Ren::SpriteComponent>(ASSETS_DIR "awesomeface.png");
 		ent_copy.Get<Ren::TagComponent>().tag = "rotate";
+		ent_copy.Get<Ren::TransformComponent>().layer = 1;
 
 		// Load font and create entity with text texture.
 		m_font = TTF_OpenFont(ASSETS_DIR "fonts/DejaVuSansCondensed.ttf", 24);
@@ -75,7 +91,7 @@ public:
 		tex.texture_handle = *ret.first;
 		trans.position = { 10.0f, 10.0f };
 		trans.scale = tex.GetTextureResource()->size;
-		trans.layer = 2;
+		trans.layer = 3;
 
 		// Call init on all scene subsystems.
 		m_scene->Init();
@@ -104,13 +120,27 @@ public:
 			ent.Get<Ren::TransformComponent>().rotation += rotation_speed * dt;
 
 		m_scene->Update(dt);
+
+		this->dt = dt;
     }
+	float dt = .0f;
     void OnRender(SDL_Renderer* renderer) override
     {
+		Ren::Renderer::BeginRender();
         m_scene->Render();
+		Ren::Renderer::Render(renderer);
     }
     void OnImGui(Ren::ImGuiContext& context) override
     {
+		ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav;
+		ImGui::SetNextWindowBgAlpha(0.35f); // Transparent background
+		ImGui::SetNextWindowPos(ImVec2(10.0f, m_GameCore->GetWindowSize().y - 40.0f));
+		if (ImGui::Begin("Ren info", nullptr, window_flags))
+		{
+			ImGui::Text("FPS: %.1f", 1.0f / dt);
+		}
+		ImGui::End();
+
         static bool show_demo = false;
 		if (KeyPressed(SDLK_i))
 			show_demo = !show_demo;
