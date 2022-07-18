@@ -37,4 +37,5 @@ Inspired by http://lazyfoo.net/tutorials/SDL
 - [ ] Box2D implementation
 - [ ] Basic networking
 - [x] ~~Centralized rendering~~
+- [ ] Use EnTT groups instead of views.
  
