@@ -12,3 +12,4 @@
 #include "GameCore.h"
 #include "ECS/Scene.h"
 #include "ECS/NativeScript.h"
+#include "Utils/Basic.hpp"

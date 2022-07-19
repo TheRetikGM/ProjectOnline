@@ -55,7 +55,7 @@ class DemoLayer : public Ren::Layer
 	Ren::Scene* m_scene;
 	// Example entity.
 	Ren::Entity m_ent;
-
+	Ren::Utils::FpsCounter m_fpsCounter;
 public:
     DemoLayer(const std::string& name) : Ren::Layer(name) {}
 
@@ -121,9 +121,8 @@ public:
 
 		m_scene->Update(dt);
 
-		this->dt = dt;
+		m_fpsCounter.Update(dt);
     }
-	float dt = .0f;
     void OnRender(SDL_Renderer* renderer) override
     {
 		Ren::Renderer::BeginRender();
@@ -132,14 +131,7 @@ public:
     }
     void OnImGui(Ren::ImGuiContext& context) override
     {
-		ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav;
-		ImGui::SetNextWindowBgAlpha(0.35f); // Transparent background
-		ImGui::SetNextWindowPos(ImVec2(10.0f, m_GameCore->GetWindowSize().y - 40.0f));
-		if (ImGui::Begin("Ren info", nullptr, window_flags))
-		{
-			ImGui::Text("FPS: %.1f", 1.0f / dt);
-		}
-		ImGui::End();
+		m_fpsCounter.DrawPlot(context, m_GameCore->GetWindowSize());
 
         static bool show_demo = false;
 		if (KeyPressed(SDLK_i))
