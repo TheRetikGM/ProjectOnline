@@ -55,7 +55,6 @@ class DemoLayer : public Ren::Layer
 	Ren::Scene* m_scene;
 	// Example entity.
 	Ren::Entity m_ent;
-	Ren::Utils::FpsCounter m_fpsCounter;
 public:
     DemoLayer(const std::string& name) : Ren::Layer(name) {}
 
@@ -120,8 +119,6 @@ public:
 			ent.Get<Ren::TransformComponent>().rotation += rotation_speed * dt;
 
 		m_scene->Update(dt);
-
-		m_fpsCounter.Update(dt);
     }
     void OnRender(SDL_Renderer* renderer) override
     {
@@ -131,8 +128,6 @@ public:
     }
     void OnImGui(Ren::ImGuiContext& context) override
     {
-		m_fpsCounter.DrawPlot(context, m_GameCore->GetWindowSize());
-
         static bool show_demo = false;
 		if (KeyPressed(SDLK_i))
 			show_demo = !show_demo;
