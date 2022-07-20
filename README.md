@@ -29,7 +29,7 @@ Inspired by http://lazyfoo.net/tutorials/SDL
 - [ ] Add support for multiple tags on single TagComponent.
 - [x] ~~Scene view shortcut~~
 - [ ] Scene serialization and de-serialization
-- [ ] Remove SDL_net dependency
+- [x] ~~Remove SDL_net dependency~~
 - [ ] Camera implementation
 - [ ] Tilemap loading
 - [x] ~~Freetype text rendering~~

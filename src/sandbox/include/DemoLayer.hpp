@@ -1,7 +1,6 @@
 #pragma once
 #include <Ren/Ren.h>
-#include <Ren/Renderer/Renderer.h>
-#include <Ren/Renderer/TextRenderer.h>
+#include <yaml-cpp/yaml.h>
 
 #include "scripts/Movement.hpp"
 
@@ -47,10 +46,6 @@ private:
 class DemoLayer : public Ren::Layer
 {
     glm::vec2 m_rectPos{ 100, 100 };
-	TTF_Font* m_font{ nullptr };
-	SDL_Texture* m_textTexture{ nullptr };
-	glm::ivec2 m_textTextureSize{ 0, 0 };
-
 	Ref<Ren::TextRenderer> m_textRenderer = Ren::TextRenderer::Create();
 
 	// EnTT //
@@ -83,30 +78,15 @@ public:
 		ent_copy.Get<Ren::TagComponent>().tag = "rotate";
 		ent_copy.Get<Ren::TransformComponent>().layer = 1;
 
-		// Load font and create entity with text texture.
-		m_font = TTF_OpenFont(ASSETS_DIR "fonts/DejaVuSansCondensed.ttf", 24);
-		REN_ASSERT(m_font != nullptr, "Failed opening font. Error: " + std::string(TTF_GetError()));
-		auto ret = m_scene->GetTextureCache()->load("texts/intro1"_hs, GetRenderer(), m_font, "WSAD for movement, 'i' to \n toggle imgui demo window, ESC to exit", glm::ivec4(0x0, 0xff, 0x0, 0xff));
-		Ren::Entity text_ent = m_scene->CreateEntity();
-		auto& trans = text_ent.Get<Ren::TransformComponent>();
-		auto& tex = text_ent.Add<Ren::SpriteComponent>();
-		tex.texture_handle = *ret.first;
-		trans.position = { 10.0f, 10.0f };
-		trans.scale = tex.GetTextureResource()->size;
-		trans.layer = 3;
-
 		// Call init on all scene subsystems.
 		m_scene->Init();
 
-		m_textRenderer->Load(ASSETS_DIR "fonts/DejaVuSansCondensed.ttf", 96);
+		m_textRenderer->Load(ASSETS_DIR "fonts/DejaVuSansCondensed.ttf", 32);
     }
     void OnDestroy() override
     {
         // Destroy native script component.
 		m_scene->Destroy();
-
-		SDL_DestroyTexture(m_textTexture);
-		TTF_CloseFont(m_font);
 
 		delete m_scene;
     }
@@ -128,8 +108,8 @@ public:
     void OnRender(SDL_Renderer* renderer) override
     {
 		Ren::Renderer::BeginRender();
+		m_textRenderer->RenderText("WSAD for movement\n'i' to toggle imgui demo window\nESC to exit", { 10.0f, 10.0f }, 1.0f, Ren::Colors3::White, 10);
         m_scene->Render();
-		m_textRenderer->RenderText("Hello, World!", { 10.0f, 100.0f }, 1.0f, Ren::Colors3::Blue, -1);
 		Ren::Renderer::Render();
     }
     void OnImGui(Ren::ImGuiContext& context) override
