@@ -32,7 +32,9 @@ Inspired by http://lazyfoo.net/tutorials/SDL
 - [ ] Remove SDL_net dependency
 - [ ] Camera implementation
 - [ ] Tilemap loading
-- [ ] Proper text rendering (maybe text component with fontResourceCache and generated textures?)
+- [x] ~~Freetype text rendering~~
+- [ ] Text component
+- [ ] Scene hiearchy
 - [ ] Basic scene editing (far ahead)
 - [ ] Box2D implementation
 - [ ] Basic networking

@@ -4,6 +4,7 @@
 #include <imgui_impl_sdl.h>
 #include <imgui_impl_sdlrenderer.h>
 #include "Ren/Layer.h"
+#include "Ren/Renderer/Renderer.h"
 
 using namespace Ren;
 
@@ -16,6 +17,8 @@ GameCore::GameCore(const GameDefinition& def)
         m_imguiContext.Init(m_context.window, m_context.renderer, m_gameDefinition.imgui_def);
     if (def.init_flags & REN_INIT_BOX2D)
         init_box2d();
+    
+    Renderer::SetRenderer(m_context.renderer);
 }
 GameCore::~GameCore()
 {
@@ -25,6 +28,7 @@ GameCore::~GameCore()
     if (m_gameDefinition.init_flags & REN_INIT_BOX2D)
         destroy_box2d();
     m_context.Destroy();
+    Renderer::SetRenderer(nullptr);
 }
 
 ///////////////////////

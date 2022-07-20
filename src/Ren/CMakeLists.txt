@@ -5,3 +5,4 @@ target_sources(REN_LIB
         LayerStack.cpp
 )
 add_subdirectory(ECS)
+add_subdirectory(Renderer)

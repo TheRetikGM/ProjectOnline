@@ -41,4 +41,6 @@ namespace Ren
     };
     using Colors4 = Colors<glm::ivec4>;
     using Colors3 = Colors<glm::ivec3>;
+    using Color3 = glm::ivec3;
+    using Color4 = glm::ivec4;
 }

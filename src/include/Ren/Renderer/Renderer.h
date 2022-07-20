@@ -24,16 +24,18 @@ namespace Ren
 
         // Executes all render commands, that were submitted earlier.
         // TODO: Rendering optimizations like culling
-        static void Render(SDL_Renderer* renderer)
+        static void Render()
         {
             // Sort by layer, so that the commands are executed in correct order. For commands in same layer, preserve the order they were submitted in.
             std::stable_sort(m_renderCommands.begin(), m_renderCommands.end(), [](const RenderCommand& a, const RenderCommand& b) { return a->GetLayer() < b->GetLayer(); });
             for (auto&& command : m_renderCommands)
-                command->Render(renderer);
+                command->Render(m_renderer);
         }
-
+        inline static SDL_Renderer* GetRenderer() { return m_renderer; } 
+        inline static void SetRenderer(SDL_Renderer* renderer) { m_renderer = renderer; }
 
     private:
         inline static std::vector<RenderCommand> m_renderCommands{};
+        inline static SDL_Renderer* m_renderer{ nullptr };
     };
 } // namespace Ren

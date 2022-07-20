@@ -1,6 +1,7 @@
 #pragma once
 #include <Ren/Ren.h>
 #include <Ren/Renderer/Renderer.h>
+#include <Ren/Renderer/TextRenderer.h>
 
 #include "scripts/Movement.hpp"
 
@@ -50,6 +51,8 @@ class DemoLayer : public Ren::Layer
 	SDL_Texture* m_textTexture{ nullptr };
 	glm::ivec2 m_textTextureSize{ 0, 0 };
 
+	Ref<Ren::TextRenderer> m_textRenderer = Ren::TextRenderer::Create();
+
 	// EnTT //
 	// Stores all entities and manages their creation etc.
 	Ren::Scene* m_scene;
@@ -94,6 +97,8 @@ public:
 
 		// Call init on all scene subsystems.
 		m_scene->Init();
+
+		m_textRenderer->Load(ASSETS_DIR "fonts/DejaVuSansCondensed.ttf", 96);
     }
     void OnDestroy() override
     {
@@ -124,7 +129,8 @@ public:
     {
 		Ren::Renderer::BeginRender();
         m_scene->Render();
-		Ren::Renderer::Render(renderer);
+		m_textRenderer->RenderText("Hello, World!", { 10.0f, 100.0f }, 1.0f, Ren::Colors3::Blue, -1);
+		Ren::Renderer::Render();
     }
     void OnImGui(Ren::ImGuiContext& context) override
     {
