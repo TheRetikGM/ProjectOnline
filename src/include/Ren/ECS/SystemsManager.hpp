@@ -2,7 +2,7 @@
 #include <unordered_map>
 #include <typeinfo>
 
-#include "Ren/Core.h"
+#include "Ren/Core/Core.h"
 #include "ComponentSystems.h"
 
 namespace Ren

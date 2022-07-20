@@ -2,7 +2,7 @@
 #include <list>
 #include <string>
 
-#include "Core.h"
+#include "Ren/Core/Core.h"
 
 namespace Ren
 {

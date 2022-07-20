@@ -2,7 +2,7 @@
 #include <glm/glm.hpp>
 #include <string>
 #include <cstdint>
-#include "Ren/KeyInterface.hpp"
+#include "Ren/Core/KeyInterface.hpp"
 #include "Scene.h"
 
 namespace Ren

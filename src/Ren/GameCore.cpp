@@ -1,9 +1,9 @@
-#include "Ren/GameCore.h"
-#include "Ren/Core.h"
+#include "Ren/Core/GameCore.h"
+#include "Ren/Core/Core.h"
 #include <algorithm>
 #include <imgui_impl_sdl.h>
 #include <imgui_impl_sdlrenderer.h>
-#include "Ren/Layer.h"
+#include "Ren/Core/Layer.h"
 #include "Ren/Renderer/Renderer.h"
 
 using namespace Ren;

@@ -1,5 +1,5 @@
 #pragma once
-#include "GameCore.h"
+#include "Ren/Core/GameCore.h"
 
 extern Ren::GameCore* CreateGame();
 

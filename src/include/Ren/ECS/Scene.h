@@ -1,7 +1,7 @@
 #pragma once
 #include <entt/entt.hpp>
 
-#include "Ren/Core.h"
+#include "Ren/Core/Core.h"
 #include "Components.h"
 #include "Loaders.hpp"
 #include "ComponentSystems.h"

@@ -2,6 +2,7 @@
 #include <entt/entt.hpp>
 
 #include "Ren/ECS/Scene.h"
+#include "Ren/Core/Camera.h"
 
 namespace Ren
 {
@@ -23,27 +24,28 @@ namespace Ren
 
     // Basic Commands //
 
-    // Command used to render a sprite.
-    struct SpriteRenderCommand
-    {
-        TransformComponent& transform;
-        SpriteComponent& sprite;
+    // // Command used to render a sprite.
+    // struct SpriteRenderCommand
+    // {
+    //     TransformComponent& transform;
+    //     SpriteComponent& sprite;
 
-        SpriteRenderCommand(Ren::Entity ent)
-            : transform(ent.Get<Ren::TransformComponent>())
-            , sprite(ent.Get<Ren::SpriteComponent>())
-        {
-        }
+    //     SpriteRenderCommand(Ren::Entity ent)
+    //         : transform(ent.Get<Ren::TransformComponent>())
+    //         , sprite(ent.Get<Ren::SpriteComponent>())
+    //     {
+    //     }
 
-        void Render(SDL_Renderer* renderer)
-        {
-            SDL_Rect rect{ (int)transform.position.x, (int)transform.position.y, (int)transform.scale.x, (int)transform.scale.y };
-            SDL_SetTextureColorMod(sprite.GetTexture(), sprite.color.r, sprite.color.g, sprite.color.b);
-            SDL_RenderCopyEx(renderer, sprite.GetTexture(), nullptr, &rect, transform.rotation, nullptr, {});
-        }
-        int GetLayer() const
-        {
-            return transform.layer;
-        }
-    };
+    //     void Render(SDL_Renderer* renderer)
+    //     {
+    //         RenRect rrect{ transform.position.x, transform.position.y, transform.scale.x, transform.scale.y };
+    //         SDL_Rect rect = camera->ConvertRect(rrect);
+    //         SDL_SetTextureColorMod(sprite.GetTexture(), sprite.color.r, sprite.color.g, sprite.color.b);
+    //         SDL_RenderCopyEx(renderer, sprite.GetTexture(), nullptr, &rect, transform.rotation, nullptr, {});
+    //     }
+    //     int GetLayer() const
+    //     {
+    //         return transform.layer;
+    //     }
+    // };
 }

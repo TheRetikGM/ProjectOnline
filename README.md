@@ -30,7 +30,10 @@ Inspired by http://lazyfoo.net/tutorials/SDL
 - [x] ~~Scene view shortcut~~
 - [ ] Scene serialization and de-serialization
 - [x] ~~Remove SDL_net dependency~~
-- [ ] Camera implementation
+- [x] ~~Camera implementation~~
+- [ ] Fix KeyInterface (segfault on some keys. For ex. arrow keys).
+- [ ] Camera controller on entity.
+- [ ] Proper comments on camera implementation.
 - [ ] Tilemap loading
 - [x] ~~Freetype text rendering~~
 - [ ] Text component

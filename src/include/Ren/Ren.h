@@ -7,9 +7,9 @@
 #include <box2d/box2d.h>
 #include <entt/entt.hpp>
 
-#include "Core.h"
-#include "Startup.hpp"
-#include "GameCore.h"
+#include "Ren/Core/Core.h"
+#include "Ren/Core/Startup.hpp"
+#include "Ren/Core/GameCore.h"
 #include "ECS/Scene.h"
 #include "ECS/NativeScript.h"
 #include "Utils/Basic.hpp"

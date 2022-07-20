@@ -1,7 +1,7 @@
 #include <algorithm>
 
-#include "Ren/LayerStack.h"
-#include "Ren/Layer.h"
+#include "Ren/Core/LayerStack.h"
+#include "Ren/Core/Layer.h"
 
 using namespace Ren;
 

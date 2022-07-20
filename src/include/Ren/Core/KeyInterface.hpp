@@ -1,5 +1,5 @@
 #pragma once
-#include "Core.h"
+#include "Ren/Core/Core.h"
 #include <SDL2/SDL.h>
 #include <cstring>  // std::memset
 

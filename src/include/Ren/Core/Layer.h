@@ -3,11 +3,11 @@
 #include <list>
 #include <string>
 
-#include "Core.h"
-#include "GameCore.h"
-#include "RenSDL/Event.hpp"
-#include "RenSDL/Context.hpp"
-#include "KeyInterface.hpp"
+#include "Ren/Core/Core.h"
+#include "Ren/Core/GameCore.h"
+#include "Ren/RenSDL/Event.hpp"
+#include "Ren/RenSDL/Context.hpp"
+#include "Ren/Core/KeyInterface.hpp"
 
 namespace Ren
 {

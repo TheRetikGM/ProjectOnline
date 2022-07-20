@@ -13,7 +13,9 @@ void RenderSystem::Render()
     auto view = m_scene->SceneView<TransformComponent, SpriteComponent>();
     for (auto&& ent : view)
     {
-        Renderer::SubmitCommand(SpriteRenderCommand{Entity{ ent, m_scene }});
+        auto [trans, sprite] = view.get(ent);
+        Renderer::SetRenderLayer(trans.layer);
+        Renderer::SubmitQuad(trans.position, trans.scale, trans.rotation, sprite.color, sprite.GetTexture());
     }
 }
 

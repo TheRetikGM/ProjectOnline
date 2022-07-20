@@ -4,7 +4,7 @@
 #include <SDL2/SDL_ttf.h>
 #include <glm/glm.hpp>
 #include <cstdint>
-#include "Ren/Core.h"
+#include "Ren/Core/Core.h"
 #include <string>
 
 #include <imgui.h>

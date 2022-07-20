@@ -1,8 +1,8 @@
 #pragma once
 #include <SDL2/SDL.h>
 
-#include "Ren/Core.h"
-#include "Ren/KeyInterface.hpp"
+#include "Ren/Core/Core.h"
+#include "Ren/Core/KeyInterface.hpp"
 
 namespace Ren
 {

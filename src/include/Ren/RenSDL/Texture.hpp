@@ -2,7 +2,7 @@
 #include <glm/glm.hpp>
 #include <SDL2/SDL.h>
 
-#include "Ren/Core.h"
+#include "Ren/Core/Core.h"
 #include "Ren/Renderer/Renderer.h"
 
 namespace Ren

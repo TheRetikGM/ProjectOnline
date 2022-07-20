@@ -4,9 +4,9 @@
 #include <glm/glm.hpp>
 #include <imgui.h>
 
-#include "RenSDL/Context.hpp"
-#include "LayerStack.h"
-#include "KeyInterface.hpp"
+#include "Ren/RenSDL/Context.hpp"
+#include "Ren/Core/LayerStack.h"
+#include "Ren/Core/KeyInterface.hpp"
 
 #define REN_INIT_IMGUI (1 << 0)
 #define REN_INIT_BOX2D (1 << 1)

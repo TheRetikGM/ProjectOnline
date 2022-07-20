@@ -5,7 +5,7 @@
 #include <entt/entt.hpp>
 #include <glm/glm.hpp>
 
-#include "Ren/Core.h"
+#include "Ren/Core/Core.h"
 
 namespace Ren
 {
