@@ -33,7 +33,7 @@ Inspired by http://lazyfoo.net/tutorials/SDL
 - [x] ~~Camera implementation~~
 - [ ] Fix KeyInterface (segfault on some keys. For ex. arrow keys).
 - [ ] Camera controller on entity.
-- [ ] Proper comments on camera implementation.
+- [ ] Proper comments on camera and renderer implementation.
 - [ ] Tilemap loading
 - [x] ~~Freetype text rendering~~
 - [ ] Text component
