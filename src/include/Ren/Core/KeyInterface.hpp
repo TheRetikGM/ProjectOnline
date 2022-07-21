@@ -1,7 +1,9 @@
 #pragma once
-#include "Ren/Core/Core.h"
 #include <SDL2/SDL.h>
 #include <cstring>  // std::memset
+
+#include "Ren/Core/Core.h"
+#include "Ren/Core/Keys.h"
 
 namespace Ren
 {
@@ -9,7 +11,7 @@ namespace Ren
     // Use this, if you cannot (or don't want to) use SDL_Event.
     class KeyInterface
     {
-        const static size_t NUM_KEYS = 322;
+        const static size_t NUM_KEYS = (size_t)Key::NUM_KEYS;
         bool m_keys[NUM_KEYS];
         bool m_keysProcessed[NUM_KEYS];
     public:
@@ -28,14 +30,14 @@ namespace Ren
             switch(e.type)
             {
             case SDL_KEYDOWN:
-                if (e.key.keysym.sym < SDL_Keycode(NUM_KEYS) && e.key.repeat == 0)
-                    m_keys[e.key.keysym.sym] = true;
+                if (e.key.keysym.scancode < NUM_KEYS && e.key.repeat == 0)
+                    m_keys[e.key.keysym.scancode] = true;
                 break;
             case SDL_KEYUP:
-                if (e.key.keysym.sym < NUM_KEYS && e.key.repeat == 0)
+                if (e.key.keysym.scancode < NUM_KEYS && e.key.repeat == 0)
                 {
-                    m_keys[e.key.keysym.sym] = false;
-                    m_keysProcessed[e.key.keysym.sym] = false;
+                    m_keys[e.key.keysym.scancode] = false;
+                    m_keysProcessed[e.key.keysym.scancode] = false;
                 }
                 break;
             default:
@@ -44,20 +46,20 @@ namespace Ren
         }
 
         // Check if key was pressed (will evaluate to true only once when holding the key).
-        inline bool KeyPressed(const SDL_KeyCode& key)
+        inline bool KeyPressed(Key key)
         {
-            if (m_keys[key] && !m_keysProcessed[key])
+            if (m_keys[(int)key] && !m_keysProcessed[(int)key])
             {
-                m_keysProcessed[key] = true;
+                m_keysProcessed[(int)key] = true;
                 return true;
             }
             return false;
         }
         
         // Check if key is being held down.
-        inline bool KeyHeld(const SDL_KeyCode& key)
+        inline bool KeyHeld(Key key)
         {
-            return m_keys[key];
+            return m_keys[(int)key];
         }
     };
 }

@@ -20,13 +20,13 @@ public:
         auto& transform = GetComponent<Ren::TransformComponent>();
 
 		float move_speed = 5.0f;
-		if (KeyHeld(SDLK_w))
+		if (KeyHeld(Ren::Key::W))
 			transform.position += Ren::UpDir() * move_speed * dt;
-		if (KeyHeld(SDLK_s))
+		if (KeyHeld(Ren::Key::S))
 			transform.position -= Ren::UpDir() * move_speed * dt;
-		if (KeyHeld(SDLK_a))
+		if (KeyHeld(Ren::Key::A))
 			transform.position -= Ren::RightDir() * move_speed * dt;
-		if (KeyHeld(SDLK_d))
+		if (KeyHeld(Ren::Key::D))
 			transform.position += Ren::RightDir() * move_speed * dt;
     }
 };

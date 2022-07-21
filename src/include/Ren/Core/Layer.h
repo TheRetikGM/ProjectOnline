@@ -28,8 +28,8 @@ namespace Ren
         virtual void OnImGui(Ren::ImGuiContext& context) {}
 
         inline const std::string& GetName() const { return m_name; }
-        inline bool KeyPressed(const SDL_KeyCode& key) { return m_GameCore->m_Input.KeyPressed(key); }
-        inline bool KeyHeld(const SDL_KeyCode& key) { return m_GameCore->m_Input.KeyHeld(key); }
+        inline bool KeyPressed(Key key) { return m_GameCore->m_Input.KeyPressed(key); }
+        inline bool KeyHeld(Key key) { return m_GameCore->m_Input.KeyHeld(key); }
         inline KeyInterface* GetInput() { return &m_GameCore->m_Input; }
         inline SDL_Renderer* GetRenderer() { return m_GameCore->GetRenderer(); }
     private:

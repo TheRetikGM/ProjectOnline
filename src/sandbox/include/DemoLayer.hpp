@@ -95,13 +95,13 @@ public:
 			ent.Get<Ren::TransformComponent>().rotation += rotation_speed * dt;
 
 		float move_speed = 8.0f;
-		if (KeyHeld(SDLK_f))
+		if (KeyHeld(Ren::Key::LEFT))
 			m_camera.m_CamPos -= Ren::RightDir() * move_speed * dt;
-		if (KeyHeld(SDLK_h))
+		if (KeyHeld(Ren::Key::RIGHT))
 			m_camera.m_CamPos += Ren::RightDir() * move_speed * dt;
-		if (KeyHeld(SDLK_t))
+		if (KeyHeld(Ren::Key::UP))
 			m_camera.m_CamPos += Ren::UpDir() * move_speed * dt;
-		if (KeyHeld(SDLK_g))
+		if (KeyHeld(Ren::Key::DOWN))
 			m_camera.m_CamPos -= Ren::UpDir() * move_speed * dt;
 		
 
@@ -110,14 +110,14 @@ public:
     void OnRender(SDL_Renderer* renderer) override
     {
 		Ren::Renderer::BeginRender(&m_camera);
-		m_textRenderer->RenderText("WSAD for movement\n'i' to toggle imgui demo window\nESC to exit", { 10.0f, 10.0f }, 1.0f, Ren::Colors3::White, 10);
+		m_textRenderer->RenderText("WSAD for movement\nArrow keys for camera movement\n'i' to toggle imgui demo window\nESC to exit", { 10.0f, 10.0f }, 1.0f, Ren::Colors3::White, 10);
         m_scene->Render();
 		Ren::Renderer::Render();
     }
     void OnImGui(Ren::ImGuiContext& context) override
     {
         static bool show_demo = false;
-		if (KeyPressed(SDLK_i))
+		if (KeyPressed(Ren::Key::I))
 			show_demo = !show_demo;
 		
 		if (show_demo)
