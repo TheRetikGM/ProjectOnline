@@ -12,6 +12,9 @@ struct Transform
     inline SDL_Rect ToRect() { return Renderer::ConvertRect({ position.x, position.y, size.x, size.y }); };
 };
 
+#pragma region Render commands
+
+// We use specialized render commands, which use camera to render.
 struct QuadRenderCommand
 {
     struct QuadInfo
@@ -63,6 +66,8 @@ struct RectRenderCommand
     }
 };
 
+#pragma endregion
+#pragma region Submission wrappers.
 
 void Renderer::SubmitQuad(const glm::vec2& pos, const glm::vec2& size, float rotation, const Ren::Color4& color)
 {
@@ -76,3 +81,5 @@ void Renderer::SubmitRect(const glm::vec2& pos, const glm::vec2& size, float rot
 {
     SubmitCommand(RectRenderCommand({ pos, size, rotation }, color, m_activeRenderLayer));
 }
+
+#pragma endregion
