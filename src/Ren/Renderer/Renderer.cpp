@@ -1,6 +1,9 @@
+#include <cmath>
 #include "Ren/Renderer/Renderer.h"
 
 using namespace Ren;
+
+const float TAU = 2 * M_PIf;
 
 struct Transform
 {
@@ -57,8 +60,8 @@ struct RectRenderCommand
     int32_t layer{ 0 };
 
     RectRenderCommand(const Transform& t, Color4 color, int32_t layer) : trans(t), color(color), layer(layer) {}
-    int32_t GetLayer() const { return layer; }
-    inline void Render(SDL_Renderer* renderer)
+    inline int32_t GetLayer() const { return layer; }
+    void Render(SDL_Renderer* renderer)
     {
         SDL_Rect rect = trans.ToRect();
         SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
@@ -66,20 +69,58 @@ struct RectRenderCommand
     }
 };
 
+struct CircleRenderCommand
+{
+    Transform trans{};
+    Color4 color{ Colors4::White };
+    uint32_t precision{ 32 };
+    bool fill = false;
+    int32_t layer{ 0 };
+
+    CircleRenderCommand(const Transform& t, Color4 color, uint32_t precision, bool fill, int32_t layer) : trans(t), color(color), precision(precision), fill(fill), layer(layer) {}
+    inline int32_t GetLayer() const { return layer; }
+    void Render(SDL_Renderer* renderer)
+    {
+        REN_ASSERT(fill == false, "Fill circle render command is not implemented yet.");
+
+        SDL_Rect rect = trans.ToRect();
+        float x = rect.x + rect.w / 2.0f, y = rect.y + rect.h / 2.0f;
+        
+        // Draw 'precision' number of lines, using points on the circle.
+        SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
+        float step_size = TAU / float(precision);
+        int i = 0;
+        for (float angle; angle < TAU; angle += step_size, i++)
+        {
+            glm::vec2 p1 = glm::vec2(std::cos(angle) * rect.w + x, std::sin(angle) * rect.h + y);
+            glm::vec2 p2 = glm::vec2(std::cos(angle + step_size) * rect.w + x, std::sin(angle + step_size) * rect.h + y);
+            SDL_RenderDrawLineF(renderer, p1.x, p1.y, p2.x, p2.y);
+        }
+    }
+};
+
 #pragma endregion
 #pragma region Submission wrappers.
 
-void Renderer::SubmitQuad(const glm::vec2& pos, const glm::vec2& size, float rotation, const Ren::Color4& color)
+void Renderer::RenderQuad(const Ren::Rect& rect, float rotation, const Ren::Color4& color)
 {
-    SubmitCommand(QuadRenderCommand({ pos, size, rotation, nullptr, color }, m_activeRenderLayer));
+    SubmitCommand(QuadRenderCommand({ rect.pos, rect.size, rotation, nullptr, color }, m_activeRenderLayer));
 }
-void Renderer::SubmitQuad(const glm::vec2& pos, const glm::vec2& size, float rotation, const Ren::Color3& color, SDL_Texture* texture)
+void Renderer::RenderQuad(const Ren::Rect& rect, float rotation, const Ren::Color3& color, SDL_Texture* texture)
 {
-    SubmitCommand(QuadRenderCommand({ pos, size, rotation, texture, Color4(color, 255) }, m_activeRenderLayer));
+    SubmitCommand(QuadRenderCommand({ rect.pos, rect.size, rotation, texture, Color4(color, 255) }, m_activeRenderLayer));
 }
-void Renderer::SubmitRect(const glm::vec2& pos, const glm::vec2& size, float rotation, const Ren::Color4& color)
+void Renderer::DrawRect(const Ren::Rect& rect, float rotation, const Ren::Color4& color)
 {
-    SubmitCommand(RectRenderCommand({ pos, size, rotation }, color, m_activeRenderLayer));
+    SubmitCommand(RectRenderCommand({ rect.pos, rect.size, rotation }, color, m_activeRenderLayer));
+}
+void Renderer::DrawCircle(const Ren::Rect& rect, const Ren::Color4& color, uint32_t precision)
+{
+    SubmitCommand(CircleRenderCommand({ rect.pos, rect.size, 0.0f }, color, precision, false, m_activeRenderLayer));
+}
+void Renderer::DrawCircle(const glm::vec2& pos, float radius, const Ren::Color4& color, uint32_t precision)
+{
+    SubmitCommand(CircleRenderCommand({ pos - glm::vec2(radius), glm::vec2(radius) * 2.0f, 0.0f }, color, precision, false, m_activeRenderLayer));
 }
 
 #pragma endregion

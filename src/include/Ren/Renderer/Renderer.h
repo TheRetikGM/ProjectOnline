@@ -27,9 +27,11 @@ namespace Ren
 
         // Use these calls to render. They take into account camera and stuff.
         inline static void SetRenderLayer(int32_t layer) { m_activeRenderLayer = layer; }
-        static void SubmitQuad(const glm::vec2& pos, const glm::vec2& size, float rotation, const Ren::Color4& color);
-        static void SubmitQuad(const glm::vec2& pos, const glm::vec2& size, float rotation, const Ren::Color3& color, SDL_Texture* texture);
-        static void SubmitRect(const glm::vec2& pos, const glm::vec2& size, float rotation, const Ren::Color4& color);
+        static void RenderQuad(const Ren::Rect& rect, float rotation, const Ren::Color4& color);
+        static void RenderQuad(const Ren::Rect& rect, float rotation, const Ren::Color3& color, SDL_Texture* texture);
+        static void DrawRect(const Ren::Rect& rect, float rotation, const Ren::Color4& color);
+        static void DrawCircle(const Ren::Rect& rect, const Ren::Color4& color, uint32_t precision = 32);
+        static void DrawCircle(const glm::vec2& pos, float radius, const Ren::Color4& color, uint32_t precision = 32);
 
         // Executes all render commands, that were submitted earlier.
         // TODO: Rendering optimizations like culling
@@ -40,10 +42,14 @@ namespace Ren
             for (auto&& command : m_renderCommands)
                 command->Render(m_renderer);
         }
+
         inline static SDL_Renderer* GetRenderer() { return m_renderer; } 
         inline static void SetRenderer(SDL_Renderer* renderer) { m_renderer = renderer; }
-        inline static SDL_Rect ConvertRect(const Ren::RenRect& rect) { return m_camera->ConvertRect(rect, m_cameraPV); }
+        inline static SDL_Rect ConvertRect(const Ren::Rect& rect) { return m_camera->ConvertRect(rect, m_cameraPV); }
         inline static Camera* GetCamera() { return m_camera; }
+        // Get position in the current viewport in respect to the camera.
+        // FIXME: Think of a better name...
+        inline glm::vec2 ToVpSpace(glm::vec2 point) { return glm::vec2(m_cameraPV * glm::vec4(point, 0.0f, 1.0f)); }
 
     private:
         inline static std::vector<RenderCommand> m_renderCommands{};

@@ -23,7 +23,7 @@ public:
 		{
 			auto [outline, trans] = view.get(ent);
 			Ren::Renderer::SetRenderLayer(trans.layer);
-			Ren::Renderer::SubmitRect(trans.position, trans.scale, trans.rotation, outline.color);
+			Ren::Renderer::DrawRect({ trans.position, trans.scale }, trans.rotation, outline.color);
 		}
 	}
 private:
@@ -71,7 +71,7 @@ public:
 
 		m_textRenderer->Load(ASSETS_DIR "fonts/DejaVuSansCondensed.ttf", 32);
 
-		m_camera.SetUnitScale(100.0f);
+		m_camera.SetUnitScale(100);
 		m_camera.SetViewportSize(m_GameCore->GetWindowSize());
     }
     void OnDestroy() override
@@ -85,6 +85,20 @@ public:
     {
         if (!(m_GameCore->m_Run = !Ren::Utils::key_pressed(e.sdl_event, SDLK_ESCAPE)))
             e.handled = true;
+		if (e.sdl_event.type == SDL_MOUSEWHEEL)
+		{
+			if (e.sdl_event.wheel.y > 0)	// scroll up
+			{
+				m_camera.SetUnitScale(m_camera.GetUnitScale() + glm::ivec2(10));
+			}
+			else
+			{
+				m_camera.SetUnitScale(m_camera.GetUnitScale() - glm::ivec2(10));
+			}
+		}
+		
+		if (Ren::Utils::key_pressed(e.sdl_event, SDLK_SPACE))
+			m_camera.SetUnitScale(100);
     }
     void OnUpdate(float dt) override
     {
@@ -93,6 +107,9 @@ public:
 		auto entities = m_scene->GetEntitiesByTag("rotate");
 		for (auto&& ent : *entities)
 			ent.Get<Ren::TransformComponent>().rotation += rotation_speed * dt;
+
+		if (KeyPressed(Ren::Key::SPACE))
+			m_camera.m_CamPos = glm::vec2(0.0f);
 
 		float move_speed = 8.0f;
 		if (KeyHeld(Ren::Key::LEFT))
@@ -103,7 +120,11 @@ public:
 			m_camera.m_CamPos += Ren::UpDir() * move_speed * dt;
 		if (KeyHeld(Ren::Key::DOWN))
 			m_camera.m_CamPos -= Ren::UpDir() * move_speed * dt;
-		
+
+		glm::ivec2 mouse_rel_pos(0);
+		bool mouse_pressed = SDL_GetRelativeMouseState(&mouse_rel_pos.x, &mouse_rel_pos.y) & SDL_BUTTON_RMASK;
+		if (mouse_pressed)
+			m_camera.m_CamPos -= glm::vec2(mouse_rel_pos.x, -mouse_rel_pos.y) / glm::vec2(m_camera.GetUnitScale());
 
 		m_scene->Update(dt);
     }
@@ -112,6 +133,8 @@ public:
 		Ren::Renderer::BeginRender(&m_camera);
 		m_textRenderer->RenderText("WSAD for movement\nArrow keys for camera movement\n'i' to toggle imgui demo window\nESC to exit", { 10.0f, 10.0f }, 1.0f, Ren::Colors3::White, 10);
         m_scene->Render();
+		Ren::Renderer::DrawCircle(glm::vec2(0.0f), 0.01f, Ren::Colors4::White, 5);
+		Ren::Renderer::DrawCircle({ 0.0f, 0.0f }, 0.5f, Ren::Colors4::Red);
 		Ren::Renderer::Render();
     }
     void OnImGui(Ren::ImGuiContext& context) override

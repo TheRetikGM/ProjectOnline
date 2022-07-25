@@ -43,4 +43,17 @@ namespace Ren
     using Colors3 = Colors<glm::ivec3>;
     using Color3 = glm::ivec3;
     using Color4 = glm::ivec4;
+
+    // Rectangle with float precision.
+    struct Rect 
+    { 
+        glm::vec2 pos, size;
+        float& x{ pos.x };
+        float& y{ pos.y };
+        float& w{ size.x };
+        float& h{ size.y };
+
+        Rect(glm::vec2 pos, glm::vec2 size) : pos(pos), size(size) {}
+        Rect(float x, float y, float w, float h) : pos(x, y), size(w, h) {}
+    };
 }

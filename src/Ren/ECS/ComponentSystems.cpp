@@ -15,7 +15,7 @@ void RenderSystem::Render()
     {
         auto [trans, sprite] = view.get(ent);
         Renderer::SetRenderLayer(trans.layer);
-        Renderer::SubmitQuad(trans.position, trans.scale, trans.rotation, sprite.color, sprite.GetTexture());
+        Renderer::RenderQuad({ trans.position, trans.scale }, trans.rotation, sprite.color, sprite.GetTexture());
     }
 }
 

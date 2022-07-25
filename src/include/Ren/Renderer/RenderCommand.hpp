@@ -38,7 +38,7 @@ namespace Ren
 
     //     void Render(SDL_Renderer* renderer)
     //     {
-    //         RenRect rrect{ transform.position.x, transform.position.y, transform.scale.x, transform.scale.y };
+    //         Rect rrect{ transform.position.x, transform.position.y, transform.scale.x, transform.scale.y };
     //         SDL_Rect rect = camera->ConvertRect(rrect);
     //         SDL_SetTextureColorMod(sprite.GetTexture(), sprite.color.r, sprite.color.g, sprite.color.b);
     //         SDL_RenderCopyEx(renderer, sprite.GetTexture(), nullptr, &rect, transform.rotation, nullptr, {});
