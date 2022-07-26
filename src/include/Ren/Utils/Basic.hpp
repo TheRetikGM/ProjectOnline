@@ -94,8 +94,12 @@ namespace Ren::Utils
             {
                 //ImGui::Text("FPS: %.1f", m_fps);
                 char avg_fps[20];
-                std::sprintf(avg_fps, "avg. %.1f", m_fps);
-                ImGui::PlotLines("FPS", &Funcs::value_getter, &m_values, m_values.size(), 0, avg_fps, 0.0f, 200.0f, ImVec2(0.0f, 80.0f));
+                #ifdef _BUILD_WINDOWS
+                    sprintf_s(avg_fps, "avg. %.1f", m_fps);
+                #else
+                    std::sprintf(avg_fps, "avg. %.1f", m_fps);
+                #endif
+                ImGui::PlotLines("FPS", &Funcs::value_getter, &m_values, (int)m_values.size(), 0, avg_fps, 0.0f, 200.0f, ImVec2(0.0f, 80.0f));
                 
                 if (ImGui::BeginPopupContextWindow())
                 {

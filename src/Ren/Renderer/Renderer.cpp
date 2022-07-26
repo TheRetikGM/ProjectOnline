@@ -1,9 +1,10 @@
+#define _USE_MATH_DEFINES
 #include <cmath>
 #include "Ren/Renderer/Renderer.h"
 
 using namespace Ren;
 
-const float TAU = 2 * M_PIf;
+const float TAU = 2.0f * float(M_PI);
 
 struct Transform
 {
@@ -88,7 +89,7 @@ struct RectRenderCommand
             p = Renderer::ToPixels(p);
         }
 
-        SDL_RenderDrawLinesF(renderer, (SDL_FPoint*)points.data(), points.size());
+        SDL_RenderDrawLinesF(renderer, (SDL_FPoint*)points.data(), (int)points.size());
     }
 };
 
@@ -112,8 +113,7 @@ struct CircleRenderCommand
         // Draw 'precision' number of lines, using points on the circle.
         SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
         float step_size = TAU / float(precision);
-        int i = 0;
-        for (float angle; angle < TAU; angle += step_size, i++)
+        for (float angle = 0.0f; angle < TAU; angle += step_size)
         {
             glm::vec2 p1 = glm::vec2(std::cos(angle) * rect.w + x, std::sin(angle) * rect.h + y);
             glm::vec2 p2 = glm::vec2(std::cos(angle + step_size) * rect.w + x, std::sin(angle + step_size) * rect.h + y);
