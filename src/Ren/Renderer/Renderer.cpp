@@ -63,9 +63,32 @@ struct RectRenderCommand
     inline int32_t GetLayer() const { return layer; }
     void Render(SDL_Renderer* renderer)
     {
-        SDL_Rect rect = trans.ToRect();
         SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
-        SDL_RenderDrawRect(renderer, &rect);
+        if (trans.rotation == 0.0f)
+        {
+            SDL_Rect rect = trans.ToRect();
+            SDL_RenderDrawRect(renderer, &rect);
+            return;
+        }
+
+        // Rotate the rectangle corners, convert them to pixel-space and render them.
+        std::array<glm::vec2, 5> points;
+        points[0] = { trans.position.x, trans.position.y };
+        points[1] = { trans.position.x + trans.size.x, trans.position.y };
+        points[2] = { trans.position.x + trans.size.x, trans.position.y + trans.size.y };
+        points[3] = { trans.position.x + 0.0f, trans.position.y + trans.size.y };
+        points[4] = { trans.position.x, trans.position.y };
+        float sinA = std::sin(glm::radians(trans.rotation));
+        float cosA = std::cos(glm::radians(trans.rotation));
+        for (auto&& p : points) {
+            p -= trans.position + trans.size / 2.0f;
+            p = { p.x * cosA - p.y * sinA, 
+                  p.x * sinA + p.y * cosA };
+            p += trans.position + trans.size / 2.0f;
+            p = Renderer::ToPixels(p);
+        }
+
+        SDL_RenderDrawLinesF(renderer, (SDL_FPoint*)points.data(), points.size());
     }
 };
 
@@ -98,6 +121,20 @@ struct CircleRenderCommand
         }
     }
 };
+struct LineRenderCommand
+{
+    glm::vec2 p1, p2;
+    Color4 color;
+    int32_t layer;
+    const int32_t GetLayer() const { return layer; }
+    void Render(SDL_Renderer* renderer)
+    {
+        p1 = Renderer::ToPixels(p1);
+        p2 = Renderer::ToPixels(p2);
+        SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
+        SDL_RenderDrawLineF(renderer, p1.x, p1.y, p2.x, p2.y);
+    }
+};
 
 #pragma endregion
 #pragma region Submission wrappers.
@@ -121,6 +158,10 @@ void Renderer::DrawCircle(const Ren::Rect& rect, const Ren::Color4& color, uint3
 void Renderer::DrawCircle(const glm::vec2& pos, float radius, const Ren::Color4& color, uint32_t precision)
 {
     SubmitCommand(CircleRenderCommand({ pos - glm::vec2(radius), glm::vec2(radius) * 2.0f, 0.0f }, color, precision, false, m_activeRenderLayer));
+}
+void Renderer::DrawLine(const glm::vec2& p1, const glm::vec2& p2, const Ren::Color4& color)
+{
+    SubmitCommand(LineRenderCommand{ p1, p2, color, m_activeRenderLayer });
 }
 
 #pragma endregion

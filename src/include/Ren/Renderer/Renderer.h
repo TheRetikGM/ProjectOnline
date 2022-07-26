@@ -19,6 +19,7 @@ namespace Ren
             m_renderCommands.clear();
             m_camera = camera;
             m_cameraPV = m_camera->GetPV();
+            m_cameraInvPV = glm::inverse(m_cameraPV);
         }
 
         // Submit raw RenderCommands, to be rendered.
@@ -27,11 +28,12 @@ namespace Ren
 
         // Use these calls to render. They take into account camera and stuff.
         inline static void SetRenderLayer(int32_t layer) { m_activeRenderLayer = layer; }
-        static void RenderQuad(const Ren::Rect& rect, float rotation, const Ren::Color4& color);
-        static void RenderQuad(const Ren::Rect& rect, float rotation, const Ren::Color3& color, SDL_Texture* texture);
-        static void DrawRect(const Ren::Rect& rect, float rotation, const Ren::Color4& color);
+        static void RenderQuad(const Ren::Rect& rect, float rotation_deg, const Ren::Color4& color);
+        static void RenderQuad(const Ren::Rect& rect, float rotation_deg, const Ren::Color3& color, SDL_Texture* texture);
+        static void DrawRect(const Ren::Rect& rect, float rotation_deg, const Ren::Color4& color);
         static void DrawCircle(const Ren::Rect& rect, const Ren::Color4& color, uint32_t precision = 32);
         static void DrawCircle(const glm::vec2& pos, float radius, const Ren::Color4& color, uint32_t precision = 32);
+        static void DrawLine(const glm::vec2& p1, const glm::vec2& p2, const Ren::Color4& color);
 
         // Executes all render commands, that were submitted earlier.
         // TODO: Rendering optimizations like culling
@@ -48,8 +50,7 @@ namespace Ren
         inline static SDL_Rect ConvertRect(const Ren::Rect& rect) { return m_camera->ConvertRect(rect, m_cameraPV); }
         inline static Camera* GetCamera() { return m_camera; }
         // Get position in the current viewport in respect to the camera.
-        // FIXME: Think of a better name...
-        inline glm::vec2 ToVpSpace(glm::vec2 point) { return glm::vec2(m_cameraPV * glm::vec4(point, 0.0f, 1.0f)); }
+        inline static glm::vec2 ToPixels(glm::vec2 point) { return m_camera->ToPixels(point, &m_cameraPV); }
 
     private:
         inline static std::vector<RenderCommand> m_renderCommands{};
@@ -58,6 +59,7 @@ namespace Ren
 
         inline static Camera* m_camera{ nullptr };
         inline static glm::mat4 m_cameraPV{ 1.0f };
+        inline static glm::mat4 m_cameraInvPV{ 1.0f };
     };
 
     inline static glm::vec2 UpDir() { return Renderer::GetCamera()->UpDir(); }

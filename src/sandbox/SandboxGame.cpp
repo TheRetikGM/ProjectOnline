@@ -35,7 +35,7 @@ Ren::GameCore* CreateGame()
 	Ren::GameDefinition def;
 	def.context_def.window_size = { WINDOW_WIDTH, WINDOW_HEIGHT };
 	def.context_def.window_name = "Demo project";
-//	def.context_def.window_flags |= SDL_WINDOW_RESIZABLE;
+	def.context_def.window_flags |= SDL_WINDOW_RESIZABLE;
 	
 	return new Game(def);
 }

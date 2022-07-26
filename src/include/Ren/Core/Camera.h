@@ -36,6 +36,12 @@ namespace Ren
         inline SDL_Rect ConvertRect(const Rect& rect) { return ConvertRect(rect, GetPV()); };
         // Get size of camera in units.
         inline glm::vec2 GetSize() { return glm::vec2(m_viewportSize) / glm::vec2(m_pixelsPerUnit); }
+        // Convert unit-space pos to pixels on viewport (taking into account camera position).
+        inline glm::vec2 ToPixels(glm::vec2 pos, glm::mat4* pv = nullptr) { return glm::vec2((pv ? *pv : GetPV()) * glm::vec4(pos, 0.0f, 1.0f)); }
+        // Convert position on viewport into position in unit-space (taking into account camera position).
+        inline glm::vec2 ToUnits(glm::vec2 pos, glm::mat4* pv = nullptr) { return glm::vec2(glm::inverse(pv ? *pv : GetPV()) * glm::vec4(pos, 0.0f, 1.0f)); }
+        // Same as ToUnits(), but with precaculated inverse PV matrix.
+        inline glm::vec2 ToUnitsPre(glm::vec2 pos, const glm::mat4& inv_pv) { return glm::vec2(inv_pv * glm::vec4(pos, 0.0f, 1.0f)); }
     protected:
         // Size of viewport (window) in pixels.
         glm::ivec2 m_viewportSize{ 1, 1 };
