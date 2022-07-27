@@ -102,6 +102,8 @@ void GameCore::Loop()
                 m_Run = false;
                 break;
             }
+            if (e.type == SDL_WINDOWEVENT && e.window.event == SDL_WINDOWEVENT_RESIZED)
+                m_context.definition.window_size = m_gameDefinition.context_def.window_size = { e.window.data1, e.window.data2 };
 
             // TODO: Check if imgui used the event and prevent other layers from accessing it.
             ImGui_ImplSDL2_ProcessEvent(&e);

@@ -38,7 +38,7 @@ class DemoLayer : public Ren::Layer
 	Ren::Entity m_ent;
 	Ren::CartesianCamera m_camera;
 	
-	b2Vec2 m_gravity{ 0.0f, -9.81f };
+	b2Vec2 m_gravity{ 0.0f, -10.0f };
 	Ref<b2World> m_world{ nullptr };
 	b2Body* m_body{ nullptr };
 	b2Body* m_groundBody{ nullptr };
@@ -120,6 +120,9 @@ public:
     }
     void OnEvent(Ren::Event& e) override
     {
+		if (e.sdl_event.type == SDL_WINDOWEVENT && e.sdl_event.window.event == SDL_WINDOWEVENT_RESIZED)
+			m_camera.SetViewportSize(m_GameCore->GetWindowSize());
+
         if (!(m_GameCore->m_Run = !Ren::Utils::key_pressed(e.sdl_event, SDLK_ESCAPE)))
             e.handled = true;
 		if (e.sdl_event.type == SDL_MOUSEWHEEL) 
