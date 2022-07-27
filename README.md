@@ -43,4 +43,5 @@ Inspired by http://lazyfoo.net/tutorials/SDL
 - [ ] Basic networking
 - [x] ~~Centralized rendering~~
 - [ ] Use EnTT groups instead of views.
+- [ ] Move GaeCore.cpp, Layer.cpp, LayerStack.cpp into their corresponding subdirectories
  

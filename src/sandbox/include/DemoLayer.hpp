@@ -105,7 +105,7 @@ public:
 			b2FixtureDef body_fix_def;
 			body_fix_def.shape = &dynamic_box;
 			body_fix_def.density = 1.0f;
-			body_fix_def.friction = 0.3;
+			body_fix_def.friction = 0.3f;
 			body_fix_def.restitution = 0.67f;
 
 			m_body->CreateFixture(&body_fix_def);

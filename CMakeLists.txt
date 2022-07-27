@@ -35,6 +35,8 @@ include_directories(
 add_compile_definitions(
 	"$<$<CONFIG:Debug,PackageDebug>:REN_DEBUG>"
 	"$<$<CONFIG:PackageDebug,PackageRelease>:REN_INSTALL>"
+	"$<$<PLATFORM_ID:Windows>:_BUILD_WINDOWS>"
+	"$<$<PLATFORM_ID:Linux>:_BUILD_LINUX>"
 )
 	
 # Go to src subdirectory, to add all source files and executable.
