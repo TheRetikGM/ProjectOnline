@@ -3,6 +3,10 @@
 #include <iostream>
 #include <glm/glm.hpp>
 
+/*
+    This file provides some Core concepts to be used across the engine.
+*/
+
 #ifdef REN_DEBUG
     #define REN_ASSERT(condition, message) \
         do { \

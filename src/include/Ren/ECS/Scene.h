@@ -9,6 +9,12 @@
 
 namespace Ren
 {
+    /*
+        Does several things:
+            - Wraps EnTT's registry and add some useful functions for our engine use (such as UUIDs (TODO))
+            - Holds systems manager.
+            - Holds component resources (loaded textures, ...)
+    */
     class Scene
     {
     public:

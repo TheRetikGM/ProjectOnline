@@ -4,12 +4,12 @@
 #include <SDL2/SDL_ttf.h>
 #include <glm/glm.hpp>
 #include <cstdint>
-#include "Ren/Core/Core.h"
 #include <string>
-
 #include <imgui.h>
 #include <imgui_impl_sdl.h>
 #include <imgui_impl_sdlrenderer.h>
+
+#include "Ren/Core/Core.h"
 
 #define INVALID_WINDOW_SIZE glm::ivec2(-1, -1)
 #define WINDOWPOS_UNDEFINED glm::ivec2(SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED)

@@ -3,7 +3,7 @@
 #include <cstring>  // std::memset
 
 #include "Ren/Core/Core.h"
-#include "Ren/Core/Keys.h"
+#include "Ren/RenSDL/Keys.h"
 
 namespace Ren
 {

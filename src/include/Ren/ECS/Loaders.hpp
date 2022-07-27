@@ -9,7 +9,6 @@
 
 namespace Ren
 {
-    // EnTT Resource Management.
     struct TextureResource 
     { 
         SDL_Texture* texture{ nullptr }; 
@@ -18,6 +17,8 @@ namespace Ren
         TextureResource(SDL_Texture* tex, glm::ivec2 size)
             : texture(tex), size(size) {}
     };
+    
+    // Manages loading of texture resources using SDL_Image as a loader.
     class TextureLoader
     {
     public:

@@ -33,6 +33,16 @@ namespace Ren
         inline bool key_released(const SDL_Event& e, SDL_Keycode key) { return e.type == SDL_KEYUP && e.key.keysym.sym == key && e.key.repeat == 0; }
     }
 
+    /*
+        Class which acts as a Core of the whole game.
+        It does several things:
+            - Initialize and destroys subsystems ( SDL, ImGui, ...)
+            - Manages user defined layers. (OnUpdate(), OnEvent(), OnRender(), ...)
+            - Manages main game loop.
+                - Polls events
+                - Updates all layers
+                - Flushes SDL renderer
+    */
     class GameCore
     {
     public:

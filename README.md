@@ -1,5 +1,5 @@
-# SDL2 learning
-Inspired by http://lazyfoo.net/tutorials/SDL
+# ProjectOnline - temp name
+Concept project which consists of Engine named Ren and Sandbox app.
 
 ## Windows build dependencies.
 - Installed visual studio with tools for C++ and C.
@@ -18,6 +18,23 @@ Inspired by http://lazyfoo.net/tutorials/SDL
     cd sdl2-learning
     cmake --preset linux-release
     cmake --build build
+
+## Windows coding environment setup (Visual Studio)
+- Install CMake tools using Visual Studio installer.
+- Clone project.
+- Open project folder in visual studio.
+- Make sure that `Windows msvc` preset is selected in the top tool blade.
+- Project -> Configure CMake cache
+- In the right side of the tool blade select which executable you want to run.
+- Use green arrows in the tool blade to build and run (ctrl + F5 or F5).
+
+## Windows coding environment setup (Visual Studio Code)
+- Install CMake Tools and C++ tools extensions.
+- Clone project
+- Open project in VSCode
+- Make sure that `Windows msvc` preset is selected in the bottom tool blade (blue strip with buttons).
+- Use arrow or bug in the bottom tool blade to compile and run code.
+- Note: Select debug or release build configuration in bottom blade.
 
 ## TODO list
 - [ ] Support already installed VCPKG, instead of downloading it

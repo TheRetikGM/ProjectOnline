@@ -3,7 +3,7 @@
 #include <algorithm>
 
 #include "RenderCommand.hpp"
-#include "Ren/Core/Camera.h"
+#include "Ren/Renderer/Camera.h"
 
 namespace Ren
 {

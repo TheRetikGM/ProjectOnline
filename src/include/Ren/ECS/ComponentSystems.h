@@ -8,9 +8,12 @@ namespace Ren
 {
     class Scene;
 
-    // Base class for all component systems.
-    // NOTE: When creating new systems, put the base constructor parameters in front of others,
-    //  so that the Scene class can automatically fill them in.
+    /*
+        Base class for all component systems.
+        - Component systems manages groups of components. For ex. render system will act on Sprite components and render them.
+        NOTE: When creating new systems, put the base constructor parameters in front of others,
+              so that the Scene class can automatically fill them in.
+    */
     class ComponentSystem
     {
     public:

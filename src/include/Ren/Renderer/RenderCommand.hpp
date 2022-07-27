@@ -2,7 +2,7 @@
 #include <entt/entt.hpp>
 
 #include "Ren/ECS/Scene.h"
-#include "Ren/Core/Camera.h"
+#include "Ren/Renderer/Camera.h"
 
 namespace Ren
 {

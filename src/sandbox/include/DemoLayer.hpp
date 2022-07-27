@@ -1,6 +1,5 @@
 #pragma once
 #include <Ren/Ren.h>
-#include <Ren/Core/Camera.h>
 #include <box2d/box2d.h>
 
 #include "scripts/Movement.hpp"
