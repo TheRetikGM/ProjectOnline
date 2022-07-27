@@ -1,6 +1,10 @@
 # ProjectOnline - temp name
 Concept project which consists of Engine named Ren and Sandbox app.
 
+## Docs
+- [Conventions](docs/typing.md "conventions")
+- [New project](docs/new_project.md "new_project")
+
 ## Windows build dependencies.
 - Installed visual studio with tools for C++ and C.
 - CMake (added to PATH)
@@ -35,6 +39,7 @@ Concept project which consists of Engine named Ren and Sandbox app.
 - Make sure that `Windows msvc` preset is selected in the bottom tool blade (blue strip with buttons).
 - Use arrow or bug in the bottom tool blade to compile and run code.
 - Note: Select debug or release build configuration in bottom blade.
+
 
 ## TODO list
 - [ ] Support already installed VCPKG, instead of downloading it
