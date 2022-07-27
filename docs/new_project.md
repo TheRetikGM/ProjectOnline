@@ -51,7 +51,7 @@
         Game(const Ren::GameDefinition& def) : Ren::GameCore(def) 
         {
             // NOTE: Here could be: Rendering layer, network layer, audio layer etc.
-            PushLayer(new DemoLayer("Demo layer"));
+            PushLayer(new MyLayer("New layer"));
         }
     };
 
