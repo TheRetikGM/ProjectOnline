@@ -204,7 +204,8 @@ public:
 			"Arrow keys or hold mouse right button for camera movement\n"
 			"'i' to toggle imgui demo window\n"
 			"ESC to exit\n"
-			"Mouse left button for spawning new body"
+			"Mouse left button for spawning new body\n"
+			"Mouse wheel for zoom"
 			, { 10.0f, 10.0f }, 1.0f, Ren::Colors3::White, 10);
         m_scene->Render();
 
