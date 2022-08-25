@@ -194,7 +194,7 @@ public:
 
 		m_scene->Update(dt);
 
-		m_world->Step(1.0f / 60.0f, 6, 2);
+		m_world->Step(dt, 6, 2);
     }
     void OnRender(SDL_Renderer* renderer) override
     {
