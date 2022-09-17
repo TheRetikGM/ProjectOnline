@@ -44,6 +44,15 @@ Concept project which consists of Engine named Ren and Sandbox app.
 ## TODO list
 - [ ] Support already installed VCPKG, instead of downloading it
 - [ ] Fix the VCPKG sdl-mixer mess. The add_library directive changes based on weather and OS... what?
+- [ ] Scene serialization and de-serialization
+- [ ] Camera controller on entity.
+- [ ] Tilemap loading
+- [ ] Text component
+- [ ] Scene hiearchy
+- [ ] Basic scene editing (far ahead)
+- [ ] Basic networking
+- [ ] Use EnTT groups instead of views.
+- [ ] Layout components / or library.
 - [x] ~~Layering system + event catching~~
 - [x] ~~Proper log handling.~~
 - [x] ~~Move function calls from REN_ASSERT (as they could get removed with some compilers).~~
@@ -51,21 +60,12 @@ Concept project which consists of Engine named Ren and Sandbox app.
 - [x] ~~Convert ScriptComponent::script to runtime polymorphic class (instead of entt::poly, which is inflexible for this use case)~~
 - [x] ~~Add support for multiple tags on single TagComponent.~~
 - [x] ~~Scene view shortcut~~
-- [ ] Scene serialization and de-serialization
 - [x] ~~Remove SDL_net dependency~~
 - [x] ~~Camera implementation~~
 - [x] ~~Fix KeyInterface (segfault on some keys. For ex. arrow keys).~~
-- [ ] Camera controller on entity.
 - [x] ~~Proper comments on camera and renderer implementation.~~
-- [ ] Tilemap loading
 - [x] ~~Freetype text rendering~~
-- [ ] Text component
-- [ ] Scene hiearchy
-- [ ] Basic scene editing (far ahead)
 - [x] ~~Box2D implementation~~ kind of
-- [ ] Basic networking
 - [x] ~~Centralized rendering~~
-- [ ] Use EnTT groups instead of views.
 - [x] ~~Move GameCore.cpp, Layer.cpp, LayerStack.cpp into their corresponding subdirectories~~
-- [ ] Layout components / or library.
  
