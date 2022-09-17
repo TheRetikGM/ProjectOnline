@@ -1,11 +1,13 @@
 #pragma once
 #include <entt/entt.hpp>
+#include <box2d/box2d.h>
 
 #include "Ren/Core/Core.h"
 #include "Components.h"
 #include "Loaders.hpp"
 #include "ComponentSystems.h"
 #include "SystemsManager.hpp"
+#include "Ren/Physics/Physics.h"
 
 namespace Ren
 {
@@ -34,8 +36,10 @@ namespace Ren
             inline auto& Add(Args&&... args) { return p_scene->m_Registry->emplace<TComponent>(id, std::forward<Args>(args)...); }
 
             // Get given components.
+            template<typename TComponent>
+            inline auto& Get() { return p_scene->m_Registry->get<TComponent>(id); }
             template<typename... TComponents>
-            inline auto& Get() { return p_scene->m_Registry->get<TComponents...>(id); }
+            inline auto GetM() { return p_scene->m_Registry->get<TComponents...>(id); }
 
             // Remove given components.
             template<typename... TComponents>
@@ -53,6 +57,8 @@ namespace Ren
         Ref<entt::registry> m_Registry{ nullptr };
         // Used for loading textures.
         SDL_Renderer* m_Renderer{ nullptr };
+        // Physics world. Updates all of physics.
+        Ref<b2World> m_PhysWorld{ nullptr };
 
         Scene(SDL_Renderer* renderer, KeyInterface* input);
         ~Scene();
@@ -82,7 +88,7 @@ namespace Ren
         
         // Add component system. Note that the type must inherit from ComponentSystem base class.
         template<typename T, typename... Args>
-        inline void AddSystem(Args... args) { m_sysManager.Add<T>(this, m_input, std::forward<Args>(args)...); }
+        inline T* AddSystem(Args... args) { return m_sysManager.Add<T>(this, m_input, std::forward<Args>(args)...); }
         // Remove component system.
         template<typename T>
         inline void RemoveSystem() { m_sysManager.Remove<T>(); }
@@ -98,6 +104,10 @@ namespace Ren
         inline void Update(float dt) { m_sysManager.Update(dt); }
         // Call render on all component systems.
         inline void Render() { m_sysManager.Render(); }
+
+        // Set positions of rigidbody to transform component, create body in physics world and create its fixture.
+        // Use this when you add RigidBodyComponent **after** the Scene::Init() method was called.
+        void InitPhysicsBody(Entity ent);
         
     private:
         // Cache for storing loaded textures of components.
@@ -113,4 +123,14 @@ namespace Ren
     }; // class Scene
 
     using Entity = Scene::Entity;
+
+    // Note: When body has RigidBody component, then changing transform component position, will not affect the position of entity.
+    template<>
+    inline auto& Scene::Entity::Add<RigidBodyComponent>()
+    {
+        const b2Vec2 gravity = { 0.0f, -9.81f };
+        if (!p_scene->m_PhysWorld)
+            p_scene->m_PhysWorld = CreateRef<b2World>(gravity);
+        return p_scene->m_Registry->emplace<RigidBodyComponent>(id);
+    }
 }; // namespace Ren

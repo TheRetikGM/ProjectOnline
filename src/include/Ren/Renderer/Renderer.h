@@ -13,7 +13,7 @@ namespace Ren
     {
     public:
         // Use this function on the start of render phase.
-        // TODO: Maybe submit a camera and render texture target here?
+        // TODO: Maybe submit render texture target here?
         static void BeginRender(Camera* camera)
         {
             m_renderCommands.clear();

@@ -3,6 +3,8 @@
 #include <string>
 #include <cstdint>
 #include <filesystem>
+#include <box2d/box2d.h>
+
 #include "Loaders.hpp"
 
 #define UNDEFINED_TAG "undefined"
@@ -48,6 +50,15 @@ namespace Ren
         glm::ivec3 color = glm::ivec3(255);
 
         SpriteComponent(std::filesystem::path img_path = UNDEFINED_PATH, glm::vec3 color = glm::vec3(255)) : color(color), ImgComponent(img_path) {}
+    };
+
+    struct RigidBodyComponent
+    {
+        b2BodyDef body_def{};
+        b2Body* p_body{ nullptr };
+        b2Shape* p_shape;
+        // Note: Use p_shape. Do NOT use b2FixtureDef::shape as it will be set when component is initialized.
+        b2FixtureDef fixture_def{};
     };
 
     ///////////////////////////////////////

@@ -35,11 +35,9 @@ namespace Ren
     class RenderSystem : public ComponentSystem
     {
     public:
-        RenderSystem(Scene* p_scene, KeyInterface* p_input, SDL_Renderer* p_renderer) : ComponentSystem(p_scene, p_input), m_renderer(p_renderer) {}
+        RenderSystem(Scene* p_scene, KeyInterface* p_input) : ComponentSystem(p_scene, p_input) {}
         
         void Render() override;
-    private:
-        SDL_Renderer* m_renderer{ nullptr };
     };
 
     // System which handles native scripts.
@@ -51,5 +49,29 @@ namespace Ren
         void Init() override;
         void Destroy() override;
         void Update(float dt) override;
+    };
+
+    // Handles updating of all rigid bodies.
+    class PhysicsSystem : public ComponentSystem
+    {
+    public:
+        PhysicsSystem(Scene* scene, KeyInterface* input) : ComponentSystem(scene, input) {}
+
+        // Render outlines of the shapes.
+        // TODO: For now, only supports rectangle shapes. Implement more shapes (eg. circles and polygons)
+        bool m_DebugRender{ false };
+        // Time of a single physics frame.
+        // TODO: implement this. System should be running in separate thread and have a stable refresh rate.
+        float m_RefreshRate{ 1.0f / 60.0f };
+        
+        // These are the recommended number of iterations from box2d docs.
+        // If you need more/less precision you can try tweaking these values.
+        int32_t m_VelocityIterations{ 6 };
+        int32_t m_PositionIterations{ 2 };
+
+        void Init() override;
+        void Destroy() override;
+        void Update(float dt) override;
+        void Render() override;
     };
 } // namespace Ren

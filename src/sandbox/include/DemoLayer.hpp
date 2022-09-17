@@ -36,12 +36,6 @@ class DemoLayer : public Ren::Layer
 	Ren::Scene* m_scene;
 	Ren::Entity m_ent;
 	Ren::CartesianCamera m_camera;
-	
-	b2Vec2 m_gravity{ 0.0f, -10.0f };
-	Ref<b2World> m_world{ nullptr };
-	b2Body* m_body{ nullptr };
-	b2Body* m_groundBody{ nullptr };
-	b2Body* m_anotherBody{ nullptr };
 public:
     DemoLayer(const std::string& name) : Ren::Layer(name) {}
 
@@ -52,6 +46,7 @@ public:
 
 		m_scene = new Ren::Scene(GetRenderer(), GetInput());
 		m_scene->AddSystem<OutlineSystem>(GetRenderer());
+		m_scene->AddSystem<Ren::PhysicsSystem>()->m_DebugRender = true;
 
 		// Create awesomeface entity.
 		m_ent = m_scene->CreateEntity({ glm::vec2(1.0f), glm::vec2(2.0f) });
@@ -67,8 +62,6 @@ public:
 		ent_copy.Get<Ren::TagComponent>().tag = "rotate";
 		ent_copy.Get<Ren::TransformComponent>().layer = 1;
 
-		// Call init on all scene subsystems.
-		m_scene->Init();
 
 		m_textRenderer->Load(ASSETS_DIR "fonts/DejaVuSansCondensed.ttf", 32);
 
@@ -77,38 +70,32 @@ public:
 
 		/////////// Box2D ///////////
 		{
-			m_world = std::make_shared<b2World>(m_gravity);
+			auto box_shape = new b2PolygonShape();
 
-			// Ground
-			b2BodyDef ground_body_def;
-			ground_body_def.position.Set(0.0f, -10.0f);
-			m_groundBody = m_world->CreateBody(&ground_body_def);
-			b2PolygonShape ground_box;
-			ground_box.SetAsBox(50.0f, 10.0f);
-			m_groundBody->CreateFixture(&ground_box, 0.0f);  // Static body
+			Ren::Entity ground_body = m_scene->CreateEntity(Ren::TransformComponent({ 0.0f, -10.0f }), Ren::TagComponent("ground"));
+			auto& ground_body_r = ground_body.Add<Ren::RigidBodyComponent>();
+			ground_body_r.p_shape = box_shape;
+			box_shape->SetAsBox(50.0f, 10.0f);
 
-			ground_box.SetAsBox(1.0f, 1.0f);
-			ground_body_def.position.Set(-1.7f, 2.0f);
-			m_anotherBody = m_world->CreateBody(&ground_body_def);
-			m_anotherBody->CreateFixture(&ground_box, 0.0f);
+			Ren::Entity another_body = m_scene->CreateEntity({{ -1.7f, 2.0f }}, { "another_body" });
+			auto& another_body_r = another_body.Add<Ren::RigidBodyComponent>();
+			box_shape = new b2PolygonShape();
+			box_shape->SetAsBox(1.0f, 1.0f);
+			another_body_r.p_shape = box_shape;
 
 			// Dynamic body
-			b2BodyDef body_def;
-			body_def.type = b2_dynamicBody;
-			body_def.position.Set(0.0f, 10.0f);
-			m_body = m_world->CreateBody(&body_def);
-
-			b2PolygonShape dynamic_box;
-			dynamic_box.SetAsBox(1.5f, 1.0f);
-
-			b2FixtureDef body_fix_def;
-			body_fix_def.shape = &dynamic_box;
-			body_fix_def.density = 1.0f;
-			body_fix_def.friction = 0.3f;
-			body_fix_def.restitution = 0.67f;
-
-			m_body->CreateFixture(&body_fix_def);
+			Ren::Entity dynamic_body = m_scene->CreateEntity({{ 0.0f, 10.0f }}, { "dynamic_body" });
+			auto& dynamic_body_r = dynamic_body.Add<Ren::RigidBodyComponent>();
+			box_shape = new b2PolygonShape();
+			box_shape->SetAsBox(1.5f, 1.0f);
+			dynamic_body_r.p_shape = box_shape;
+			dynamic_body_r.body_def.type = b2_dynamicBody;
+			dynamic_body_r.fixture_def.density = 1.0f;
+			dynamic_body_r.fixture_def.friction = 0.3f;
+			dynamic_body_r.fixture_def.restitution = 0.67;
 		}
+		// Call init on all scene subsystems.
+		m_scene->Init();
     }
     void OnDestroy() override
     {
@@ -137,21 +124,17 @@ public:
 			SDL_GetMouseState(&mouse_pos.x, &mouse_pos.y);
 			glm::vec2 pos = m_camera.ToUnits(glm::vec2(mouse_pos));
 
-			b2BodyDef body_def;
-			body_def.type = b2_dynamicBody;
-			body_def.position.Set(pos.x, pos.y);
-			b2Body* body = m_world->CreateBody(&body_def);
+			Ren::Entity dynamic_body = m_scene->CreateEntity({{ pos.x, pos.y }}, { "spawned_body" });
+			auto& dynamic_body_r = dynamic_body.Add<Ren::RigidBodyComponent>();
+			auto box_shape = new b2PolygonShape();
+			box_shape->SetAsBox(Ren::Utils::RandomFloat(0.5f, 2.0f), Ren::Utils::RandomFloat(0.5f, 2.0f));
+			dynamic_body_r.p_shape = box_shape;
+			dynamic_body_r.body_def.type = b2_dynamicBody;
+			dynamic_body_r.fixture_def.density = Ren::Utils::RandomFloat(0.5f, 5.0f);
+			dynamic_body_r.fixture_def.friction = Ren::Utils::RandomFloat_0_1();
+			dynamic_body_r.fixture_def.restitution = Ren::Utils::RandomFloat_0_1();
 
-			b2PolygonShape dynamic_box;
-			dynamic_box.SetAsBox(Ren::Utils::RandomFloat(0.5f, 2.0f), Ren::Utils::RandomFloat(0.5f, 2.0f));
-
-			b2FixtureDef body_fix_def;
-			body_fix_def.shape = &dynamic_box;
-			body_fix_def.density = Ren::Utils::RandomFloat(0.5f, 5.0f);
-			body_fix_def.friction = Ren::Utils::RandomFloat_0_1();
-			body_fix_def.restitution = Ren::Utils::RandomFloat_0_1();
-
-			body->CreateFixture(&body_fix_def);
+			m_scene->InitPhysicsBody(dynamic_body);
 		}
 		
 		if (Ren::Utils::key_pressed(e.sdl_event, SDLK_SPACE))
@@ -193,8 +176,6 @@ public:
 			m_camera.m_CamPos -= glm::vec2(mouse_rel_pos.x, -mouse_rel_pos.y) / glm::vec2(m_camera.GetUnitScale());
 
 		m_scene->Update(dt);
-
-		m_world->Step(dt, 6, 2);
     }
     void OnRender(SDL_Renderer* renderer) override
     {
@@ -208,19 +189,6 @@ public:
 			"Mouse wheel for zoom"
 			, { 10.0f, 10.0f }, 1.0f, Ren::Colors3::White, 10);
         m_scene->Render();
-
-		const auto to_vec2 = [](b2Vec2 v){ return *(glm::vec2*)(&v); };
-		const auto draw_body = [&](b2Body* body){
-			b2PolygonShape* shape = (b2PolygonShape*)body->GetFixtureList()->GetShape();
-			SAND_ASSERT(shape->m_count == 4, "Only rectangles are supported for now.");
-
-			glm::vec2 pos = to_vec2(body->GetPosition());
-			Ren::Rect rect{ pos + to_vec2(shape->m_vertices[0]), to_vec2(shape->m_vertices[2]) - to_vec2(shape->m_vertices[0]) };
-			Ren::Renderer::DrawRect(rect, glm::degrees(body->GetAngle()), Ren::Colors4::White);
-		};
-		for (b2Body* body = m_world->GetBodyList(); body; body = body->GetNext())
-			draw_body(body);
-
 		Ren::Renderer::Render();
     }
     void OnImGui(Ren::ImGuiContext& context) override

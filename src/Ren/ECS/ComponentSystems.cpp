@@ -2,6 +2,7 @@
 #include "Ren/ECS/Scene.h"
 #include "Ren/ECS/NativeScript.h"
 #include "Ren/Renderer/Renderer.h"
+#include "Ren/Physics/Physics.h"
 
 using namespace Ren;
 
@@ -58,6 +59,73 @@ void NativeScriptSystem::Update(float dt)
     for_each_script(m_scene, [&dt](entt::entity ent, NativeScript* script) {
         script->OnUpdate(dt);
     });
+}
+
+// Physics system.
+void PhysicsSystem::Init()
+{
+    if (!m_scene->m_PhysWorld)
+        return;
+
+    auto view = m_scene->SceneView<RigidBodyComponent, TransformComponent, TagComponent>();
+    for (auto&& ent : view)
+        m_scene->InitPhysicsBody({ ent, m_scene });
+}
+void PhysicsSystem::Destroy()
+{
+    if (!m_scene->m_PhysWorld)
+        return;
+
+    // Destroy all bodies in world when the world is deleted.
+    for (b2Body* body = m_scene->m_PhysWorld->GetBodyList(); body;)
+    {
+        b2Body* next = body->GetNext();
+        m_scene->m_PhysWorld->DestroyBody(body);
+        body = next;
+    }
+    
+    // Set pointers of the components to null, so that they don't point to free'd memory.
+    auto view = m_scene->SceneView<RigidBodyComponent>();
+    for (auto&& ent : view)
+    {
+        auto [r] = view.get(ent);
+        r.p_body = nullptr;
+        delete r.p_shape;
+    }
+    m_scene->m_PhysWorld.reset();
+}
+void PhysicsSystem::Update(float dt)
+{
+    if (!m_scene->m_PhysWorld)
+        return;
+
+    // Update physics.
+    m_scene->m_PhysWorld->Step(dt, m_VelocityIterations, m_PositionIterations);
+    
+    // Sync TransformComponent position with RigidBodyComponent position.
+    // TODO: Call collision callbacks.
+    auto view = m_scene->SceneView<TransformComponent, RigidBodyComponent>();
+    for (auto&& ent : view)
+    {
+        auto [trans, rigid] = view.get(ent);
+        trans.position = Utils::to_vec2(rigid.p_body->GetPosition());
+    }
+}
+void PhysicsSystem::Render()
+{
+    if (!m_DebugRender)
+        return;
+
+    const auto draw_body = [&](b2Body* body){
+        b2PolygonShape* shape = (b2PolygonShape*)body->GetFixtureList()->GetShape();
+        REN_ASSERT(shape->m_count == 4, "Only rectangles are supported for now.");
+
+        glm::vec2 pos = Utils::to_vec2(body->GetPosition());
+        Ren::Rect rect{ pos + Utils::to_vec2(shape->m_vertices[0]), Utils::to_vec2(shape->m_vertices[2]) - Utils::to_vec2(shape->m_vertices[0]) };
+        Ren::Renderer::DrawRect(rect, glm::degrees(body->GetAngle()), Ren::Colors4::White);
+    };
+    for (b2Body* body = m_scene->m_PhysWorld->GetBodyList(); body; body = body->GetNext())
+        draw_body(body);
 }
 
 #pragma endregion

@@ -13,7 +13,7 @@ namespace Ren
         // Create new system of specified type.
         // NOTE: Type must inherit from ComponentSystem base class.
         template<typename T, typename... Args>
-        void Add(Args... args)
+        T* Add(Args... args)
         {
             int32_t sys_id = getID<T>();
 
@@ -22,6 +22,8 @@ namespace Ren
             
             // Create new instance, down-cast it to base class type and store it in Ref.
             m_systems[sys_id] = Ref<ComponentSystem>(dynamic_cast<ComponentSystem*>(new T(std::forward<Args>(args)...)));
+
+            return dynamic_cast<T*>(m_systems[sys_id].get());
         }
 
         // Return specified system.

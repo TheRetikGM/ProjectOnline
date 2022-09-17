@@ -25,7 +25,7 @@ namespace Ren
         m_Registry->on_construct<SpriteComponent>().connect<&Scene::onTextureConstruct<SpriteComponent>>(this);
 
         // Add common systems.
-        AddSystem<RenderSystem>(m_Renderer);
+        AddSystem<RenderSystem>();
         AddSystem<NativeScriptSystem>();
     }
     Scene::~Scene()
@@ -75,6 +75,23 @@ namespace Ren
             auto ret = m_textureCache->load(entt::hashed_string(component->img_path.string().c_str()), m_Renderer, component->img_path.string().c_str());
             component->texture_handle = *ret.first;
         }
+    }
+
+    void Scene::InitPhysicsBody(Entity ent)
+    {
+        auto [rig, trans, tag] = ent.GetM<RigidBodyComponent, TransformComponent, TagComponent>();
+        
+        // Body was already initialized.
+        if (rig.p_body)
+            return;
+
+        REN_ASSERT(rig.p_shape, "Body must have a shape. Body tag = " + tag.tag);
+
+        // Create body and its fixture.
+        rig.body_def.position = Utils::to_b2Vec2(trans.position);
+        rig.p_body = m_PhysWorld->CreateBody(&rig.body_def);
+        rig.fixture_def.shape = rig.p_shape;
+        rig.p_body->CreateFixture(&rig.fixture_def);
     }
 
 } // namespace Ren
