@@ -53,6 +53,8 @@ Concept project which consists of Engine named Ren and Sandbox app.
 - [ ] Basic networking
 - [ ] Use EnTT groups instead of views.
 - [ ] Layout components / or library.
+- [ ] Box2D Collision callbacks
+- [ ] Box2D shape offsetting
 - [x] ~~Layering system + event catching~~
 - [x] ~~Proper log handling.~~
 - [x] ~~Move function calls from REN_ASSERT (as they could get removed with some compilers).~~
