@@ -67,5 +67,5 @@ Concept project which consists of Engine named Ren and Sandbox app.
 - [x] ~~Centralized rendering~~
 - [ ] Use EnTT groups instead of views.
 - [x] ~~Move GameCore.cpp, Layer.cpp, LayerStack.cpp into their corresponding subdirectories~~
-- [x] Layout components / or library.
+- [ ] Layout components / or library.
  
