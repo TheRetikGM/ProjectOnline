@@ -68,7 +68,7 @@ void PhysicsSystem::Init()
     if (!m_scene->m_PhysWorld)
         return;
 
-    auto view = m_scene->SceneView<RigidBodyComponent, TransformComponent, TagComponent>();
+    auto view = m_scene->SceneView<RigidBodyComponent>();
     for (auto&& ent : view)
         m_scene->InitPhysicsBody({ ent, m_scene });
 }

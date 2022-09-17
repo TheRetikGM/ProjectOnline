@@ -23,15 +23,6 @@ namespace Ren
             : position(pos), scale(scale), layer(layer) {}
     };
 
-    // TODO: Support multiple tags.
-    struct TagComponent
-    {
-        std::string tag = UNDEFINED_TAG;
-
-        TagComponent() = default;
-        TagComponent(const std::string& tag_name) : tag(tag_name) {}
-    };
-
     // Base class for components, that has to load some texture.
     struct ImgComponent
     {

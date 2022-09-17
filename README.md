@@ -49,7 +49,7 @@ Concept project which consists of Engine named Ren and Sandbox app.
 - [x] ~~Move function calls from REN_ASSERT (as they could get removed with some compilers).~~
 - [x] ~~Sandbox~~
 - [x] ~~Convert ScriptComponent::script to runtime polymorphic class (instead of entt::poly, which is inflexible for this use case)~~
-- [ ] Add support for multiple tags on single TagComponent.
+- [x] ~~Add support for multiple tags on single TagComponent.~~
 - [x] ~~Scene view shortcut~~
 - [ ] Scene serialization and de-serialization
 - [x] ~~Remove SDL_net dependency~~
@@ -67,4 +67,5 @@ Concept project which consists of Engine named Ren and Sandbox app.
 - [x] ~~Centralized rendering~~
 - [ ] Use EnTT groups instead of views.
 - [x] ~~Move GameCore.cpp, Layer.cpp, LayerStack.cpp into their corresponding subdirectories~~
+- [x] Layout components / or library.
  

@@ -68,17 +68,15 @@ public:
 		m_scene->AddSystem<Ren::PhysicsSystem>()->m_DebugRender = true;
 
 		// Create awesomeface entity.
-		m_ent = m_scene->CreateEntity({ glm::vec2(1.0f), glm::vec2(2.0f) });
+		m_ent = m_scene->CreateEntity({ glm::vec2(1.0f), glm::vec2(2.0f) }, { "awesomeface" });
 		m_ent.Add<Ren::SpriteComponent>(ASSETS_DIR "awesomeface.png").color = Ren::Colors3::Magenta;
 		m_ent.Add<OutlineComponent>().color = Ren::Colors4::Cyan;
 		m_ent.Add<Ren::NativeScriptComponent>().Bind<MovementScript>();
-		m_ent.Get<Ren::TagComponent>().tag = "awesomeface";
 		m_ent.Get<Ren::TransformComponent>().layer = 2;
 
 		// Create copy of awesomeface entity (the texture will get reused).
-		auto ent_copy = m_scene->CreateEntity({ glm::vec2(0.0f), glm::vec2(2.0f) });
+		auto ent_copy = m_scene->CreateEntity({ glm::vec2(0.0f), glm::vec2(2.0f) }, { "rotate" });
 		ent_copy.Add<Ren::SpriteComponent>(ASSETS_DIR "awesomeface.png");
-		ent_copy.Get<Ren::TagComponent>().tag = "rotate";
 		ent_copy.Get<Ren::TransformComponent>().layer = 1;
 
 
@@ -91,7 +89,7 @@ public:
 		{
 			auto box_shape = new b2PolygonShape();
 
-			Ren::Entity ground_body = m_scene->CreateEntity(Ren::TransformComponent({ 0.0f, -10.0f }), Ren::TagComponent("ground"));
+			Ren::Entity ground_body = m_scene->CreateEntity(Ren::TransformComponent({ 0.0f, -10.0f }), Ren::TagList{ "ground" });
 			auto& ground_body_r = ground_body.Add<Ren::RigidBodyComponent>();
 			ground_body_r.p_shape = box_shape;
 			box_shape->SetAsBox(50.0f, 10.0f);

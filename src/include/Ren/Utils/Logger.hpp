@@ -6,11 +6,11 @@
 #include <unordered_map>
 #include <iostream>
 
-#define LOG_I(message) Ren::LogEmmiter::Log(Ren::LogLevel::info, message, __FILE__, __LINE__);
-#define LOG_S(message) Ren::LogEmmiter::Log(Ren::LogLevel::status, message, __FILE__, __LINE__);
-#define LOG_W(message) Ren::LogEmmiter::Log(Ren::LogLevel::warning, message, __FILE__, __LINE__);
-#define LOG_E(message) Ren::LogEmmiter::Log(Ren::LogLevel::error, message, __FILE__, __LINE__);
-#define LOG_C(message) Ren::LogEmmiter::Log(Ren::LogLevel::critical, message, __FILE__, __LINE__);
+#define LOG_I(message) Ren::LogEmmiter::Log(Ren::LogLevel::info, message, __FILE__, __LINE__)
+#define LOG_S(message) Ren::LogEmmiter::Log(Ren::LogLevel::status, message, __FILE__, __LINE__)
+#define LOG_W(message) Ren::LogEmmiter::Log(Ren::LogLevel::warning, message, __FILE__, __LINE__)
+#define LOG_E(message) Ren::LogEmmiter::Log(Ren::LogLevel::error, message, __FILE__, __LINE__)
+#define LOG_C(message) Ren::LogEmmiter::Log(Ren::LogLevel::critical, message, __FILE__, __LINE__)
 
 using StreamArr = std::vector<std::FILE*>;  // Used in Ren::StreamLogger
 

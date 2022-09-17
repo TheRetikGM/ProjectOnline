@@ -1,5 +1,6 @@
 #include <tuple>
 #include <vector>
+#include <algorithm>    // std::find
 
 #include "Ren/ECS/Scene.h"
 #include "Ren/Utils/Logger.hpp"
@@ -36,33 +37,58 @@ namespace Ren
         m_Registry->clear();
     }
 
-    Entity Scene::CreateEntity(const TransformComponent& transform_comp, const TagComponent& tag_comp)
+    Entity Scene::CreateEntity(const TransformComponent& transform_comp, const TagList& tag_list)
     {
         Entity ent{ m_Registry->create(), this };
         ent.Add<TransformComponent>() = transform_comp;
-        ent.Add<TagComponent>() = tag_comp;
+        for (auto&& tag : tag_list)
+            AddTag(ent, tag);
         return ent;
     };
+    void Scene::AddTag(Entity ent, std::string tag)
+    {
+        if (HasTag(ent, tag))
+            return;
+        m_entityToTags[ent.id].push_back(tag);
+        m_tagToEntities[tag].push_back(ent.id);
+    }
+    bool Scene::HasTag(Entity ent, std::string tag)
+    {
+        return std::find(m_entityToTags[ent.id].begin(), m_entityToTags[ent.id].end(), tag) == m_entityToTags[ent.id].end();
+    }
+    void Scene::RemTag(Entity ent, std::string tag)
+    {
+        auto tag_iter = std::find(m_entityToTags[ent.id].begin(), m_entityToTags[ent.id].end(), tag);
+        if (tag_iter == m_entityToTags[ent.id].end())
+            return;
+        auto ent_iter = std::find(m_tagToEntities[tag].begin(), m_tagToEntities[tag].end(), ent.id);
 
+        m_entityToTags[ent.id].erase(tag_iter);
+        m_tagToEntities[tag].erase(ent_iter);
+    }
     Ref<std::vector<Entity>> Scene::GetEntitiesByTag(const std::string& tag)
     {
-        auto view = m_Registry->view<TagComponent>();
-        auto matches = CreateRef<std::vector<Entity>>();
-        for (auto&& ent : view)
-            if (view.get<TagComponent>(ent).tag == tag)
-                matches->push_back({ ent, this });
-        return matches;
+        auto ent_arr = CreateRef<std::vector<Entity>>();
+        
+        // Check if tag exists at all, so we dont create empty std::list<entt::entity> when using [] operator.
+        if (m_tagToEntities.count(tag) == 0)
+            return ent_arr;
+        
+        std::list<entt::entity>& found_entities = m_tagToEntities[tag];
+        for (auto&& ent : found_entities)
+            ent_arr->push_back({ ent, this });
+
+        return ent_arr;
     }
 
     std::tuple<bool, Entity> Scene::GetEntityByTag(const std::string& tag)
     {
-        auto view = m_Registry->view<TagComponent>();
+        // Check if tag exists at all, so we dont create empty std::list<entt::entity> when using [] operator.
+        if (m_tagToEntities.count(tag) == 0)
+            return { false, {} };
 
-        for (auto&& ent : view)
-            if (view.get<TagComponent>(ent).tag == tag)
-                return std::make_tuple(true, Entity{ ent, this });
-
-        return std::make_tuple(false, Entity{});
+        auto& found_entities = m_tagToEntities[tag];
+        return { found_entities.size() > 0, { found_entities.front(), this } };
     }
     
     void Scene::LoadTexture(ImgComponent* component)
@@ -89,13 +115,13 @@ namespace Ren
 
     void Scene::InitPhysicsBody(Entity ent)
     {
-        auto [rig, trans, tag] = ent.GetM<RigidBodyComponent, TransformComponent, TagComponent>();
+        auto [rig, trans] = ent.GetM<RigidBodyComponent, TransformComponent>();
         
         // Body was already initialized.
         if (rig.p_body)
             return;
 
-        REN_ASSERT(rig.p_shape, "Body must have a shape. Body tag = " + tag.tag);
+        REN_ASSERT(rig.p_shape, "Body must have a shape. Body id = " + std::to_string((uint32_t)ent.id));
 
         // Create body and its fixture.
         rig.body_def.position = Utils::to_b2Vec2(trans.position);

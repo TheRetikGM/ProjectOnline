@@ -12,6 +12,8 @@
 
 namespace Ren
 {
+    using TagList = std::list<std::string>;
+
     /*
         Does several things:
             - Wraps EnTT's registry and add some useful functions for our engine use (such as UUIDs (TODO))
@@ -65,7 +67,9 @@ namespace Ren
         ~Scene();
 
         // Create entity with default components.
-        Entity CreateEntity(const TransformComponent& transform_comp = {}, const TagComponent& tag_comp = {});
+        Entity CreateEntity(const TransformComponent& transform_comp = {}, const TagList& tag_list = {});
+        // Create Ren::Entity from entt::entity.
+        inline Entity ToEntity(entt::entity ent) { return { ent, this }; }
         // Destroy given entity.
         inline void DestroyEntity(Entity ent) { m_Registry->destroy(ent.id); }
         // Checks if given entity is still valid (e.g. it was not destroyed).
@@ -79,6 +83,10 @@ namespace Ren
         Ref<std::vector<Entity>> GetEntitiesByTag(const std::string& tag);
         // Get the first entity with given tag. First tuple element represents success status.
         std::tuple<bool, Entity> GetEntityByTag(const std::string& tag);
+
+        void AddTag(Entity ent, std::string tag);
+        bool HasTag(Entity ent, std::string tag);
+        void RemTag(Entity ent, std::string tag);
 
         // Loads texture for given component reference.
         void LoadTexture(ImgComponent* component);
@@ -120,6 +128,10 @@ namespace Ren
         SystemsManager m_sysManager;
         // Used for auto passing as argument to systems.
         KeyInterface* m_input;
+        // Map tag to entities to speed up the search time for entities by tag.
+        std::unordered_map<std::string, std::list<entt::entity>> m_tagToEntities{};
+        // Map entity to tags to speed up tag searchup.
+        std::unordered_map<entt::entity, std::list<std::string>> m_entityToTags{};
 
         // Load texture (into texture cache) when the component is constructed. It will be unloaded when the cache is cleared.
         template<typename T>
