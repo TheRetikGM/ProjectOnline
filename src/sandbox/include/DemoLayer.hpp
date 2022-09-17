@@ -24,7 +24,7 @@ public:
 		{
 			auto [outline, trans] = view.get(ent);
 			Ren::Renderer::SetRenderLayer(trans.layer);
-			Ren::Renderer::DrawRect({ trans.position, trans.scale }, outline.rotation, outline.color);
+			Ren::Renderer::DrawRect({ trans.position - trans.scale * 0.5f, trans.scale }, outline.rotation, outline.color);
 		}
 	}
 private:

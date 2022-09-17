@@ -57,7 +57,7 @@ namespace Ren
     public:
         virtual void OnLog(const LogInfo& log) = 0;
     };
-    // Outputs the logs to (C) file streams.
+    // Outputs logs to (C) file streams.
     class StreamLogger : public LogListener
     {
     public:

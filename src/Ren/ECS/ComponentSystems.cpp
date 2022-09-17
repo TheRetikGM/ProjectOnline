@@ -16,7 +16,7 @@ void RenderSystem::Render()
     {
         auto [trans, sprite] = view.get(ent);
         Renderer::SetRenderLayer(trans.layer);
-        Renderer::RenderQuad({ trans.position, trans.scale }, trans.rotation, sprite.color, sprite.GetTexture());
+        Renderer::RenderQuad({ trans.position - trans.scale * 0.5f, trans.scale }, trans.rotation, sprite.color, sprite.GetTexture());
     }
 }
 
@@ -117,6 +117,7 @@ void PhysicsSystem::Render()
     if (!m_DebugRender)
         return;
 
+    Ren::Renderer::SetRenderLayer(1000);
     const auto draw_body = [&](b2Body* body){
         b2PolygonShape* shape = (b2PolygonShape*)body->GetFixtureList()->GetShape();
         REN_ASSERT(shape->m_count == 4, "Only rectangles are supported for now.");
