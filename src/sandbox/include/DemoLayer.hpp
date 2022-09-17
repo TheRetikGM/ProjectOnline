@@ -1,6 +1,7 @@
 #pragma once
 #include <Ren/Ren.h>
 #include <box2d/box2d.h>
+#include <fstream>
 
 #include "scripts/Movement.hpp"
 
@@ -37,7 +38,25 @@ class DemoLayer : public Ren::Layer
 	Ren::Entity m_ent;
 	Ren::CartesianCamera m_camera;
 public:
-    DemoLayer(const std::string& name) : Ren::Layer(name) {}
+    DemoLayer(const std::string& name) : Ren::Layer(name) 
+	{
+		std::filesystem::create_directory(SOURCE_DIR "/logs");
+		// Create a file handle, which automatically deletes itself when out of scope.
+		auto file = Ref<std::FILE>(fopen(SOURCE_DIR "/logs/out.log", "a"), [](std::FILE* f){ 
+			auto logger = Ren::LogEmmiter::GetListener<Ren::StreamLogger>();
+			if (logger)
+				logger->Erase(f);
+			fclose(f);
+		});
+
+		Ren::LogEmmiter::AddListener<Ren::StreamLogger>(StreamArr{
+			stdout,
+			file.get()
+		});
+
+		LOG_I("Hey!");
+		LOG_W("How are you?");
+	}
 
     void OnInit() override
     {

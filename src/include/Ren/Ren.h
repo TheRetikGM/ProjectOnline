@@ -16,6 +16,7 @@
 
 #include "Utils/Basic.hpp"
 #include "Utils/FpsCounter.hpp"
+#include "Utils/Logger.hpp"
 
 #include "Renderer/Renderer.h"
 #include "Renderer/TextRenderer.h"

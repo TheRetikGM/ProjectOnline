@@ -43,8 +43,9 @@ Concept project which consists of Engine named Ren and Sandbox app.
 
 ## TODO list
 - [ ] Support already installed VCPKG, instead of downloading it
+- [ ] Fix the VCPKG sdl-mixer mess. The add_library directive changes based on weather and OS... what?
 - [x] ~~Layering system + event catching~~
-- [ ] Proper log handling.
+- [x] ~~Proper log handling.~~
 - [x] ~~Move function calls from REN_ASSERT (as they could get removed with some compilers).~~
 - [x] ~~Sandbox~~
 - [x] ~~Convert ScriptComponent::script to runtime polymorphic class (instead of entt::poly, which is inflexible for this use case)~~
@@ -61,9 +62,9 @@ Concept project which consists of Engine named Ren and Sandbox app.
 - [ ] Text component
 - [ ] Scene hiearchy
 - [ ] Basic scene editing (far ahead)
-- [ ] Box2D implementation
+- [x] ~~Box2D implementation~~ kind of
 - [ ] Basic networking
 - [x] ~~Centralized rendering~~
 - [ ] Use EnTT groups instead of views.
-- [ ] Move GaeCore.cpp, Layer.cpp, LayerStack.cpp into their corresponding subdirectories
+- [x] ~~Move GameCore.cpp, Layer.cpp, LayerStack.cpp into their corresponding subdirectories~~
  

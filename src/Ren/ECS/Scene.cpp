@@ -2,6 +2,7 @@
 #include <vector>
 
 #include "Ren/ECS/Scene.h"
+#include "Ren/Utils/Logger.hpp"
 
 namespace Ren
 {
@@ -66,15 +67,24 @@ namespace Ren
     
     void Scene::LoadTexture(ImgComponent* component)
     {
+        auto [success, handle] = LoadTexture(component->img_path);
+        if (success)
+            component->texture_handle = handle;
+    }
+    std::tuple<bool, TextureHandle> Scene::LoadTexture(std::filesystem::path path)
+    {
         // Load the component, only if the path is specified.
         // Note that the texture cache load will be unsuccessfull only if the texture is already loaded **NOT** when the load
         //  of texture itself is unsuccessfull (when that happens, there is undefined behavior). Those cases are already
         //  accounted for with asserts in the loader.
-        if (component->img_path != UNDEFINED_PATH)
+        if (path != UNDEFINED_PATH)
         {
-            auto ret = m_textureCache->load(entt::hashed_string(component->img_path.string().c_str()), m_Renderer, component->img_path.string().c_str());
-            component->texture_handle = *ret.first;
+            auto ret = m_textureCache->load(entt::hashed_string(path.string().c_str()), m_Renderer, path.string().c_str());
+            return std::make_tuple(true, *ret.first);
         }
+        else
+            LOG_W("Trying to load image with unspecified path.");
+        return std::make_tuple(false, TextureHandle{});
     }
 
     void Scene::InitPhysicsBody(Entity ent)

@@ -1,6 +1,7 @@
 #pragma once
 #include <entt/entt.hpp>
 #include <box2d/box2d.h>
+#include <filesystem> // std::filesystem::path
 
 #include "Ren/Core/Core.h"
 #include "Components.h"
@@ -79,8 +80,11 @@ namespace Ren
         // Get the first entity with given tag. First tuple element represents success status.
         std::tuple<bool, Entity> GetEntityByTag(const std::string& tag);
 
-        // Loads texture for given component reference. 
+        // Loads texture for given component reference.
         void LoadTexture(ImgComponent* component);
+        // Load texture with given, path. If texture already exists in cache, then it is recycled.
+        /// @returns [sucess, texture_handle]
+        std::tuple<bool, TextureHandle> LoadTexture(std::filesystem::path path);
         // Returns raw pointer to the texture cache.
         inline TextureCache* GetTextureCache() { return m_textureCache.get(); }
 

@@ -60,7 +60,8 @@ void NativeScriptSystem::Update(float dt)
         script->OnUpdate(dt);
     });
 }
-
+#pragma endregion
+#pragma region --> Physics system
 // Physics system.
 void PhysicsSystem::Init()
 {
