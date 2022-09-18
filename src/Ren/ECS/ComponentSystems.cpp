@@ -4,6 +4,8 @@
 #include "Ren/Renderer/Renderer.h"
 #include "Ren/Physics/Physics.h"
 
+#include "Ren/Utils/Logger.hpp"
+
 using namespace Ren;
 
 #pragma region --> Render system
@@ -16,7 +18,10 @@ void RenderSystem::Render()
     {
         auto [trans, sprite] = view.get(ent);
         Renderer::SetRenderLayer(trans.layer);
-        Renderer::RenderQuad({ trans.position - trans.scale * 0.5f, trans.scale }, trans.rotation, sprite.color, sprite.GetTexture());
+
+        glm::vec2 size = sprite.GetSize();
+
+        Renderer::RenderQuad({ trans.position - size * 0.5f, size }, trans.rotation, sprite.m_Color, sprite.GetTexture());
     }
 }
 
@@ -108,8 +113,15 @@ void PhysicsSystem::Update(float dt)
     auto view = m_scene->SceneView<TransformComponent, RigidBodyComponent>();
     for (auto&& ent : view)
     {
-        auto [trans, rigid] = view.get(ent);
-        trans.position = Utils::to_vec2(rigid.p_body->GetPosition());
+        auto [trans, rig] = view.get(ent);
+        if (trans.dirty)
+        {
+            rig.p_body->SetTransform(Utils::to_b2Vec2(trans.position), rig.p_body->GetAngle());
+            trans.dirty = false;
+        }
+        else
+            trans.position = Utils::to_vec2(rig.p_body->GetPosition());
+        trans.rotation = rig.p_body->GetAngle() * (180.0f / 3.141592f);
     }
 }
 void PhysicsSystem::Render()
@@ -119,12 +131,26 @@ void PhysicsSystem::Render()
 
     Ren::Renderer::SetRenderLayer(1000);
     const auto draw_body = [&](b2Body* body){
-        b2PolygonShape* shape = (b2PolygonShape*)body->GetFixtureList()->GetShape();
-        REN_ASSERT(shape->m_count == 4, "Only rectangles are supported for now.");
-
         glm::vec2 pos = Utils::to_vec2(body->GetPosition());
-        Ren::Rect rect{ pos + Utils::to_vec2(shape->m_vertices[0]), Utils::to_vec2(shape->m_vertices[2]) - Utils::to_vec2(shape->m_vertices[0]) };
-        Ren::Renderer::DrawRect(rect, glm::degrees(body->GetAngle()), Ren::Colors4::White);
+
+        switch (body->GetFixtureList()->GetShape()->GetType())
+        {
+        case b2Shape::Type::e_polygon: {
+            b2PolygonShape* shape = (b2PolygonShape*)body->GetFixtureList()->GetShape();
+            REN_ASSERT(shape->m_count == 4, "Only rectangles are supported for now.");
+
+            Ren::Rect rect{ pos + Utils::to_vec2(shape->m_vertices[0]), Utils::to_vec2(shape->m_vertices[2]) - Utils::to_vec2(shape->m_vertices[0]) };
+            Ren::Renderer::DrawRect(rect, glm::degrees(body->GetAngle()), Ren::Colors4::White);
+            } break;
+        case b2Shape::Type::e_circle: {
+            b2CircleShape* shape = (b2CircleShape*)body->GetFixtureList()->GetShape();
+            Ren::Renderer::DrawCircle(pos, shape->m_radius, Ren::Colors4::White);
+            } break;
+        default:
+            LOG_W("Only polygon and circle shapes are supported for debug printing.");
+            break;
+        }
+
     };
     for (b2Body* body = m_scene->m_PhysWorld->GetBodyList(); body; body = body->GetNext())
         draw_body(body);

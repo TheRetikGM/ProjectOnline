@@ -8,6 +8,7 @@
 
 #include "Ren/Renderer/Renderer.h"
 #include "Ren/RenSDL/Texture.hpp"
+#include "Ren/Utils/Logger.hpp"
 
 using namespace Ren;
 
@@ -65,7 +66,7 @@ void TextRenderer::Load(std::string font, unsigned int font_size)
         // Load character glyph
         if (FT_Load_Char(face, c, FT_LOAD_RENDER))
         {
-            REN_STATUS("Failed to load Glyph. C = " + std::to_string(c));
+            LOG_E("Failed to load Glyph. C = " + std::to_string(c));
             continue;
         }
 

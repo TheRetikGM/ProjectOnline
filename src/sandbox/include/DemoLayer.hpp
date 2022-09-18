@@ -7,30 +7,6 @@
 
 using namespace entt::literals;
 
-struct OutlineComponent
-{
-	glm::ivec4 color = glm::ivec4(255);
-	float rotation = 0.0f;
-};
-class OutlineSystem : public Ren::ComponentSystem
-{    glm::vec2 m_rectPos{ 100, 100 };
-public:
-	OutlineSystem(Ren::Scene* p_scene, Ren::KeyInterface* p_input, SDL_Renderer* renderer) : Ren::ComponentSystem(p_scene, p_input), m_renderer(renderer) {}
-
-	void Render() override
-	{
-		auto view = m_scene->SceneView<OutlineComponent, Ren::TransformComponent>();
-		for (auto&& ent : view)
-		{
-			auto [outline, trans] = view.get(ent);
-			Ren::Renderer::SetRenderLayer(trans.layer);
-			Ren::Renderer::DrawRect({ trans.position - trans.scale * 0.5f, trans.scale }, outline.rotation, outline.color);
-		}
-	}
-private:
-	SDL_Renderer* m_renderer = nullptr;
-};
-
 class DemoLayer : public Ren::Layer
 {
 	Ref<Ren::TextRenderer> m_textRenderer = Ren::TextRenderer::Create();
@@ -40,22 +16,8 @@ class DemoLayer : public Ren::Layer
 public:
     DemoLayer(const std::string& name) : Ren::Layer(name) 
 	{
-		std::filesystem::create_directory(SOURCE_DIR "/logs");
-		// Create a file handle, which automatically deletes itself when out of scope.
-		auto file = Ref<std::FILE>(fopen(SOURCE_DIR "/logs/out.log", "a"), [](std::FILE* f){ 
-			auto logger = Ren::LogEmmiter::GetListener<Ren::StreamLogger>();
-			if (logger)
-				logger->Erase(f);
-			fclose(f);
-		});
-
-		Ren::LogEmmiter::AddListener<Ren::StreamLogger>(StreamArr{
-			stdout,
-			file.get()
-		});
-
-		LOG_I("Hey!");
-		LOG_W("How are you?");
+		// Outputs logs to stdout by default.
+		Ren::LogEmmiter::AddListener<Ren::StreamLogger>();
 	}
 
     void OnInit() override
@@ -64,15 +26,23 @@ public:
 		m_GameCore->m_ClearColor = { 100, 100, 100, 255 };
 
 		m_scene = new Ren::Scene(GetRenderer(), GetInput());
-		m_scene->AddSystem<OutlineSystem>(GetRenderer());
 		m_scene->AddSystem<Ren::PhysicsSystem>()->m_DebugRender = true;
 
 		// Create awesomeface entity.
 		m_ent = m_scene->CreateEntity({ glm::vec2(1.0f), glm::vec2(2.0f) }, { "awesomeface" });
-		m_ent.Add<Ren::SpriteComponent>(ASSETS_DIR "awesomeface.png").color = Ren::Colors3::Magenta;
-		m_ent.Add<OutlineComponent>().color = Ren::Colors4::Cyan;
+		m_ent.Add<Ren::SpriteComponent>(ASSETS_DIR "awesomeface.png").m_Color = Ren::Colors3::Magenta;
 		m_ent.Add<Ren::NativeScriptComponent>().Bind<MovementScript>();
 		m_ent.Get<Ren::TransformComponent>().layer = 2;
+		auto& rig = m_ent.Add<Ren::RigidBodyComponent>();
+		auto size = m_ent.Get<Ren::SpriteComponent>().GetSize() * 0.5f;
+		auto shape = new b2CircleShape();
+		shape->m_radius = size.x;
+		rig.body_def.type = b2_dynamicBody;
+		rig.p_shape = shape;
+		rig.fixture_def.density = 1.0f;
+		rig.fixture_def.friction = 0.3f;
+		rig.fixture_def.restitution = 0.67;
+
 
 		// Create copy of awesomeface entity (the texture will get reused).
 		auto ent_copy = m_scene->CreateEntity({ glm::vec2(0.0f), glm::vec2(2.0f) }, { "rotate" });
@@ -82,7 +52,7 @@ public:
 
 		m_textRenderer->Load(ASSETS_DIR "fonts/DejaVuSansCondensed.ttf", 32);
 
-		m_camera.SetUnitScale(100);
+		m_camera.SetUnitScale(50);
 		m_camera.SetViewportSize(m_GameCore->GetWindowSize());
 
 		/////////// Box2D ///////////
@@ -104,7 +74,7 @@ public:
 			Ren::Entity dynamic_body = m_scene->CreateEntity({{ 0.0f, 10.0f }}, { "dynamic_body" });
 			auto& dynamic_body_r = dynamic_body.Add<Ren::RigidBodyComponent>();
 			box_shape = new b2PolygonShape();
-			box_shape->SetAsBox(1.5f, 1.0f);
+			box_shape->SetAsBox(1.5f, 1.f);
 			dynamic_body_r.p_shape = box_shape;
 			dynamic_body_r.body_def.type = b2_dynamicBody;
 			dynamic_body_r.fixture_def.density = 1.0f;
@@ -164,15 +134,6 @@ public:
 		auto entities = m_scene->GetEntitiesByTag("rotate");
 		for (auto&& ent : *entities)
 			ent.Get<Ren::TransformComponent>().rotation += rotation_speed * dt;
-
-		auto outline_ents = m_scene->SceneView<OutlineComponent>();
-		for (auto&& ent : outline_ents)
-		{
-			auto [outline] = outline_ents.get(ent);
-			outline.rotation -= rotation_speed * dt * 1.3f;
-			if (std::abs(outline.rotation) > 360.0f)
-				outline.rotation += outline.rotation > 0.0f ? -360.0f : 360.0f;
-		}
 
 		if (KeyPressed(Ren::Key::SPACE))
 			m_camera.m_CamPos = glm::vec2(0.0f);

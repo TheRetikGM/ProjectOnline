@@ -1,3 +1,12 @@
+/*
+ * Logger implementation designed to be portable and a copy-paste solution for other projects.
+ * Use:
+ *  - Make sure you have added LogListener
+ *      - Example: Ren::LogEmmiter::AddListener<Ren::StreamLogger>(StreamArr{ stdout });
+ *  - Then you can use macros LOG_* for logging or Ren::LogEmmiter::Log() member function.
+ * If you need extra functionality, you can define your own child of LogListener base class (see definition below).
+ */
+
 #pragma once
 #include <string>
 #include <filesystem>
@@ -107,19 +116,25 @@ namespace Ren
                 listener->OnLog(log);
         }
 
+        // Create instance of a specified type (which must be a child of LogListener) with args as arguments for construction.
         template<typename T, typename... Args>
         static T* AddListener(Args... args)
         {
             int id = getID<T>();
-            REN_ASSERT(s_logListeners.count(id) == 0, std::string("Log listener of type '") + typeid(T).name() + "' is already present.");
+            if (s_logListeners.count(id) != 0)
+                return dynamic_cast<T*>(s_logListeners[id].get());
+
             s_logListeners[id] = Ref<LogListener>(new T(std::forward<Args>(args)...));
             return dynamic_cast<T*>(s_logListeners[id].get());
         }
+        // Create instance of a specified type (which must be a child of LogListener).
         template<typename T>
         static T* AddListener()
         {
             int id = getID<T>();
-            REN_ASSERT(s_logListeners.count(id) == 0, std::string("Log listener of type '") + typeid(T).name() + "' is already present.");
+            if (s_logListeners.count(id) != 0)
+                return dynamic_cast<T*>(s_logListeners[id].get());
+            
             s_logListeners[id] = Ref<LogListener>(new T());
             return dynamic_cast<T*>(s_logListeners[id].get());
         }

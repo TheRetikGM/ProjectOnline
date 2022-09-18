@@ -16,8 +16,12 @@ namespace Ren
     {
         glm::vec2 position{ .0f, .0f };
         glm::vec2 scale { .0f, .0f };
+        // Rotation in degrees ccw from positive x.
         float rotation{ 0.0f };
         int32_t layer{ 0 };
+
+        // Use this if entity has RigidBodyComponent and you want to enforce transform as position.
+        bool dirty = false;
         
         TransformComponent(glm::vec2 pos = glm::vec2(0.0f), glm::vec2 scale = glm::vec2(10.0f), int32_t layer = 0)
             : position(pos), scale(scale), layer(layer) {}
@@ -36,11 +40,19 @@ namespace Ren
         inline entt::resource<TextureResource> GetTextureResource() { return texture_handle.second; }
     };
 
-    struct SpriteComponent : public ImgComponent
+    class SpriteComponent : public ImgComponent
     {
-        glm::ivec3 color = glm::ivec3(255);
+    public:
+        glm::ivec3 m_Color = glm::ivec3(255);
+        // Texture size is defined in pixels, so we have to scale it to match our desired size in unit-space.
+        // However we don't use pixels-per-unit from Renderer::GetCamera(), because we don't want the texture
+        // to have same size on different zoom levels of the camera (defined by the ppu ratio).
+        glm::ivec2 m_PixelsPerUnit = glm::ivec2(200);
 
-        SpriteComponent(std::filesystem::path img_path = UNDEFINED_PATH, glm::vec3 color = glm::vec3(255)) : color(color), ImgComponent(img_path) {}
+        SpriteComponent(std::filesystem::path img_path = UNDEFINED_PATH, glm::vec3 color = glm::vec3(255)) : m_Color(color), ImgComponent(img_path) {}
+
+        // Get size in units (accounting for m_PixelsPerUnit)
+        glm::vec2 GetSize();
     };
 
     struct RigidBodyComponent

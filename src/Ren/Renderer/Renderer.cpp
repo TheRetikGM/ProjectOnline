@@ -44,7 +44,7 @@ struct QuadRenderCommand
         if (info.texture)
         {
             SDL_SetTextureColorMod(info.texture, info.color.r, info.color.g, info.color.b );
-            SDL_RenderCopyEx(renderer, info.texture, nullptr, &rect, info.trans.rotation, nullptr, {});
+            SDL_RenderCopyEx(renderer, info.texture, nullptr, &rect, -info.trans.rotation, nullptr, {});
         }
         else
         {
@@ -115,8 +115,8 @@ struct CircleRenderCommand
         float step_size = TAU / float(precision);
         for (float angle = 0.0f; angle < TAU; angle += step_size)
         {
-            glm::vec2 p1 = glm::vec2(std::cos(angle) * rect.w + x, std::sin(angle) * rect.h + y);
-            glm::vec2 p2 = glm::vec2(std::cos(angle + step_size) * rect.w + x, std::sin(angle + step_size) * rect.h + y);
+            glm::vec2 p1 = glm::vec2(std::cos(angle) * rect.w * 0.5f + x, std::sin(angle) * rect.h * 0.5f + y);
+            glm::vec2 p2 = glm::vec2(std::cos(angle + step_size) * rect.w * 0.5f + x, std::sin(angle + step_size) * rect.h * 0.5f + y);
             SDL_RenderDrawLineF(renderer, p1.x, p1.y, p2.x, p2.y);
         }
     }

@@ -87,6 +87,9 @@ namespace Ren
         void AddTag(Entity ent, std::string tag);
         bool HasTag(Entity ent, std::string tag);
         void RemTag(Entity ent, std::string tag);
+        inline void AddTag(entt::entity ent, std::string tag) { AddTag({ ent, this }, tag); }
+        inline bool HasTag(entt::entity ent, std::string tag) { return HasTag({ ent, this }, tag); }
+        inline void RemTag(entt::entity ent, std::string tag) { RemTag({ ent, this }, tag); }
 
         // Loads texture for given component reference.
         void LoadTexture(ImgComponent* component);
