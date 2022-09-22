@@ -4,6 +4,7 @@ Concept project which consists of Engine named Ren and Sandbox app.
 ## Docs
 - [Conventions](docs/typing.md "conventions")
 - [New project](docs/new_project.md "new_project")
+- [Custom component](docs/custom_component.md)
 
 ## Windows build dependencies.
 - Installed visual studio with tools for C++ and C.
@@ -44,7 +45,7 @@ Concept project which consists of Engine named Ren and Sandbox app.
 ## TODO list
 - [ ] Support already installed VCPKG, instead of downloading it
 - [ ] Fix the VCPKG sdl-mixer mess. The add_library directive changes based on weather and OS... what?
-- [ ] Scene serialization and de-serialization
+- [x] Scene serialization and de-serialization
 - [ ] Camera controller on entity.
 - [ ] Tilemap loading
 - [ ] Text component
@@ -55,6 +56,7 @@ Concept project which consists of Engine named Ren and Sandbox app.
 - [ ] Layout components / or library.
 - [ ] Box2D Collision callbacks
 - [ ] Box2D shape offsetting
+- [ ] RigidBodyComponent support for multiple fixtures (and shapes).
 - [x] ~~Layering system + event catching~~
 - [x] ~~Proper log handling.~~
 - [x] ~~Move function calls from REN_ASSERT (as they could get removed with some compilers).~~

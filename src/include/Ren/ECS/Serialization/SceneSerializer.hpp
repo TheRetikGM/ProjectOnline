@@ -122,6 +122,7 @@ namespace Ren
         typedef EntitySerializerWrapper<
             TransformComponent,
             SpriteComponent,
-            RigidBodyComponent> EntitySerializer;
+            RigidBodyComponent
+        > EntitySerializer;
     };
 }
