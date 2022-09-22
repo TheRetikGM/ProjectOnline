@@ -7,6 +7,7 @@
 #include "Ren/ECS/Scene.h"
 #include "Ren/ECS/Components.h"
 #include "Ren/Core/Core.h"
+#include "Ren/Utils/Logger.hpp"
 
 namespace YAML {
     template<>

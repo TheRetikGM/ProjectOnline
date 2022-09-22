@@ -79,13 +79,11 @@ namespace Ren
     class NativeScript;
     struct NativeScriptComponent
     {
-        std::string bind_type_name = "";
         NativeScript* script_instance{ nullptr };
 
         template<typename T>
         void Bind()
         {
-            bind_type_name = Utils::type_name<T>();
             REN_ASSERT(script_instance == nullptr, "There is already bound script to this component. Multiple bound scripts are not supported yet.");
             script_instance = dynamic_cast<NativeScript*>(new T());
         }

@@ -22,6 +22,70 @@ public:
 
     void OnInit() override
     {
+		// // Set background color.
+		// m_GameCore->m_ClearColor = { 100, 100, 100, 255 };
+
+		// m_scene = CreateRef<Ren::Scene>(GetRenderer(), GetInput());
+
+		// // Create awesomeface entity.
+		// m_ent = m_scene->CreateEntity({ glm::vec2(1.0f), glm::vec2(2.0f) }, { "awesomeface" });
+		// m_ent.Add<Ren::SpriteComponent>(ASSETS_DIR "awesomeface.png").m_Color = Ren::Colors3::Magenta;
+		// m_ent.Add<Ren::NativeScriptComponent>().Bind<MovementScript>();
+		// m_ent.Get<Ren::TransformComponent>().layer = 2;
+		// auto& rig = m_ent.Add<Ren::RigidBodyComponent>();
+		// auto size = m_ent.Get<Ren::SpriteComponent>().GetSize() * 0.5f;
+		// auto shape = CreateRef<b2CircleShape>();
+		// shape->m_radius = size.x;
+		// rig.body_def.type = b2_dynamicBody;
+		// rig.p_shape = shape;
+		// rig.fixture_def.density = 1.0f;
+		// rig.fixture_def.friction = 0.3f;
+		// rig.fixture_def.restitution = 0.67;
+
+
+		// // Create copy of awesomeface entity (the texture will get reused).
+		// auto ent_copy = m_scene->CreateEntity({ glm::vec2(0.0f), glm::vec2(2.0f) }, { "rotate" });
+		// ent_copy.Add<Ren::SpriteComponent>(ASSETS_DIR "awesomeface.png");
+		// ent_copy.Get<Ren::TransformComponent>().layer = 1;
+
+
+		// m_textRenderer->Load(ASSETS_DIR "fonts/DejaVuSansCondensed.ttf", 32);
+
+		// m_camera.SetUnitScale(50);
+		// m_camera.SetViewportSize(m_GameCore->GetWindowSize());
+
+		// /////////// Box2D ///////////
+		// {
+		// 	auto box_shape = CreateRef<b2PolygonShape>();
+
+		// 	Ren::Entity ground_body = m_scene->CreateEntity(Ren::TransformComponent({ 0.0f, -10.0f }), Ren::TagList{ "ground" });
+		// 	auto& ground_body_r = ground_body.Add<Ren::RigidBodyComponent>();
+		// 	ground_body_r.p_shape = box_shape;
+		// 	box_shape->SetAsBox(50.0f, 10.0f);
+
+		// 	Ren::Entity another_body = m_scene->CreateEntity({{ -1.7f, 2.0f }}, { "another_body" });
+		// 	auto& another_body_r = another_body.Add<Ren::RigidBodyComponent>();
+		// 	box_shape = CreateRef<b2PolygonShape>();
+		// 	box_shape->SetAsBox(1.0f, 1.0f);
+		// 	another_body_r.p_shape = box_shape;
+
+		// 	// Dynamic body
+		// 	Ren::Entity dynamic_body = m_scene->CreateEntity({{ 0.0f, 10.0f }}, { "dynamic_body" });
+		// 	auto& dynamic_body_r = dynamic_body.Add<Ren::RigidBodyComponent>();
+		// 	box_shape = CreateRef<b2PolygonShape>();
+		// 	box_shape->SetAsBox(1.5f, 1.f);
+		// 	dynamic_body_r.p_shape = box_shape;
+		// 	dynamic_body_r.body_def.type = b2_dynamicBody;
+		// 	dynamic_body_r.fixture_def.density = 1.0f;
+		// 	dynamic_body_r.fixture_def.friction = 0.3f;
+		// 	dynamic_body_r.fixture_def.restitution = 0.67;
+		// }
+		// m_scene->GetSystem<Ren::PhysicsSystem>()->m_DebugRender = true;
+		// // Call init on all scene subsystems.
+		// m_scene->Init();
+
+		// Ren::SceneSerializer::Serialize(m_scene, SOURCE_DIR "/build/test.yaml");
+
         // Set background color.
 		m_GameCore->m_ClearColor = { 100, 100, 100, 255 };
 
@@ -88,11 +152,6 @@ public:
 
 		if (KeyPressed(Ren::Key::SPACE))
 			m_camera.m_CamPos = glm::vec2(0.0f);
-		if (KeyPressed(Ren::Key::F1))
-		{
-			Ren::SceneSerializer serializer;
-			serializer.Serialize(m_scene, SOURCE_DIR "/build/test.yaml");
-		}
 
 		float move_speed = 8.0f;
 		if (KeyHeld(Ren::Key::LEFT))

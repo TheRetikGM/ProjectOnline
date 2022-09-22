@@ -1,5 +1,7 @@
 #pragma once
+
 #include "Ren/ECS/Components.h"
+#include "Ren/Utils/Logger.hpp"
 
 namespace Ren
 {

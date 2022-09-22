@@ -53,7 +53,7 @@ namespace Ren
         // Note: Returned scene is NOT initialized.
         static Ref<Scene> Deserialze(std::filesystem::path path, SDL_Renderer* renderer, KeyInterface* input)
         {
-            YAML::Node node = YAML::LoadFile(path.c_str());
+            YAML::Node node = YAML::LoadFile(path.string().c_str());
 
             Ref<Scene> scene = CreateRef<Scene>(renderer, input);
 
@@ -68,12 +68,27 @@ namespace Ren
             return scene;
         }
     private:
-
+    
         template<typename... TComp>
         struct EntitySerializerWrapper
         {
+            inline static int last_comp_id = 0;
+        
+            // Get unique ID for type (only in this context).
+            template<typename T>
+            static int getID()
+            {
+                static int id = last_comp_id++;
+                return id;
+            }
+
             static YAML::Node Serialize(Entity e)
             {
+                // We need to get IDs of the components in the same order
+                // for each scene. As such we create them in this dummy array
+                // first.
+                int _[] = {-1, getID<TComp>()...};
+
                 YAML::Node ent_info;
 
                 // For now hard-set the UUID
@@ -91,7 +106,7 @@ namespace Ren
                     if (e.HasAll<TComp>()) {
                         int index = ent_info["Components"].size();
                         ent_info["Components"][index] = e.Get<TComp>();
-                        ent_info["Components"][index]["Name"] = Utils::type_name<TComp>();
+                        ent_info["Components"][index]["ID"] = getID<TComp>();
                     }
                 }...);
 
@@ -99,6 +114,9 @@ namespace Ren
             }
             static void Deserialize(const YAML::Node& node, Entity& e)
             {
+                // See explanation above.
+                int _[] = {-1, getID<TComp>()...};
+                
                 // TODO: UUID
 
                 // Add all tags to entity.
@@ -109,7 +127,7 @@ namespace Ren
                 for (auto&& component : node["Components"])
                 {
                     Utils::do_in_order([&]{
-                        if (component["Name"].as<std::string>() == Utils::type_name<TComp>())
+                        if (component["ID"].as<int>() == getID<TComp>())
                         {
                             TComp comp = component.as<TComp>();
                             setup_component(e, comp);
@@ -119,6 +137,10 @@ namespace Ren
             }
         };
 
+        // Specify what components should be serialized.
+        // Note: New components should be added to the end of
+        //  of the list, so that we keep backward compatibility
+        //  with serialized scenes.
         typedef EntitySerializerWrapper<
             TransformComponent,
             SpriteComponent,

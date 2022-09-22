@@ -1,4 +1,4 @@
-SceneName: Demo scene
+SceneName: Undefined
 Entities:
   - UUID: 123
     Tags: [dynamic_body]
@@ -6,7 +6,7 @@ Entities:
       - position: [0, 10]
         scale: [10, 10]
         layer: 0
-        Name: N3Ren18TransformComponentE
+        ID: 0
       - body_def:
           type: dynamic
           position: [0, 10]
@@ -37,14 +37,14 @@ Entities:
             category_bits: 1
             mask_bits: 65535
             group_index: 0
-        Name: N3Ren18RigidBodyComponentE
+        ID: 2
   - UUID: 123
     Tags: [another_body]
     Components:
       - position: [-1.70000005, 2]
         scale: [10, 10]
         layer: 0
-        Name: N3Ren18TransformComponentE
+        ID: 0
       - body_def:
           type: static
           position: [-1.70000005, 2]
@@ -75,14 +75,14 @@ Entities:
             category_bits: 1
             mask_bits: 65535
             group_index: 0
-        Name: N3Ren18RigidBodyComponentE
+        ID: 2
   - UUID: 123
     Tags: [ground]
     Components:
       - position: [0, -10]
         scale: [10, 10]
         layer: 0
-        Name: N3Ren18TransformComponentE
+        ID: 0
       - body_def:
           type: static
           position: [0, -10]
@@ -113,29 +113,29 @@ Entities:
             category_bits: 1
             mask_bits: 65535
             group_index: 0
-        Name: N3Ren18RigidBodyComponentE
+        ID: 2
   - UUID: 123
     Tags: [rotate]
     Components:
       - position: [0, 0]
         scale: [2, 2]
         layer: 1
-        Name: N3Ren18TransformComponentE
+        ID: 0
       - img_path: awesomeface.png
         color: [255, 255, 255]
         ppu: [200, 200]
-        Name: N3Ren15SpriteComponentE
+        ID: 1
   - UUID: 123
-    Tags: [awesomeface, dynamic_body]
+    Tags: [awesomeface]
     Components:
       - position: [1, 1]
         scale: [2, 2]
         layer: 2
-        Name: N3Ren18TransformComponentE
+        ID: 0
       - img_path: awesomeface.png
         color: [255, 0, 255]
         ppu: [200, 200]
-        Name: N3Ren15SpriteComponentE
+        ID: 1
       - body_def:
           type: dynamic
           position: [1, 1]
@@ -164,4 +164,4 @@ Entities:
             category_bits: 1
             mask_bits: 65535
             group_index: 0
-        Name: N3Ren18RigidBodyComponentE
+        ID: 2
