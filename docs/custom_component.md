@@ -131,7 +131,7 @@ For serialization, we use the [YAML-cpp](https://github.com/jbeder/yaml-cpp) lib
         ```
 ### 4.3 Define component setup
 - Component setup is basically a function which defines how a component should be added to an entity and how to configure it with de-serialized data.
-- For most components a simple copy of parameters is sufficient.
+- For most components this is **NOT** needed, however if you need to construct a component in some special way, this is how you would do it.
     - For example a special case is **SpriteComponent** whih needs to be added with a path to texture, for it to be loaded by Scene object. Or it must be loaded afterward manually.
 - The definition should be added to [ComponentSetups.hpp](../src/include/Ren/ECS/Serialization/ComponentSetups.hpp), but you can paste it where you want. However it has to be available to SceneSerializer at compile time.
 - Example code:
@@ -144,6 +144,7 @@ For serialization, we use the [YAML-cpp](https://github.com/jbeder/yaml-cpp) lib
             auto& r = e.Add<OutlineComponent>();
             r.color = comp.color;
             r.rotation = comp.rotation;
+            // Your special code here...
         }
     }
     ```
