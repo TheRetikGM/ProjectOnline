@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <filesystem>
 #include <box2d/box2d.h>
+#include <typeinfo>
 
 #include "Loaders.hpp"
 
@@ -12,6 +13,12 @@
 
 namespace Ren
 {
+    namespace Utils
+    {
+        template<typename T>
+        static std::string type_name() { return typeid(T).name(); }
+    }
+
     struct TransformComponent
     {
         glm::vec2 position{ .0f, .0f };
@@ -55,11 +62,12 @@ namespace Ren
         glm::vec2 GetSize();
     };
 
+    // TODO support for multiple fixtures
     struct RigidBodyComponent
     {
         b2BodyDef body_def{};
         b2Body* p_body{ nullptr };
-        b2Shape* p_shape;
+        Ref<b2Shape> p_shape;
         // Note: Use p_shape. Do NOT use b2FixtureDef::shape as it will be set when component is initialized.
         b2FixtureDef fixture_def{};
     };
@@ -71,11 +79,13 @@ namespace Ren
     class NativeScript;
     struct NativeScriptComponent
     {
+        std::string bind_type_name = "";
         NativeScript* script_instance{ nullptr };
 
         template<typename T>
         void Bind()
         {
+            bind_type_name = Utils::type_name<T>();
             REN_ASSERT(script_instance == nullptr, "There is already bound script to this component. Multiple bound scripts are not supported yet.");
             script_instance = dynamic_cast<NativeScript*>(new T());
         }

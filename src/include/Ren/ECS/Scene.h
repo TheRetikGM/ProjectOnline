@@ -55,6 +55,11 @@ namespace Ren
             // Returns true, if entity has ANY of the given components.
             template<typename... TComponents>
             inline bool HasAny() { return p_scene->m_Registry->any_of<TComponents...>(id); }
+
+            void AddTag(std::string tag) { p_scene->AddTag(*this, tag); };
+            bool HasTag(std::string tag) { return p_scene->HasTag(*this, tag); };
+            void RemTag(std::string tag) { p_scene->RemTag(*this, tag); };
+            const TagList& GetTags() { return p_scene->m_entityToTags[id]; }
         };  // struct Entity
     public:
         Ref<entt::registry> m_Registry{ nullptr };
@@ -62,6 +67,8 @@ namespace Ren
         SDL_Renderer* m_Renderer{ nullptr };
         // Physics world. Updates all of physics.
         Ref<b2World> m_PhysWorld{ nullptr };
+        // Name of the scene.
+        std::string m_Name = "Undefined";
 
         Scene(SDL_Renderer* renderer, KeyInterface* input);
         ~Scene();
@@ -139,6 +146,8 @@ namespace Ren
         // Load texture (into texture cache) when the component is constructed. It will be unloaded when the cache is cleared.
         template<typename T>
         inline void onTextureConstruct(entt::registry& reg, entt::entity ent) { LoadTexture(dynamic_cast<ImgComponent*>(&reg.get<T>(ent))); }
+
+        friend class SceneSerializer;
     }; // class Scene
 
     using Entity = Scene::Entity;

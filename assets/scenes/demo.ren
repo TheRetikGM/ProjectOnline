@@ -1,0 +1,167 @@
+SceneName: Demo scene
+Entities:
+  - UUID: 123
+    Tags: [dynamic_body]
+    Components:
+      - position: [0, 10]
+        scale: [10, 10]
+        layer: 0
+        Name: N3Ren18TransformComponentE
+      - body_def:
+          type: dynamic
+          position: [0, 10]
+          angle: 0
+          linear_velocity: [0, 0]
+          angular_velocity: 0
+          linear_damping: 0
+          angular_damping: 0
+          allow_sleep: true
+          awake: true
+          fixed_rotation: false
+          bullet: false
+          enabled: true
+          gravity_scale: 1
+        fixture_def:
+          shape_type: polygon
+          shape:
+            centroid: [0, 0]
+            vertices: [[-1.5, -1], [1.5, -1], [1.5, 1], [-1.5, 1]]
+            normals: [[0, -1], [1, 0], [0, 1], [-1, 0]]
+            count: 4
+          friction: 0.300000012
+          restitution: 0.670000017
+          restitution_threshhold: 1
+          density: 1
+          is_sensor: false
+          filter:
+            category_bits: 1
+            mask_bits: 65535
+            group_index: 0
+        Name: N3Ren18RigidBodyComponentE
+  - UUID: 123
+    Tags: [another_body]
+    Components:
+      - position: [-1.70000005, 2]
+        scale: [10, 10]
+        layer: 0
+        Name: N3Ren18TransformComponentE
+      - body_def:
+          type: static
+          position: [-1.70000005, 2]
+          angle: 0
+          linear_velocity: [0, 0]
+          angular_velocity: 0
+          linear_damping: 0
+          angular_damping: 0
+          allow_sleep: true
+          awake: true
+          fixed_rotation: false
+          bullet: false
+          enabled: true
+          gravity_scale: 1
+        fixture_def:
+          shape_type: polygon
+          shape:
+            centroid: [0, 0]
+            vertices: [[-1, -1], [1, -1], [1, 1], [-1, 1]]
+            normals: [[0, -1], [1, 0], [0, 1], [-1, 0]]
+            count: 4
+          friction: 0.200000003
+          restitution: 0
+          restitution_threshhold: 1
+          density: 0
+          is_sensor: false
+          filter:
+            category_bits: 1
+            mask_bits: 65535
+            group_index: 0
+        Name: N3Ren18RigidBodyComponentE
+  - UUID: 123
+    Tags: [ground]
+    Components:
+      - position: [0, -10]
+        scale: [10, 10]
+        layer: 0
+        Name: N3Ren18TransformComponentE
+      - body_def:
+          type: static
+          position: [0, -10]
+          angle: 0
+          linear_velocity: [0, 0]
+          angular_velocity: 0
+          linear_damping: 0
+          angular_damping: 0
+          allow_sleep: true
+          awake: true
+          fixed_rotation: false
+          bullet: false
+          enabled: true
+          gravity_scale: 1
+        fixture_def:
+          shape_type: polygon
+          shape:
+            centroid: [0, 0]
+            vertices: [[-50, -10], [50, -10], [50, 10], [-50, 10]]
+            normals: [[0, -1], [1, 0], [0, 1], [-1, 0]]
+            count: 4
+          friction: 0.200000003
+          restitution: 0
+          restitution_threshhold: 1
+          density: 0
+          is_sensor: false
+          filter:
+            category_bits: 1
+            mask_bits: 65535
+            group_index: 0
+        Name: N3Ren18RigidBodyComponentE
+  - UUID: 123
+    Tags: [rotate]
+    Components:
+      - position: [0, 0]
+        scale: [2, 2]
+        layer: 1
+        Name: N3Ren18TransformComponentE
+      - img_path: awesomeface.png
+        color: [255, 255, 255]
+        ppu: [200, 200]
+        Name: N3Ren15SpriteComponentE
+  - UUID: 123
+    Tags: [awesomeface, dynamic_body]
+    Components:
+      - position: [1, 1]
+        scale: [2, 2]
+        layer: 2
+        Name: N3Ren18TransformComponentE
+      - img_path: awesomeface.png
+        color: [255, 0, 255]
+        ppu: [200, 200]
+        Name: N3Ren15SpriteComponentE
+      - body_def:
+          type: dynamic
+          position: [1, 1]
+          angle: 0
+          linear_velocity: [0, 0]
+          angular_velocity: 0
+          linear_damping: 0
+          angular_damping: 0
+          allow_sleep: true
+          awake: true
+          fixed_rotation: false
+          bullet: false
+          enabled: true
+          gravity_scale: 1
+        fixture_def:
+          shape_type: circle
+          shape:
+            radius: 1.27999997
+            position: [0, 0]
+          friction: 0.300000012
+          restitution: 0.670000017
+          restitution_threshhold: 1
+          density: 1
+          is_sensor: false
+          filter:
+            category_bits: 1
+            mask_bits: 65535
+            group_index: 0
+        Name: N3Ren18RigidBodyComponentE

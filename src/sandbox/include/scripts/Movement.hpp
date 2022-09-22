@@ -17,22 +17,6 @@ public:
 
     void OnUpdate(float dt) override
     {
-        // auto& transform = GetComponent<Ren::TransformComponent>();
-
-        // glm::vec2 old_pos = transform.position;
-		// float move_speed = 5.0f;
-		// if (KeyHeld(Ren::Key::W))
-		// 	transform.position += Ren::UpDir() * move_speed * dt;
-		// if (KeyHeld(Ren::Key::S))
-		// 	transform.position -= Ren::UpDir() * move_speed * dt;
-		// if (KeyHeld(Ren::Key::A))
-		// 	transform.position -= Ren::RightDir() * move_speed * dt;
-		// if (KeyHeld(Ren::Key::D))
-		// 	transform.position += Ren::RightDir() * move_speed * dt;
-
-        // if (old_pos != transform.position)
-        //     transform.dirty = true;
-
         b2Body* rig = GetComponent<Ren::RigidBodyComponent>().p_body;
 
         float force = 100.0f;

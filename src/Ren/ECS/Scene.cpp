@@ -29,6 +29,7 @@ namespace Ren
         // Add common systems.
         AddSystem<RenderSystem>();
         AddSystem<NativeScriptSystem>();
+        AddSystem<PhysicsSystem>();
     }
     Scene::~Scene()
     {
@@ -54,7 +55,7 @@ namespace Ren
     }
     bool Scene::HasTag(Entity ent, std::string tag)
     {
-        return std::find(m_entityToTags[ent.id].begin(), m_entityToTags[ent.id].end(), tag) == m_entityToTags[ent.id].end();
+        return std::find(m_entityToTags[ent.id].begin(), m_entityToTags[ent.id].end(), tag) != m_entityToTags[ent.id].end();
     }
     void Scene::RemTag(Entity ent, std::string tag)
     {
@@ -126,7 +127,7 @@ namespace Ren
         // Create body and its fixture.
         rig.body_def.position = Utils::to_b2Vec2(trans.position);
         rig.p_body = m_PhysWorld->CreateBody(&rig.body_def);
-        rig.fixture_def.shape = rig.p_shape;
+        rig.fixture_def.shape = rig.p_shape.get();
         rig.p_body->CreateFixture(&rig.fixture_def);
     }
 

@@ -96,7 +96,8 @@ void PhysicsSystem::Destroy()
     {
         auto [r] = view.get(ent);
         r.p_body = nullptr;
-        delete r.p_shape;
+        // Also reset the pointer to shape.
+        r.p_shape.reset();
     }
     m_scene->m_PhysWorld.reset();
 }
