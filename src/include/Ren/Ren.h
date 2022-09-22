@@ -13,6 +13,7 @@
 
 #include "ECS/Scene.h"
 #include "ECS/NativeScript.h"
+#include "ECS/Serialization/SceneSerializer.hpp"
 
 #include "Utils/Basic.hpp"
 #include "Utils/FpsCounter.hpp"

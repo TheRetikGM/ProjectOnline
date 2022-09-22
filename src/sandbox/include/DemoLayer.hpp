@@ -1,6 +1,5 @@
 #pragma once
 #include <Ren/Ren.h>
-#include <Ren/ECS/Serialization/SceneSerializer.hpp>
 #include <box2d/box2d.h>
 #include <fstream>
 
