@@ -67,7 +67,7 @@ If you want to create a custom component, this is the tutorial for you.
         float custom_val = 12.3f;
         scene->AddSystem<OutlineSystem>(custom_val);
         ```
-    - Or integrate it into Ren engine (it will be created automatically on scene creation)
+    - Or integrate it into Ren engine file [Scene.cpp](../src/Ren/ECS/Scene.cpp) (it will be created automatically on scene creation)
         ```C++
         // Scene.cpp
         
