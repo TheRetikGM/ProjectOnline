@@ -117,18 +117,25 @@ namespace Ren
     void Scene::InitPhysicsBody(Entity ent)
     {
         auto [rig, trans] = ent.GetM<RigidBodyComponent, TransformComponent>();
-        
+
         // Body was already initialized.
         if (rig.p_body)
             return;
-
-        REN_ASSERT(rig.p_shape, "Body must have a shape. Body id = " + std::to_string((uint32_t)ent.id));
-
-        // Create body and its fixture.
+    
+        // By default, position body at its transform.
         rig.body_def.position = Utils::to_b2Vec2(trans.position);
+
+        // Create body in physics world.
         rig.p_body = m_PhysWorld->CreateBody(&rig.body_def);
-        rig.fixture_def.shape = rig.p_shape.get();
-        rig.p_body->CreateFixture(&rig.fixture_def);
+
+        
+        for (auto&& [p_shape, fixture_def] : rig.fixtures)
+        {
+            REN_ASSERT(p_shape, "Body must have a shape. Entity tag = " + ent.GetTags().front());
+
+            fixture_def.shape = p_shape.get();
+            rig.p_body->CreateFixture(&fixture_def);
+        }
     }
 
 } // namespace Ren

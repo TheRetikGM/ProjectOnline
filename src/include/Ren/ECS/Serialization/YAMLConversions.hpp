@@ -191,7 +191,7 @@ namespace YAML {
 
             n["friction"] = s.friction;
             n["restitution"] = s.restitution;
-            n["restitution_threshhold"] = s.restitutionThreshold;
+            n["restitution_threshold"] = s.restitutionThreshold;
             n["density"] = s.density;
             n["is_sensor"] = s.isSensor;
             n["filter"]["category_bits"] = s.filter.categoryBits;
@@ -201,17 +201,9 @@ namespace YAML {
             return n;
         }
         static bool decode(const Node& n, b2FixtureDef& s) {
-            if (n["shape_type"].as<std::string>() == "polygon") {
-                s.shape->m_type == b2Shape::Type::e_polygon;
-            }
-            else if (n["shape_type"].as<std::string>() == "circle") {
-                s.shape->m_type == b2Shape::Type::e_circle;
-            }
-            else LOG_E("Deserialization of shape with type == " + n["shape_type"].as<std::string>() + " is not supported yet.");
-
             s.friction = n["friction"].as<float>();
             s.restitution = n["restitution"].as<float>();
-            s.restitutionThreshold = n["restitution_threshhold"].as<float>();
+            s.restitutionThreshold = n["restitution_threshold"].as<float>();
             s.density = n["density"].as<float>();
             s.isSensor = n["is_sensor"].as<bool>();
             s.filter.categoryBits = (uint16)n["filter"]["category_bits"].as<int>();
@@ -227,34 +219,42 @@ namespace YAML {
             REN_ASSERT(s.p_body, "PhysicsBodyComponent is not initialized. See Scene::InitPhysicsBody().");
 
             n["body_def"] = s.body_def;
-            // TODO: add support for multiple fixtures.
-            n["fixture_def"] = s.fixture_def;
+            for (auto&& [p_shape, fix_def] : s.fixtures)
+                n["fixtures"].push_back(fix_def);
 
             return n;
         }
         static bool decode(const Node& n, Ren::RigidBodyComponent& s) {
             s.body_def = n["body_def"].as<b2BodyDef>();
-            s.fixture_def = n["fixture_def"].as<b2FixtureDef>();
-            
-            std::string type = n["fixture_def"]["shape_type"].as<std::string>();
-            if (type == "polygon") {
-                auto shape = CreateRef<b2PolygonShape>();
-                YAML::Node ys = n["fixture_def"]["shape"];
-                shape->m_count = ys["count"].as<int>();
-                for (int i = 0; i < shape->m_count; i++) {
-                    shape->m_vertices[i] = ys["vertices"][i].as<b2Vec2>();
-                    shape->m_normals[i] = ys["normals"][i].as<b2Vec2>();
+                        
+            for (auto&& n_fix : n["fixtures"])
+            {
+                b2FixtureDef fix_def = n_fix.as<b2FixtureDef>();
+                Ref<b2Shape> shape = nullptr;
+
+                if (n_fix["shape_type"].as<std::string>() == "polygon") {
+                    auto poly_shape = CreateRef<b2PolygonShape>();
+                    YAML::Node ys = n_fix["shape"];
+                    poly_shape->m_count = ys["count"].as<int>();
+                    for (int i = 0; i < poly_shape->m_count; i++) {
+                        poly_shape->m_vertices[i] = ys["vertices"][i].as<b2Vec2>();
+                        poly_shape->m_normals[i] = ys["normals"][i].as<b2Vec2>();
+                    }
+                    poly_shape->m_centroid = ys["centroid"].as<b2Vec2>();
+                    shape = poly_shape;
                 }
-                shape->m_centroid = ys["centroid"].as<b2Vec2>();
-                s.p_shape = shape;
+                else if (n_fix["shape_type"].as<std::string>() == "circle") {
+                    auto circle_shape = CreateRef<b2CircleShape>();
+                    YAML::Node ys = n_fix["shape"];
+                    circle_shape->m_radius = ys["radius"].as<float>();
+                    circle_shape->m_p = ys["position"].as<b2Vec2>();
+                    shape = circle_shape;
+                }
+
+                REN_ASSERT(shape, "Fixture has an unknown shape type. Type = " + n_fix["shape_type"].as<std::string>());
+                s.fixtures.push_back({ shape, fix_def });
             }
-            else if (type == "circle") {
-                auto shape = CreateRef<b2CircleShape>();
-                YAML::Node ys = n["fixture_def"]["shape"];
-                shape->m_radius = ys["radius"].as<float>();
-                shape->m_p = ys["position"].as<b2Vec2>();
-                s.p_shape = shape;
-            }
+            
             return true;
         }
     };

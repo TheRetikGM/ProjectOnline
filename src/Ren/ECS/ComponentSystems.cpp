@@ -96,8 +96,6 @@ void PhysicsSystem::Destroy()
     {
         auto [r] = view.get(ent);
         r.p_body = nullptr;
-        // Also reset the pointer to shape.
-        r.p_shape.reset();
     }
     m_scene->m_PhysWorld.reset();
 }
@@ -134,22 +132,50 @@ void PhysicsSystem::Render()
     const auto draw_body = [&](b2Body* body){
         glm::vec2 pos = Utils::to_vec2(body->GetPosition());
 
-        switch (body->GetFixtureList()->GetShape()->GetType())
-        {
-        case b2Shape::Type::e_polygon: {
-            b2PolygonShape* shape = (b2PolygonShape*)body->GetFixtureList()->GetShape();
-            REN_ASSERT(shape->m_count == 4, "Only rectangles are supported for now.");
+        REN_ASSERT(body->GetFixtureList(), "Body does not have a fixture!");
 
-            Ren::Rect rect{ pos + Utils::to_vec2(shape->m_vertices[0]), Utils::to_vec2(shape->m_vertices[2]) - Utils::to_vec2(shape->m_vertices[0]) };
-            Ren::Renderer::DrawRect(rect, glm::degrees(body->GetAngle()), Ren::Colors4::White);
-            } break;
-        case b2Shape::Type::e_circle: {
-            b2CircleShape* shape = (b2CircleShape*)body->GetFixtureList()->GetShape();
-            Ren::Renderer::DrawCircle(pos, shape->m_radius, Ren::Colors4::White);
-            } break;
-        default:
-            LOG_W("Only polygon and circle shapes are supported for debug printing.");
-            break;
+        // Pre-calculate sin and cos for polygon rotation purposes.
+        float sin_a = std::sin(body->GetAngle());
+        float cos_a = std::cos(body->GetAngle());
+        const auto rot_point = [sin_a, cos_a](const glm::vec2& p) -> glm::vec2 {
+            return { p.x * cos_a - p.y * sin_a,
+                     p.x * sin_a + p.y * cos_a };
+        };
+
+        for (auto fix = body->GetFixtureList(); fix; fix = fix->GetNext())
+        {
+            switch (fix->GetShape()->GetType())
+            {
+            case b2Shape::Type::e_polygon: {
+                b2PolygonShape* shape = (b2PolygonShape*)fix->GetShape();
+
+                // If polygon is rectangle and is not offseted, we can render it as a retangle.
+                if (shape->m_count == 4 && Utils::to_vec2(shape->m_centroid) == glm::vec2(0.0f)) 
+                {
+                    Ren::Rect rect{ pos + Utils::to_vec2(shape->m_vertices[0]), Utils::to_vec2(shape->m_vertices[2]) - Utils::to_vec2(shape->m_vertices[0]) };
+                    Ren::Renderer::DrawRect(rect, glm::degrees(body->GetAngle()), Ren::Colors4::White);
+                }
+                // Otherwise we render lines between every vertex.
+                else {
+                    for (int i = 0; i < shape->m_count; i++)
+                    {
+                        glm::vec2 a = Utils::to_vec2(shape->m_vertices[i]);
+                        glm::vec2 b = Utils::to_vec2(shape->m_vertices[(i + 1) % shape->m_count]);
+                        a = rot_point(a) + pos;
+                        b = rot_point(b) + pos;
+
+                        Ren::Renderer::DrawLine(a, b, Ren::Colors4::White);
+                    }
+                }
+                } break;
+            case b2Shape::Type::e_circle: {
+                b2CircleShape* shape = (b2CircleShape*)fix->GetShape();
+                Ren::Renderer::DrawCircle(pos + Utils::to_vec2(shape->m_p), shape->m_radius, Ren::Colors4::White);
+                } break;
+            default:
+                LOG_W("Only polygon and circle shapes are supported for debug printing.");
+                break;
+            }
         }
 
     };

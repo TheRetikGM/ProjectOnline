@@ -65,11 +65,11 @@ namespace Ren
     // TODO support for multiple fixtures
     struct RigidBodyComponent
     {
+        using ShapeFix = std::pair<Ref<b2Shape>, b2FixtureDef>;
         b2BodyDef body_def{};
         b2Body* p_body{ nullptr };
-        Ref<b2Shape> p_shape;
         // Note: Use p_shape. Do NOT use b2FixtureDef::shape as it will be set when component is initialized.
-        b2FixtureDef fixture_def{};
+        std::vector<ShapeFix> fixtures;
     };
 
     ///////////////////////////////////////

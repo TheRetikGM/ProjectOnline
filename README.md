@@ -55,7 +55,7 @@ Concept project which consists of Engine named Ren and Sandbox app.
 - [ ] Layout components / or library.
 - [ ] Box2D Collision callbacks
 - [ ] Box2D shape offsetting
-- [ ] RigidBodyComponent support for multiple fixtures (and shapes).
+- [x] ~~RigidBodyComponent support for multiple fixtures (and shapes).~~
 - [x] ~~Scene serialization and de-serialization~~
 - [x] ~~Layering system + event catching~~
 - [x] ~~Proper log handling.~~

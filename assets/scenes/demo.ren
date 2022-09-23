@@ -21,22 +21,22 @@ Entities:
           bullet: false
           enabled: true
           gravity_scale: 1
-        fixture_def:
-          shape_type: polygon
-          shape:
-            centroid: [0, 0]
-            vertices: [[-1.5, -1], [1.5, -1], [1.5, 1], [-1.5, 1]]
-            normals: [[0, -1], [1, 0], [0, 1], [-1, 0]]
-            count: 4
-          friction: 0.300000012
-          restitution: 0.670000017
-          restitution_threshhold: 1
-          density: 1
-          is_sensor: false
-          filter:
-            category_bits: 1
-            mask_bits: 65535
-            group_index: 0
+        fixtures:
+          - shape_type: polygon
+            shape:
+              centroid: [0, 0]
+              vertices: [[-1.5, -1], [1.5, -1], [1.5, 1], [-1.5, 1]]
+              normals: [[0, -1], [1, 0], [0, 1], [-1, 0]]
+              count: 4
+            friction: 0.300000012
+            restitution: 0.670000017
+            restitution_threshold: 1
+            density: 1
+            is_sensor: false
+            filter:
+              category_bits: 1
+              mask_bits: 65535
+              group_index: 0
         ID: 2
   - UUID: 123
     Tags: [another_body]
@@ -59,22 +59,22 @@ Entities:
           bullet: false
           enabled: true
           gravity_scale: 1
-        fixture_def:
-          shape_type: polygon
-          shape:
-            centroid: [0, 0]
-            vertices: [[-1, -1], [1, -1], [1, 1], [-1, 1]]
-            normals: [[0, -1], [1, 0], [0, 1], [-1, 0]]
-            count: 4
-          friction: 0.200000003
-          restitution: 0
-          restitution_threshhold: 1
-          density: 0
-          is_sensor: false
-          filter:
-            category_bits: 1
-            mask_bits: 65535
-            group_index: 0
+        fixtures:
+          - shape_type: polygon
+            shape:
+              centroid: [0, 0]
+              vertices: [[-1, -1], [1, -1], [1, 1], [-1, 1]]
+              normals: [[0, -1], [1, 0], [0, 1], [-1, 0]]
+              count: 4
+            friction: 0.200000003
+            restitution: 0
+            restitution_threshold: 1
+            density: 0
+            is_sensor: false
+            filter:
+              category_bits: 1
+              mask_bits: 65535
+              group_index: 0
         ID: 2
   - UUID: 123
     Tags: [ground]
@@ -97,22 +97,22 @@ Entities:
           bullet: false
           enabled: true
           gravity_scale: 1
-        fixture_def:
-          shape_type: polygon
-          shape:
-            centroid: [0, 0]
-            vertices: [[-50, -10], [50, -10], [50, 10], [-50, 10]]
-            normals: [[0, -1], [1, 0], [0, 1], [-1, 0]]
-            count: 4
-          friction: 0.200000003
-          restitution: 0
-          restitution_threshhold: 1
-          density: 0
-          is_sensor: false
-          filter:
-            category_bits: 1
-            mask_bits: 65535
-            group_index: 0
+        fixtures:
+          - shape_type: polygon
+            shape:
+              centroid: [0, 0]
+              vertices: [[-50, -10], [50, -10], [50, 10], [-50, 10]]
+              normals: [[0, -1], [1, 0], [0, 1], [-1, 0]]
+              count: 4
+            friction: 0.200000003
+            restitution: 0
+            restitution_threshold: 1
+            density: 0
+            is_sensor: false
+            filter:
+              category_bits: 1
+              mask_bits: 65535
+              group_index: 0
         ID: 2
   - UUID: 123
     Tags: [rotate]
@@ -150,18 +150,33 @@ Entities:
           bullet: false
           enabled: true
           gravity_scale: 1
-        fixture_def:
-          shape_type: circle
-          shape:
-            radius: 1.27999997
-            position: [0, 0]
-          friction: 0.300000012
-          restitution: 0.670000017
-          restitution_threshhold: 1
-          density: 1
-          is_sensor: false
-          filter:
-            category_bits: 1
-            mask_bits: 65535
-            group_index: 0
+        fixtures:
+          - shape_type: circle
+            shape:
+              radius: 1.27999997
+              position: [0, 0]
+            friction: 0.300000012
+            restitution: 0.670000017
+            restitution_threshold: 1
+            density: 1
+            is_sensor: false
+            filter:
+              category_bits: 1
+              mask_bits: 65535
+              group_index: 0
+          - shape_type: polygon
+            shape:
+              centroid: [0, 0.5]
+              vertices: [[-1.27999997, -0.779999971], [1.27999997, -0.779999971], [1.27999997, 1.77999997], [-1.27999997, 1.77999997]]
+              normals: [[0, -1], [1, 0], [0, 1], [-1, 0]]
+              count: 4
+            friction: 0.300000012
+            restitution: 0.670000017
+            restitution_threshold: 1
+            density: 1
+            is_sensor: false
+            filter:
+              category_bits: 1
+              mask_bits: 65535
+              group_index: 0
         ID: 2
