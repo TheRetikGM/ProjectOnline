@@ -45,7 +45,6 @@ Concept project which consists of Engine named Ren and Sandbox app.
 ## TODO list
 - [ ] Support already installed VCPKG, instead of downloading it
 - [ ] Fix the VCPKG sdl-mixer mess. The add_library directive changes based on weather and OS... what?
-- [x] Scene serialization and de-serialization
 - [ ] Camera controller on entity.
 - [ ] Tilemap loading
 - [ ] Text component
@@ -57,6 +56,7 @@ Concept project which consists of Engine named Ren and Sandbox app.
 - [ ] Box2D Collision callbacks
 - [ ] Box2D shape offsetting
 - [ ] RigidBodyComponent support for multiple fixtures (and shapes).
+- [x] ~~Scene serialization and de-serialization~~
 - [x] ~~Layering system + event catching~~
 - [x] ~~Proper log handling.~~
 - [x] ~~Move function calls from REN_ASSERT (as they could get removed with some compilers).~~
