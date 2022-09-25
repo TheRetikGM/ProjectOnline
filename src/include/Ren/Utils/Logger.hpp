@@ -42,8 +42,16 @@ namespace Ren
                 minute = tim.tm_min;
                 second = tim.tm_sec;
             }
+            std::string to_string() const
+            {
+                char str[21] = {};
+                std::snprintf(str, 20, "%04i-%02i-%02i %02i:%02i:%02i", year, month, day, hour, minute, second);
+                str[20] = '\0';
+                return str;
+            }
         };
     }
+    
     // Error -> When something fails, but program can still go on.
     // Critical -> Program cannot continue with this problem.
     enum class LogLevel : int { info = 0, status = 1, warning = 2, error = 3, critical = 3 };
@@ -66,6 +74,7 @@ namespace Ren
     public:
         virtual void OnLog(const LogInfo& log) = 0;
     };
+    
     // Outputs logs to (C) file streams.
     class StreamLogger : public LogListener
     {
@@ -81,8 +90,8 @@ namespace Ren
         void OnLog(const LogInfo& log) override
         {
             for (std::FILE* stream : m_Streams)
-                std::fprintf(stream, "%04i-%02i-%02i %02i:%02i:%02i    %8s    %15s:%i    %s\n", 
-                    log.time_info.year, log.time_info.month, log.time_info.day, log.time_info.hour, log.time_info.minute, log.time_info.second,
+                std::fprintf(stream, "%s    %8s    %15s:%i    %s\n", 
+                    log.time_info.to_string().c_str(),
                     LOG_LEVEL_STRINGS[(int)log.level],
                     log.file.filename().c_str(), log.line,
                     log.message.c_str()

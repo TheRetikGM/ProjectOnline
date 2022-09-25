@@ -57,6 +57,18 @@ namespace Ren
     class PhysicsSystem : public ComponentSystem
     {
         const b2Vec2 GRAVITY{ 0.0f, -9.81f };
+
+        class ContactListener : public b2ContactListener
+        {
+            PhysicsSystem* m_sys{ nullptr };
+        public:
+            ContactListener(PhysicsSystem* sys) : m_sys(sys) {}
+
+            void BeginContact(b2Contact* contact) override;
+            void EndContact(b2Contact* contact) override;
+            void PreSolve(b2Contact* contact, const b2Manifold* oldManifold) override;
+            void PostSolve(b2Contact* contact, const b2ContactImpulse* impulse) override;
+        };
     public:
         // Render outlines of the shapes.
         // TODO: For now, only supports rectangle shapes. Implement more shapes (eg. circles and polygons)
@@ -69,10 +81,7 @@ namespace Ren
         int32_t m_VelocityIterations{ 6 };
         int32_t m_PositionIterations{ 2 };
 
-        PhysicsSystem(Scene* scene, KeyInterface* input) 
-            : ComponentSystem(scene, input)
-            , m_physWorld(CreateRef<b2World>(GRAVITY)) 
-        {}
+        PhysicsSystem(Scene* scene, KeyInterface* input);
 
         void Init() override;
         void Destroy() override;
@@ -87,5 +96,6 @@ namespace Ren
 
     private:
         Ref<b2World> m_physWorld{ nullptr };
+        ContactListener m_contactListener;
     };
 } // namespace Ren

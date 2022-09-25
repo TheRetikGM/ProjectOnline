@@ -1,5 +1,6 @@
 #pragma once
 #include <Ren/ECS/NativeScript.h>
+#include <Ren/Utils/Logger.hpp>
 #include "sandbox.h"
 
 class MovementScript : public Ren::NativeScript
@@ -13,6 +14,14 @@ public:
     void OnDestroy() override
     {
         SAND_STATUS("Native movement script destroyed.");
+    }
+
+    void OnContactBegin(Ren::Entity e, b2Contact* contact) override
+    {
+        std::string tags = "";
+        for (auto&& tag : e.GetTags())
+            tags += tag + " ";
+        SAND_STATUS(Ren::Utils::TimeInfo().to_string() + "    Movement.hpp    Contact with entity! Tags = " + tags);
     }
 
     void OnUpdate(float dt) override

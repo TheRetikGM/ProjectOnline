@@ -2,6 +2,7 @@
 #include <glm/glm.hpp>
 #include <string>
 #include <cstdint>
+#include <box2d/box2d.h>
 
 #include "Ren/Core/KeyInterface.hpp"
 #include "Scene.h"
@@ -18,6 +19,13 @@ namespace Ren
         virtual void OnInit() {}
         virtual void OnDestroy() {}
         virtual void OnUpdate(float dt) {}
+
+        // Box2D collision callbacks.
+        virtual void OnContactBegin(Entity e, b2Contact* contact) {}
+        virtual void OnContactEnd(Entity e, b2Contact* contact) {}
+        virtual void OnContactPreSolve(Entity e, b2Contact* contact, const b2Manifold* old_manifold) {}
+        virtual void OnContactPostSolve(Entity e, b2Contact* contact, const b2ContactImpulse* impulse) {}
+
         // TODO:
         // void OnFixedUpdate(float dt) {}
         // void OnCollision(...) {}

@@ -67,6 +67,13 @@ void NativeScriptSystem::Update(float dt)
 }
 #pragma endregion
 #pragma region --> Physics system
+PhysicsSystem::PhysicsSystem(Scene* scene, KeyInterface* input) 
+    : ComponentSystem(scene, input)
+    , m_physWorld(CreateRef<b2World>(GRAVITY))
+    , m_contactListener(this)
+{
+    m_physWorld->SetContactListener(&m_contactListener);
+}
 // Physics system.
 void PhysicsSystem::Init()
 {
@@ -76,22 +83,22 @@ void PhysicsSystem::Init()
 }
 void PhysicsSystem::Destroy()
 {
-    // Set pointers of the components to null, so that they don't point to free'd memory.
-    auto view = m_scene->SceneView<RigidBodyComponent>();
-    for (auto&& ent : view)
-    {
-        auto [r] = view.get(ent);
-
-        CleanupPhysicsBody(ent);
-        r.p_body = nullptr;
-    }
 
     // Destroy all bodies in world when the world is deleted.
     for (b2Body* body = m_physWorld->GetBodyList(); body;)
     {
         b2Body* next = body->GetNext();
-        m_physWorld->DestroyBody(body);
+        Entity* ent = reinterpret_cast<Entity*>(body->GetUserData().pointer);
+        CleanupPhysicsBody(ent->id);
         body = next;
+    }
+
+    // Set pointers of the components to null, so that they don't point to free'd memory.
+    auto view = m_scene->SceneView<RigidBodyComponent>();
+    for (auto&& ent : view)
+    {
+        auto [r] = view.get(ent);
+        r.p_body = nullptr;
     }
     
     m_physWorld.reset();
@@ -214,14 +221,55 @@ void PhysicsSystem::CleanupPhysicsBody(entt::entity raw_ent)
 {
     Entity ent = { raw_ent, m_scene };
     REN_ASSERT((ent.HasAll<RigidBodyComponent>()), "Body must have RigidBodyComponent to be cleanedup");
-
     auto& rig = ent.Get<RigidBodyComponent>();
+    REN_ASSERT(rig.p_body, "Rigid body was not initialized or was deleted in runtime.");
+
+    // Delete from physics world (this internaly calls ContactListener::ContanctEnd(), so we have to make sure the custom data, which our 
+    // implementation of this listener uses, is not deleted by then).
+    m_physWorld->DestroyBody(rig.p_body);
+
+    // Delete custom data pointer to the parent entity.
     if (!rig.body_def.userData.pointer)
         return;
-
     Entity* p_ent = reinterpret_cast<Entity*>(rig.body_def.userData.pointer);
     delete p_ent;
 
     rig.body_def.userData.pointer = 0;
+    rig.p_body = nullptr;
+}
+
+// Call function with arguments on each native script instance in scene.
+template<typename Fun, typename... Args>
+inline void call_on_nativescript(Scene* scene, Fun fun, b2Contact* contact, Args... args)
+{
+    auto fixA = contact->GetFixtureA();
+    auto fixB = contact->GetFixtureB();
+
+    Entity* p_entA = reinterpret_cast<Entity*>(fixA->GetBody()->GetUserData().pointer);
+    Entity* p_entB = reinterpret_cast<Entity*>(fixB->GetBody()->GetUserData().pointer);
+
+    const auto call_fun = [&](NativeScript* instance, Entity e) { if (instance) (instance->*fun)(e, contact, args...); };
+
+    if (p_entA->HasAll<NativeScriptComponent>())
+        call_fun(p_entA->Get<NativeScriptComponent>().script_instance, *p_entB);
+    if (p_entB->HasAll<NativeScriptComponent>())
+        call_fun(p_entB->Get<NativeScriptComponent>().script_instance, *p_entA);
+}
+
+void PhysicsSystem::ContactListener::BeginContact(b2Contact* contact)
+{
+    call_on_nativescript(m_sys->m_scene, &NativeScript::OnContactBegin, contact);
+}
+void PhysicsSystem::ContactListener::EndContact(b2Contact* contact)
+{
+    call_on_nativescript(m_sys->m_scene, &NativeScript::OnContactEnd, contact);
+}
+void PhysicsSystem::ContactListener::PreSolve(b2Contact* contact, const b2Manifold* oldManifold)
+{
+    call_on_nativescript(m_sys->m_scene, &NativeScript::OnContactPreSolve, contact, oldManifold);
+}
+void PhysicsSystem::ContactListener::PostSolve(b2Contact* contact, const b2ContactImpulse* impulse)
+{
+    call_on_nativescript(m_sys->m_scene, &NativeScript::OnContactPostSolve, contact, impulse);
 }
 #pragma endregion
