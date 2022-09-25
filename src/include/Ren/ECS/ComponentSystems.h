@@ -1,5 +1,7 @@
 #pragma once
 #include <SDL2/SDL.h>
+#include <box2d/box2d.h>
+#include <entt/entt.hpp>
 
 #include "Ren/Core/Core.h"
 #include "Ren/Core/KeyInterface.hpp"
@@ -54,24 +56,36 @@ namespace Ren
     // Handles updating of all rigid bodies.
     class PhysicsSystem : public ComponentSystem
     {
+        const b2Vec2 GRAVITY{ 0.0f, -9.81f };
     public:
-        PhysicsSystem(Scene* scene, KeyInterface* input) : ComponentSystem(scene, input) {}
-
         // Render outlines of the shapes.
         // TODO: For now, only supports rectangle shapes. Implement more shapes (eg. circles and polygons)
         bool m_DebugRender{ false };
         // Time of a single physics frame.
         // TODO: implement this. System should be running in separate thread and have a stable refresh rate.
-        float m_RefreshRate{ 1.0f / 60.0f };
-        
+        float m_RefreshRate{ 1.0f / 60.0f };        
         // These are the recommended number of iterations from box2d docs.
         // If you need more/less precision you can try tweaking these values.
         int32_t m_VelocityIterations{ 6 };
         int32_t m_PositionIterations{ 2 };
 
+        PhysicsSystem(Scene* scene, KeyInterface* input) 
+            : ComponentSystem(scene, input)
+            , m_physWorld(CreateRef<b2World>(GRAVITY)) 
+        {}
+
         void Init() override;
         void Destroy() override;
         void Update(float dt) override;
         void Render() override;
+
+        // Set positions of rigidbody to transform component, create body in physics world and create its fixture.
+        // Use this when you add RigidBodyComponent **after** the Scene::Init() method was called.
+        void InitPhysicsBody(entt::entity ent);
+        // Cleanup any data allocated on heap by this object.
+        void CleanupPhysicsBody(entt::entity ent);
+
+    private:
+        Ref<b2World> m_physWorld{ nullptr };
     };
 } // namespace Ren

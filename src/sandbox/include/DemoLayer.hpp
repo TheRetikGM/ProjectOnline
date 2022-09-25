@@ -22,17 +22,16 @@ public:
 
     void OnInit() override
     {
-        // Set background color.
+		// Set background color.
 		m_GameCore->m_ClearColor = { 100, 100, 100, 255 };
 
-		m_scene = Ren::SceneSerializer::Deserialze(ASSETS_DIR "scenes/demo.ren", GetRenderer(), GetInput());
-		m_scene->GetSystem<Ren::PhysicsSystem>()->m_DebugRender = true;
-		auto [success, ent] = m_scene->GetEntityByTag("awesomeface");
-		if (success)
-			ent.Add<Ren::NativeScriptComponent>().Bind<MovementScript>();
-		m_scene->Init();
+        sceneFromScratch();
+		//sceneFromFile();
 
+		// Load font.
 		m_textRenderer->Load(ASSETS_DIR "fonts/DejaVuSansCondensed.ttf", 32);
+
+		// Setup camera with initial scale of 50 pixels per unit.
 		m_camera.SetUnitScale(50);
 		m_camera.SetViewportSize(m_GameCore->GetWindowSize());
     }
@@ -73,7 +72,7 @@ public:
 			fix_def.restitution = Ren::Utils::RandomFloat_0_1();
 			dynamic_body_r.fixtures.push_back({ box_shape, fix_def });
 
-			m_scene->InitPhysicsBody(dynamic_body);
+			m_scene->GetSystem<Ren::PhysicsSystem>()->InitPhysicsBody(dynamic_body.id);
 		}
 		
 		if (Ren::Utils::key_pressed(e.sdl_event, SDLK_SPACE))
@@ -130,4 +129,85 @@ public:
 		if (show_demo)
 			ImGui::ShowDemoWindow();
     }
+
+private:
+
+	void sceneFromFile(std::filesystem::path path  = ASSETS_DIR "scenes/demo.ren")
+	{
+		m_scene = Ren::SceneSerializer::Deserialze(path, GetRenderer(), GetInput());
+		m_scene->GetSystem<Ren::PhysicsSystem>()->m_DebugRender = true;
+		auto [success, ent] = m_scene->GetEntityByTag("awesomeface");
+		if (success)
+			ent.Add<Ren::NativeScriptComponent>().Bind<MovementScript>();
+		m_scene->Init();
+	}
+
+	void sceneFromScratch(bool serialize = false)
+	{
+		m_scene = CreateRef<Ren::Scene>(GetRenderer(), GetInput());
+
+		// Create awesomeface entity.
+		m_ent = m_scene->CreateEntity({ glm::vec2(1.0f), glm::vec2(2.0f) }, { "awesomeface" });
+		m_ent.Add<Ren::SpriteComponent>(ASSETS_DIR "awesomeface.png").m_Color = Ren::Colors3::Magenta;
+		m_ent.Add<Ren::NativeScriptComponent>().Bind<MovementScript>();
+		m_ent.Get<Ren::TransformComponent>().layer = 2;
+		auto& rig = m_ent.Add<Ren::RigidBodyComponent>();
+		{
+			auto size = m_ent.Get<Ren::SpriteComponent>().GetSize() * 0.5f;
+			rig.body_def.type = b2_dynamicBody;
+			rig.body_def.fixedRotation = false;
+
+			auto circle_shape = CreateRef<b2CircleShape>();
+			circle_shape->m_radius = size.x;
+			b2FixtureDef fix;
+			fix.density = 1.0f;
+			fix.friction = 0.3f;
+			fix.restitution = 0.67f;
+			rig.fixtures.push_back({ circle_shape, fix });
+
+			auto box_shape = CreateRef<b2PolygonShape>();
+			box_shape->SetAsBox(size.x, size.y, { 0, 0.5f }, 0.0f);
+			rig.fixtures.push_back({ box_shape, fix });
+		}
+
+
+		// Create copy of awesomeface entity (the texture will get reused).
+		auto ent_copy = m_scene->CreateEntity({ glm::vec2(0.0f), glm::vec2(2.0f) }, { "rotate" });
+		ent_copy.Add<Ren::SpriteComponent>(ASSETS_DIR "awesomeface.png");
+		ent_copy.Get<Ren::TransformComponent>().layer = 1;
+
+		/////////// Box2D ///////////
+		{
+			auto box_shape = CreateRef<b2PolygonShape>();
+
+			Ren::Entity ground_body = m_scene->CreateEntity(Ren::TransformComponent({ 0.0f, -10.0f }), Ren::TagList{ "ground" });
+			auto& ground_body_r = ground_body.Add<Ren::RigidBodyComponent>();
+			box_shape->SetAsBox(50.0f, 10.0f);
+			ground_body_r.fixtures.push_back({ box_shape, {} });
+
+			Ren::Entity another_body = m_scene->CreateEntity({{ -1.7f, 2.0f }}, { "another_body" });
+			auto& another_body_r = another_body.Add<Ren::RigidBodyComponent>();
+			box_shape = CreateRef<b2PolygonShape>();
+			box_shape->SetAsBox(1.0f, 1.0f);
+			another_body_r.fixtures.push_back({ box_shape, {} });
+
+			// Dynamic body
+			Ren::Entity dynamic_body = m_scene->CreateEntity({{ 0.0f, 10.0f }}, { "dynamic_body" });
+			auto& dynamic_body_r = dynamic_body.Add<Ren::RigidBodyComponent>();
+			box_shape = CreateRef<b2PolygonShape>();
+			box_shape->SetAsBox(1.5f, 1.f);
+			dynamic_body_r.body_def.type = b2_dynamicBody;
+			b2FixtureDef fix_def;
+			fix_def.density = 1.0f;
+			fix_def.friction = 0.3f;
+			fix_def.restitution = 0.67;
+			dynamic_body_r.fixtures.push_back({ box_shape, fix_def });
+		}
+		m_scene->GetSystem<Ren::PhysicsSystem>()->m_DebugRender = true;
+		// Call init on all scene subsystems.
+		m_scene->Init();
+
+		if (serialize)
+			Ren::SceneSerializer::Serialize(m_scene, SOURCE_DIR "/build/test.yaml");
+	}
 };

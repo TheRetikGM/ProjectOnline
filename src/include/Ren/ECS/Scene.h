@@ -1,6 +1,5 @@
 #pragma once
 #include <entt/entt.hpp>
-#include <box2d/box2d.h>
 #include <filesystem> // std::filesystem::path
 
 #include "Ren/Core/Core.h"
@@ -65,8 +64,6 @@ namespace Ren
         Ref<entt::registry> m_Registry{ nullptr };
         // Used for loading textures.
         SDL_Renderer* m_Renderer{ nullptr };
-        // Physics world. Updates all of physics.
-        Ref<b2World> m_PhysWorld{ nullptr };
         // Name of the scene.
         std::string m_Name = "Undefined";
 
@@ -126,10 +123,6 @@ namespace Ren
         inline void Update(float dt) { m_sysManager.Update(dt); }
         // Call render on all component systems.
         inline void Render() { m_sysManager.Render(); }
-
-        // Set positions of rigidbody to transform component, create body in physics world and create its fixture.
-        // Use this when you add RigidBodyComponent **after** the Scene::Init() method was called.
-        void InitPhysicsBody(Entity ent);
         
     private:
         // Cache for storing loaded textures of components.
@@ -151,14 +144,4 @@ namespace Ren
     }; // class Scene
 
     using Entity = Scene::Entity;
-
-    // Note: When body has RigidBody component, then changing transform component position, will not affect the position of entity.
-    template<>
-    inline auto& Scene::Entity::Add<RigidBodyComponent>()
-    {
-        const b2Vec2 gravity = { 0.0f, -9.81f };
-        if (!p_scene->m_PhysWorld)
-            p_scene->m_PhysWorld = CreateRef<b2World>(gravity);
-        return p_scene->m_Registry->emplace<RigidBodyComponent>(id);
-    }
 }; // namespace Ren

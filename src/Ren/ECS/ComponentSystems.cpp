@@ -70,42 +70,39 @@ void NativeScriptSystem::Update(float dt)
 // Physics system.
 void PhysicsSystem::Init()
 {
-    if (!m_scene->m_PhysWorld)
-        return;
-
     auto view = m_scene->SceneView<RigidBodyComponent>();
     for (auto&& ent : view)
-        m_scene->InitPhysicsBody({ ent, m_scene });
+        InitPhysicsBody(ent);
 }
 void PhysicsSystem::Destroy()
 {
-    if (!m_scene->m_PhysWorld)
-        return;
-
-    // Destroy all bodies in world when the world is deleted.
-    for (b2Body* body = m_scene->m_PhysWorld->GetBodyList(); body;)
-    {
-        b2Body* next = body->GetNext();
-        m_scene->m_PhysWorld->DestroyBody(body);
-        body = next;
-    }
-    
     // Set pointers of the components to null, so that they don't point to free'd memory.
     auto view = m_scene->SceneView<RigidBodyComponent>();
     for (auto&& ent : view)
     {
         auto [r] = view.get(ent);
+
+        CleanupPhysicsBody(ent);
         r.p_body = nullptr;
     }
-    m_scene->m_PhysWorld.reset();
+
+    // Destroy all bodies in world when the world is deleted.
+    for (b2Body* body = m_physWorld->GetBodyList(); body;)
+    {
+        b2Body* next = body->GetNext();
+        m_physWorld->DestroyBody(body);
+        body = next;
+    }
+    
+    m_physWorld.reset();
 }
 void PhysicsSystem::Update(float dt)
 {
-    if (!m_scene->m_PhysWorld)
+    if (!m_physWorld)
         return;
 
     // Update physics.
-    m_scene->m_PhysWorld->Step(dt, m_VelocityIterations, m_PositionIterations);
+    m_physWorld->Step(dt, m_VelocityIterations, m_PositionIterations);
     
     // Sync TransformComponent position with RigidBodyComponent position.
     // TODO: Call collision callbacks.
@@ -179,8 +176,52 @@ void PhysicsSystem::Render()
         }
 
     };
-    for (b2Body* body = m_scene->m_PhysWorld->GetBodyList(); body; body = body->GetNext())
+    for (b2Body* body = m_physWorld->GetBodyList(); body; body = body->GetNext())
         draw_body(body);
 }
+void PhysicsSystem::InitPhysicsBody(entt::entity raw_ent)
+{
+    Entity ent = { raw_ent, m_scene };
+    REN_ASSERT((ent.HasAll<RigidBodyComponent, TransformComponent>()), "Body must have RigidBodyComponent and TransformComponent to be initialized in physics world.");
 
+    auto [rig, trans] = ent.GetM<RigidBodyComponent, TransformComponent>();
+
+    // Body was already initialized.
+    if (rig.p_body)
+        return;
+
+    // By default, position body at its transform.
+    rig.body_def.position = Utils::to_b2Vec2(trans.position);
+
+    // Each body has a custom data pointer to Entity structure allocated on heap (to be freed in Scene::CleanupPhysicsBody)
+    Entity* p_entity = new Entity();
+    *p_entity = ent;
+    rig.body_def.userData.pointer = reinterpret_cast<uintptr_t>(p_entity);
+
+    // Create body in physics world.
+    rig.p_body = m_physWorld->CreateBody(&rig.body_def);
+
+    // Create all fixtures of a body.
+    for (auto&& [p_shape, fixture_def] : rig.fixtures)
+    {
+        REN_ASSERT(p_shape, "Body must have a shape. Entity tag = " + ent.GetTags().front());
+
+        fixture_def.shape = p_shape.get();
+        rig.p_body->CreateFixture(&fixture_def);
+    }
+}
+void PhysicsSystem::CleanupPhysicsBody(entt::entity raw_ent)
+{
+    Entity ent = { raw_ent, m_scene };
+    REN_ASSERT((ent.HasAll<RigidBodyComponent>()), "Body must have RigidBodyComponent to be cleanedup");
+
+    auto& rig = ent.Get<RigidBodyComponent>();
+    if (!rig.body_def.userData.pointer)
+        return;
+
+    Entity* p_ent = reinterpret_cast<Entity*>(rig.body_def.userData.pointer);
+    delete p_ent;
+
+    rig.body_def.userData.pointer = 0;
+}
 #pragma endregion
