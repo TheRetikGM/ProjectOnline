@@ -1,17 +1,23 @@
 # ProjectOnline - temp name
+
 Concept project which consists of Engine named Ren and Sandbox app.
 
+[your face after seeing this project](assets/awesomeface.png)
+
 ## Docs
+
 - [Conventions](docs/typing.md "conventions")
 - [New project](docs/new_project.md "new_project")
 - [Custom component](docs/custom_component.md)
 
 ## Windows build dependencies.
+
 - Installed visual studio with tools for C++ and C.
 - CMake (added to PATH)
 - Git (added to PATH)
 
 ## Build - Windows
+
     git clone https://github.com/theretikgm/sdl2-learning
     go to cloned project
     launch configure.bat
@@ -19,12 +25,14 @@ Concept project which consists of Engine named Ren and Sandbox app.
     compiled binary should be in build/src/Release directory
 
 ## Build - Linux
+
     git clone https://github.com/theretikgm/sdl2-learning
     cd sdl2-learning
     cmake --preset linux-release
     cmake --build build
 
 ## Windows coding environment setup (Visual Studio)
+
 - Install CMake tools using Visual Studio installer.
 - Clone project.
 - Open project folder in visual studio.
@@ -34,6 +42,7 @@ Concept project which consists of Engine named Ren and Sandbox app.
 - Use green arrows in the tool blade to build and run (ctrl + F5 or F5).
 
 ## Windows coding environment setup (Visual Studio Code)
+
 - Install CMake Tools and C++ tools extensions.
 - Clone project
 - Open project in VSCode
@@ -41,8 +50,8 @@ Concept project which consists of Engine named Ren and Sandbox app.
 - Use arrow or bug in the bottom tool blade to compile and run code.
 - Note: Select debug or release build configuration in bottom blade.
 
-
 ## TODO list
+
 - [ ] Support already installed VCPKG, instead of downloading it
 - [ ] Fix the VCPKG sdl-mixer mess. The add_library directive changes based on weather and OS... what?
 - [ ] Camera controller on entity.
@@ -72,4 +81,3 @@ Concept project which consists of Engine named Ren and Sandbox app.
 - [x] ~~Box2D implementation~~ kind of
 - [x] ~~Centralized rendering~~
 - [x] ~~Move GameCore.cpp, Layer.cpp, LayerStack.cpp into their corresponding subdirectories~~
- 
