@@ -120,16 +120,6 @@ public:
         m_scene->Render();
 		Ren::Renderer::Render();
     }
-    void OnImGui(Ren::ImGuiContext& context) override
-    {
-        static bool show_demo = false;
-		if (KeyPressed(Ren::Key::I))
-			show_demo = !show_demo;
-		
-		if (show_demo)
-			ImGui::ShowDemoWindow();
-    }
-
 private:
 
 	void sceneFromFile(std::filesystem::path path  = ASSETS_DIR "scenes/demo.ren")

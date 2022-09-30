@@ -109,9 +109,10 @@ void GameCore::Loop()
             ImGui_ImplSDL2_ProcessEvent(&e);
             
             Event ren_event{ e, false };
-            // Pass events to all layers in reverse order, because overlay layers should get the events first.
+            // Pass events to all layers in reverse order, so that overlay layers will get the event first.
             for (auto it = m_layerStack.rbegin(); it != m_layerStack.rend(); it++)
             {
+                std::string name = (*it)->m_name;
                 (*it)->OnEvent(ren_event);
                 if (ren_event.handled)
                     break;

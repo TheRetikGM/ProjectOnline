@@ -63,7 +63,9 @@ namespace Ren
         // Begin main loop. To exit set m_run to false.
         void Loop();
 
+        // Push layer onto the stack. Note: Overlays are always above layers.
         void PushLayer(Layer* layer);
+        // Push overlay layer onto the stack. Note: Overlays are always above layers.
         void PushOverlay(Layer* layer);
         inline LayerStack& GetLayerStack() { return m_layerStack; };
 

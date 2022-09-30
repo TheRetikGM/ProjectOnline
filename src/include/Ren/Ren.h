@@ -10,6 +10,7 @@
 #include "Ren/Core/Core.h"
 #include "Ren/Core/Startup.hpp"
 #include "Ren/Core/GameCore.h"
+#include "Ren/Core/Layer.h"
 
 #include "ECS/Scene.h"
 #include "ECS/NativeScript.h"
