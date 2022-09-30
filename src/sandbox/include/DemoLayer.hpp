@@ -13,11 +13,11 @@ class DemoLayer : public Ren::Layer
 	Ref<Ren::Scene> m_scene;
 	Ren::Entity m_ent;
 	Ren::CartesianCamera m_camera;
+	Ren::Texture2D m_renderTexture;
 public:
+
     DemoLayer(const std::string& name) : Ren::Layer(name) 
 	{
-		// Outputs logs to stdout by default.
-		Ren::LogEmmiter::AddListener<Ren::StreamLogger>();
 	}
 
     void OnInit() override
@@ -34,6 +34,11 @@ public:
 		// Setup camera with initial scale of 50 pixels per unit.
 		m_camera.SetUnitScale(50);
 		m_camera.SetViewportSize(m_GameCore->GetWindowSize());
+
+		m_renderTexture.m_Size = m_GameCore->GetWindowSize();
+		m_renderTexture.m_Format = SDL_PIXELFORMAT_RGBA32; 
+		m_renderTexture.m_Access = SDL_TextureAccess::SDL_TEXTUREACCESS_TARGET;
+		m_renderTexture.Generate();
     }
     void OnDestroy() override
     {
@@ -108,18 +113,20 @@ public:
     }
     void OnRender(SDL_Renderer* renderer) override
     {
-		Ren::Renderer::BeginRender(&m_camera);
-		m_textRenderer->RenderText(
-			"WSAD for movement\n"
-			"Arrow keys or hold mouse right button for camera movement\n"
-			"'i' to toggle imgui demo window\n"
-			"ESC to exit\n"
-			"Mouse left button for spawning new body\n"
-			"Mouse wheel for zoom"
-			, { 10.0f, 10.0f }, 1.0f, Ren::Colors3::White, 10);
-        m_scene->Render();
+		Ren::Renderer::BeginRender(&m_camera, &m_renderTexture);
+			Ren::Renderer::Clear(m_GameCore->m_ClearColor);
+			m_textRenderer->RenderText(
+				"WSAD for movement\n"
+				"Arrow keys or hold mouse right button for camera movement\n"
+				"'i' to toggle imgui demo window\n"
+				"ESC to exit\n"
+				"Mouse left button for spawning new body\n"
+				"Mouse wheel for zoom"
+				, { 10.0f, 10.0f }, 1.0f, Ren::Colors3::White, 10);
+			m_scene->Render();
 		Ren::Renderer::Render();
-    }
+		Ren::Renderer::EndRender();
+	}
 private:
 
 	void sceneFromFile(std::filesystem::path path  = ASSETS_DIR "scenes/demo.ren")
@@ -200,4 +207,6 @@ private:
 		if (serialize)
 			Ren::SceneSerializer::Serialize(m_scene, SOURCE_DIR "/build/test.yaml");
 	}
+
+	friend class ImGuiLayer;
 };

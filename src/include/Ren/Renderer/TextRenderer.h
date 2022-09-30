@@ -6,7 +6,7 @@
 #include <vector>
 
 #include "Ren/Core/Core.h"
-#include "Ren/RenSDL/Texture.hpp"
+#include "Ren/RenSDL/Texture.h"
 
 namespace Ren
 {

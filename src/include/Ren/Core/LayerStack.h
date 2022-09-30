@@ -14,8 +14,8 @@ namespace Ren
     public:
         LayerStack();
 
-        void PushLayer(Layer* layer);
-        void PushOverlay(Layer* overlay);
+        void PushLayer(Ref<Layer> layer);
+        void PushOverlay(Ref<Layer> overlay);
 
         // Delete layer from layer stack.
         void DeleteLayer(const std::string& name);

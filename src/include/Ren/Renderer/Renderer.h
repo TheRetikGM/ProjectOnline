@@ -4,6 +4,7 @@
 
 #include "RenderCommand.hpp"
 #include "Ren/Renderer/Camera.h"
+#include "Ren/RenSDL/Texture.h"
 
 namespace Ren
 {
@@ -14,12 +15,22 @@ namespace Ren
     public:
         // Use this function on the start of render phase.
         // TODO: Maybe submit render texture target here?
-        static void BeginRender(Camera* camera)
+        static void BeginRender(Camera* camera, Texture2D* render_target = nullptr)
         {
             m_renderCommands.clear();
             m_camera = camera;
             m_cameraPV = m_camera->GetPV();
             m_cameraInvPV = glm::inverse(m_cameraPV);
+            m_renderTarget = render_target;
+
+            if (render_target)
+                SDL_SetRenderTarget(m_renderer, render_target->m_Texture);
+        }
+        static void EndRender()
+        {
+            if (m_renderTarget)
+                SDL_SetRenderTarget(m_renderer, nullptr);
+            m_renderTarget = nullptr;
         }
 
         // Submit raw RenderCommands, to be rendered.
@@ -45,6 +56,8 @@ namespace Ren
                 command->Render(m_renderer);
         }
 
+        // Clear current render target.
+        static void Clear(Ren::Color4 color = Ren::Colors4::Black);
         inline static SDL_Renderer* GetRenderer() { return m_renderer; } 
         inline static void SetRenderer(SDL_Renderer* renderer) { m_renderer = renderer; }
         inline static SDL_Rect ConvertRect(const Ren::Rect& rect) { return m_camera->ConvertRect(rect, m_cameraPV); }
@@ -56,6 +69,7 @@ namespace Ren
         inline static std::vector<RenderCommand> m_renderCommands{};
         inline static SDL_Renderer* m_renderer{ nullptr };
         inline static int32_t m_activeRenderLayer{ 0 };
+        inline static Ren::Texture2D* m_renderTarget{ nullptr };
 
         inline static Camera* m_camera{ nullptr };
         inline static glm::mat4 m_cameraPV{ 1.0f };

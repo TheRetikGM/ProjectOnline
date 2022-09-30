@@ -165,3 +165,10 @@ void Renderer::DrawLine(const glm::vec2& p1, const glm::vec2& p2, const Ren::Col
 }
 
 #pragma endregion
+
+
+void Renderer::Clear(Ren::Color4 color)
+{
+    SDL_SetRenderDrawColor(m_renderer, color.r, color.g, color.b, color.a);
+    SDL_RenderClear(m_renderer);
+}

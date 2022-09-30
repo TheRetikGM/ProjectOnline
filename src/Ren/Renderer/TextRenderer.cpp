@@ -7,7 +7,7 @@
 #include FT_FREETYPE_H
 
 #include "Ren/Renderer/Renderer.h"
-#include "Ren/RenSDL/Texture.hpp"
+#include "Ren/RenSDL/Texture.h"
 #include "Ren/Utils/Logger.hpp"
 
 using namespace Ren;

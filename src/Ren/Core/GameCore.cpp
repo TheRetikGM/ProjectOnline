@@ -152,5 +152,5 @@ void GameCore::Loop()
     }
 }
 
-void GameCore::PushLayer(Layer* layer) { m_layerStack.PushLayer(layer); layer->m_GameCore = this; }
-void GameCore::PushOverlay(Layer* layer) { m_layerStack.PushOverlay(layer); layer->m_GameCore = this; }
+void GameCore::PushLayer(Ref<Layer> layer) { m_layerStack.PushLayer(layer); layer->m_GameCore = this; }
+void GameCore::PushOverlay(Ref<Layer> layer) { m_layerStack.PushOverlay(layer); layer->m_GameCore = this; }

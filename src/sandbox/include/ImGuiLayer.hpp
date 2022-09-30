@@ -1,29 +1,58 @@
 #pragma once
 #include <Ren/Ren.h>
 #include <Ren/Utils/FpsCounter.hpp>
+#include "DemoLayer.hpp"
 
 class ImGuiLayer : public Ren::Layer
 {
+    Ren::PixelCamera m_pixCam;
+
 public:
+    Ref<DemoLayer> m_DemoLayer{ nullptr };
+    
     ImGuiLayer(const std::string& name) : Ren::Layer(name) {}
 
+    void OnInit() override
+    {
+        m_pixCam.SetViewportSize(m_GameCore->GetWindowSize());
+    }
     void OnUpdate(float dt) override 
     {
         m_fpsCounter.Update(dt);		
         if (KeyPressed(Ren::Key::I))
             m_showDemo = !m_showDemo;
     }
-    
-    void OnEvent(Ren::Event& e)
+    void OnEvent(Ren::Event& e) override
     {
         if (e.sdl_event.type == SDL_MOUSEBUTTONDOWN)
             e.handled = true;
     }
-    void OnImGui(Ren::ImGuiContext& context)
+    void OnImGui(Ren::ImGuiContext& context) override
     {
-        m_fpsCounter.DrawPlot(context, m_GameCore->GetWindowSize());
+        ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
+        if (ImGui::BeginMainMenuBar())
+        {
+            if (ImGui::BeginMenu("File"))
+            {
+                if (ImGui::MenuItem("New", "Ctrl+N")) {}
+                if (ImGui::MenuItem("Open", "Ctrl+O")) {}
+                if (ImGui::MenuItem("Save", "Ctrl+S")) {}
+                if (ImGui::MenuItem("Save As..")) {}
+                ImGui::Separator();
+                if (ImGui::MenuItem("Quit", "Alt+f4"))
+                    m_GameCore->m_Run = false;
+
+                ImGui::EndMenu();
+            }
+
+            ImGui::EndMainMenuBar();
+        }
+        // m_fpsCounter.DrawPlot(context, m_GameCore->GetWindowSize());
         if (m_showDemo)
             ImGui::ShowDemoWindow();
+        
+        ImGui::Begin("Scene view");
+        ImGui::End();
     }
 private:
     bool m_showDemo{ false };

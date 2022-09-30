@@ -17,18 +17,18 @@ LayerStack::Stack::iterator LayerStack::findLayerWithName(const std::string& nam
         return l->GetName() == name;
     });
 }
-void LayerStack::PushLayer(Layer* layer)
+void LayerStack::PushLayer(Ref<Layer> layer)
 {
     // Check if layer with given name already exists.
     auto it = findLayerWithName(layer->GetName());
     REN_ASSERT(it == m_layersAndOverlays.end(), "Layer with name '" + layer->GetName() + "' already exists.");
     
     if (it == m_layersAndOverlays.end())
-        m_layersAndOverlays.insert(m_overlayBegin, Ref<Layer>(layer));
+        m_layersAndOverlays.insert(m_overlayBegin, layer);
 }
-void LayerStack::PushOverlay(Layer* layer)
+void LayerStack::PushOverlay(Ref<Layer> layer)
 {
-    auto it = m_layersAndOverlays.insert(m_layersAndOverlays.end(), Ref<Layer>(layer));
+    auto it = m_layersAndOverlays.insert(m_layersAndOverlays.end(), layer);
 
     if (m_overlayBegin == m_layersAndOverlays.end())
         m_overlayBegin = it;

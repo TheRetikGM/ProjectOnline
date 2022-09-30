@@ -64,9 +64,9 @@ namespace Ren
         void Loop();
 
         // Push layer onto the stack. Note: Overlays are always above layers.
-        void PushLayer(Layer* layer);
+        void PushLayer(Ref<Layer> layer);
         // Push overlay layer onto the stack. Note: Overlays are always above layers.
-        void PushOverlay(Layer* layer);
+        void PushOverlay(Ref<Layer> layer);
         inline LayerStack& GetLayerStack() { return m_layerStack; };
 
         /* User-defined functions */
