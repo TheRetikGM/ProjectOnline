@@ -16,3 +16,4 @@ vcpkg
 .cache
 imgui.ini
 logs
+.vscode
