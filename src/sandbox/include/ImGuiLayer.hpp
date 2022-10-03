@@ -3,15 +3,17 @@
 #include <Ren/Utils/FpsCounter.hpp>
 #include <Ren/Physics/Physics.h>
 #include "DemoLayer.hpp"
+#include "GuiLogger.hpp"
 
 class ImGuiLayer : public Ren::Layer
 {
-    Ren::PixelCamera m_pixCam;
-
 public:
     Ref<DemoLayer> m_DemoLayer{ nullptr };
     
-    ImGuiLayer(const std::string& name) : Ren::Layer(name) {}
+    ImGuiLayer(const std::string& name) : Ren::Layer(name) 
+    {
+        Ren::LogEmmiter::AddListener<GuiLogger>();
+    }
 
     void OnInit() override
     {
@@ -25,7 +27,10 @@ public:
     }
     void OnEvent(Ren::Event& e) override
     {
-        if (e.sdl_event.type == SDL_MOUSEBUTTONDOWN)
+        ImGuiIO& io = ImGui::GetIO();
+        if (io.WantCaptureMouse && ((e.sdl_event.type & SDL_MOUSEMOTION) == e.sdl_event.type))
+            e.handled = true;
+        if (io.WantCaptureKeyboard && ((e.sdl_event.type & SDL_KEYDOWN) == e.sdl_event.type))
             e.handled = true;
     }
     void OnImGui(Ren::ImGuiContext& context) override
@@ -69,18 +74,26 @@ public:
         ImGui::End();
 
         ImGui::Begin("Info");
+        m_fpsCounter.DrawPlot();
         ImGui::End();
 
         ImGui::Begin("Scene");
         ImGui::End();
 
         ImGui::Begin("Logger");
+        Ren::LogEmmiter::GetListener<GuiLogger>()->Draw();
         ImGui::End();
 
         ImGui::Begin("Options");
+        ImGui::Checkbox("Scene grab input", &m_grabInput);
+        ImGui::End();
+
+        ImGui::Begin("Component");
         ImGui::End();
     }
 private:
     bool m_showDemo{ false };
     Ren::Utils::FpsCounter m_fpsCounter;
+    Ren::PixelCamera m_pixCam;
+    bool m_grabInput = false;
 };

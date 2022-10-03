@@ -21,7 +21,7 @@ public:
         std::string tags = "";
         for (auto&& tag : e.GetTags())
             tags += tag + " ";
-        SAND_STATUS(Ren::Utils::TimeInfo().to_string() + "    Movement.hpp    Contact with entity! Tags = " + tags);
+        LOG_I("Contact with entity! Tags = " + tags);
     }
 
     void OnUpdate(float dt) override

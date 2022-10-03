@@ -23,6 +23,8 @@ public:
 		// NOTE: Here could be: Rendering layer, network layer, audio layer etc.
 		PushLayer(demo_layer);
 		PushLayer(gui_layer);
+
+		// Ren::LogEmmiter::AddListener<Ren::StreamLogger>();
 	}
 };
 

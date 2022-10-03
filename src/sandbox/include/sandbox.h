@@ -1,4 +1,5 @@
 #pragma once
+#include <Ren/Utils/Logger.hpp>
 
 // FIXME: This is temporary and should be changed in the future to give the user a chocie to choose between sandbox debug and release.
 #ifdef REN_DEBUG
@@ -14,7 +15,7 @@
                 std::terminate(); \
             } \
         } while (false)
-    #define SAND_STATUS(message) std::cout << "[Sandbox] -- " << message << std::endl
+    #define SAND_STATUS(message) std::cout << "[Sandbox] -- " << message << std::endl;
 #else
     #define SAND_ASSERT(condition, message) if (!(condition)) std::cout << "[Sandbox-error] -- " << message << std::endl
     #define SAND_STATUS(message) do {} while(false)

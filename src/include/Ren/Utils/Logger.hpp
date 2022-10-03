@@ -13,6 +13,8 @@
 #include <thread>
 #include <ctime>
 #include <unordered_map>
+#include <memory>
+#include <vector>
 #include <iostream>
 
 #define LOG_I(message) Ren::LogEmmiter::Log(Ren::LogLevel::info, message, __FILE__, __LINE__)
@@ -133,7 +135,7 @@ namespace Ren
             if (s_logListeners.count(id) != 0)
                 return dynamic_cast<T*>(s_logListeners[id].get());
 
-            s_logListeners[id] = Ref<LogListener>(new T(std::forward<Args>(args)...));
+            s_logListeners[id] = std::shared_ptr<LogListener>(new T(std::forward<Args>(args)...));
             return dynamic_cast<T*>(s_logListeners[id].get());
         }
         // Create instance of a specified type (which must be a child of LogListener).
@@ -144,7 +146,7 @@ namespace Ren
             if (s_logListeners.count(id) != 0)
                 return dynamic_cast<T*>(s_logListeners[id].get());
             
-            s_logListeners[id] = Ref<LogListener>(new T());
+            s_logListeners[id] = std::shared_ptr<LogListener>(new T());
             return dynamic_cast<T*>(s_logListeners[id].get());
         }
 
@@ -165,7 +167,7 @@ namespace Ren
         }
 
     protected:
-        inline static std::unordered_map<int, Ref<LogListener>> s_logListeners{};
+        inline static std::unordered_map<int, std::shared_ptr<LogListener>> s_logListeners{};
         inline static int s_lastID{ 0 };
 
         template<typename T>

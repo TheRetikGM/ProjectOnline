@@ -26,7 +26,17 @@ namespace Ren::Utils
         inline float GetFps() { return m_fps; }
         inline void SetSampleTime(float n_sec) { m_sampleTime = n_sec; reset(); }
 
-        void DrawPlot(Ren::ImGuiContext& context, glm::ivec2 win_size)
+        void DrawPlotWindow(Ren::ImGuiContext& context, glm::ivec2 win_size)
+        {
+            ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav;
+            ImGui::SetNextWindowBgAlpha(0.35f); // Transparent background
+            if (m_lockPos)
+                ImGui::SetNextWindowPos(ImVec2(10.0f, win_size.y - 105.0f));
+            if (ImGui::Begin("Ren::Utils::FpsCounter", nullptr, window_flags))
+                DrawPlot();
+            ImGui::End();
+        }
+        void DrawPlot()
         {
             struct Funcs
             {
@@ -37,25 +47,16 @@ namespace Ren::Utils
                 }
             };
 
-            ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav;
-            ImGui::SetNextWindowBgAlpha(0.35f); // Transparent background
-            static bool lock_pos = true;
-            if (lock_pos)
-                ImGui::SetNextWindowPos(ImVec2(10.0f, win_size.y - 105.0f));
-            if (ImGui::Begin("Ren::Utils::FpsCounter", nullptr, window_flags))
+            //ImGui::Text("FPS: %.1f", m_fps);
+            char avg_fps[20];
+            std::sprintf(avg_fps, "avg. %.1f", m_fps);
+            ImGui::PlotLines("FPS", &Funcs::value_getter, &m_values, m_values.size(), 0, avg_fps, 0.0f, 200.0f, ImVec2(0.0f, 80.0f));
+            
+            if (ImGui::BeginPopupContextWindow())
             {
-                //ImGui::Text("FPS: %.1f", m_fps);
-                char avg_fps[20];
-                std::sprintf(avg_fps, "avg. %.1f", m_fps);
-                ImGui::PlotLines("FPS", &Funcs::value_getter, &m_values, m_values.size(), 0, avg_fps, 0.0f, 200.0f, ImVec2(0.0f, 80.0f));
-                
-                if (ImGui::BeginPopupContextWindow())
-                {
-                    ImGui::MenuItem("Lock position", NULL, &lock_pos);
-                    ImGui::EndPopup();
-                }
+                ImGui::MenuItem("Lock position", NULL, &m_lockPos);
+                ImGui::EndPopup();
             }
-            ImGui::End();
         }
 
     private:
@@ -63,6 +64,7 @@ namespace Ren::Utils
         float m_sampleTime = 2.0f;
         float m_currentSampleTime = 0.0f;
         int m_nSamples = 0;
+        bool m_lockPos{ true };
 
         float m_fps{ 0.0f };
 
