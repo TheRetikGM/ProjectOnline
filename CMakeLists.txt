@@ -39,7 +39,14 @@ add_compile_definitions(
 	"$<$<PLATFORM_ID:Windows>:_BUILD_WINDOWS>"
 	"$<$<PLATFORM_ID:Linux>:_BUILD_LINUX>"
 )
-	
+
+# Add compile options to generate more warnings.
+if (MSVC)
+	add_compile_options(/W4 /WX)
+else()
+	add_compile_options(-Wall -Wextra -Wno-unused-parameter)
+endif()
+
 # Go to src subdirectory, to add all source files and executable.
 add_subdirectory(src)
 
