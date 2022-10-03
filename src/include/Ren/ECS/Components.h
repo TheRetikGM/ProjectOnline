@@ -50,13 +50,13 @@ namespace Ren
     class SpriteComponent : public ImgComponent
     {
     public:
-        glm::ivec3 m_Color = glm::ivec3(255);
+        glm::ivec3 m_Color{ glm::ivec3(255) };
         // Texture size is defined in pixels, so we have to scale it to match our desired size in unit-space.
         // However we don't use pixels-per-unit from Renderer::GetCamera(), because we don't want the texture
         // to have same size on different zoom levels of the camera (defined by the ppu ratio).
-        glm::ivec2 m_PixelsPerUnit = glm::ivec2(200);
+        glm::ivec2 m_PixelsPerUnit{ glm::ivec2(200) };
 
-        SpriteComponent(std::filesystem::path img_path = UNDEFINED_PATH, glm::vec3 color = glm::vec3(255)) : m_Color(color), ImgComponent(img_path) {}
+        SpriteComponent(std::filesystem::path img_path = UNDEFINED_PATH, glm::vec3 color = glm::vec3(255)) : ImgComponent(img_path), m_Color(color) {}
 
         // Get size in units (accounting for m_PixelsPerUnit)
         glm::vec2 GetSize();

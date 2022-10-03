@@ -126,7 +126,7 @@ struct LineRenderCommand
     glm::vec2 p1, p2;
     Color4 color;
     int32_t layer;
-    const int32_t GetLayer() const { return layer; }
+    const int32_t& GetLayer() const { return layer; }
     void Render(SDL_Renderer* renderer)
     {
         p1 = Renderer::ToPixels(p1);

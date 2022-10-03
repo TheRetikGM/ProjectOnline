@@ -101,10 +101,10 @@ namespace Ren
         void Erase(std::FILE* file)
         {
             int i = 0;
-            for (i; i < m_Streams.size(); i++)
+            for (i = 0; i < (int)m_Streams.size(); i++)
                 if (m_Streams[i] == file)
                     break;
-            if (i < m_Streams.size())
+            if (i < (int)m_Streams.size())
                 m_Streams.erase(m_Streams.begin() + i);
         }
     };

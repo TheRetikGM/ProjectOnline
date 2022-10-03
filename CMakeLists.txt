@@ -44,7 +44,7 @@ add_compile_definitions(
 if (MSVC)
 	add_compile_options(/W4 /WX)
 else()
-	add_compile_options(-Wall -Wextra -Wno-unused-parameter)
+	add_compile_options(-Wall -Wextra -Wno-unused-parameter -Wno-unknown-pragmas)
 endif()
 
 # Go to src subdirectory, to add all source files and executable.

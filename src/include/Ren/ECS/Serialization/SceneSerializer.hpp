@@ -87,7 +87,7 @@ namespace Ren
                 // We need to get IDs of the components in the same order
                 // for each scene. As such we create them in this dummy array
                 // first.
-                int _[] = {-1, getID<TComp>()...};
+                int _[] = {-1, getID<TComp>()...}; (void)_;
 
                 YAML::Node ent_info;
 
@@ -115,7 +115,7 @@ namespace Ren
             static void Deserialize(const YAML::Node& node, Entity& e)
             {
                 // See explanation above.
-                int _[] = {-1, getID<TComp>()...};
+                int _[] = {-1, getID<TComp>()...}; (void)_;
                 
                 // TODO: UUID
 
