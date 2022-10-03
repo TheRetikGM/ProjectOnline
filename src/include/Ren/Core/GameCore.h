@@ -20,11 +20,11 @@ namespace Ren
     struct GameDefinition
     {
         // Define window and SDL specs.
-        SDLContextDef   context_def;
+        SDLContextDef   context_def{};
         // Init flags for the Ren engine.
         uint32_t        init_flags{ REN_INIT_IMGUI | REN_INIT_BOX2D };
         // Definition of the Ren imgui context.
-        ImGuiContextDef imgui_def;
+        ImGuiContextDef imgui_def{};
     };
 
     namespace Utils
