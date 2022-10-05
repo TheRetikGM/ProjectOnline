@@ -4,6 +4,7 @@
 #include <Ren/Physics/Physics.h>
 #include "DemoLayer.hpp"
 #include "GuiLogger.hpp"
+#define BIT_TEST(a, b) ((a & b) == b)
 
 class ImGuiLayer : public Ren::Layer
 {
@@ -27,11 +28,17 @@ public:
     }
     void OnEvent(Ren::Event& e) override
     {
-        ImGuiIO& io = ImGui::GetIO();
-        if (io.WantCaptureMouse && ((e.sdl_event.type & SDL_MOUSEMOTION) == e.sdl_event.type))
+        ImGuiIO& io = ImGui::GetIO(); (void)io;
+        if (!m_grabInput)
+        {
             e.handled = true;
-        if (io.WantCaptureKeyboard && ((e.sdl_event.type & SDL_KEYDOWN) == e.sdl_event.type))
-            e.handled = true;
+            return;
+        }
+
+        if (BIT_TEST(e.event.type, SDL_MOUSEMOTION))
+        {
+        }
+
     }
     void OnImGui(Ren::ImGuiContext& context) override
     {
@@ -86,10 +93,18 @@ public:
 
         ImGui::Begin("Options");
         ImGui::Checkbox("Scene grab input", &m_grabInput);
+        static bool show_demo = false;
+        ImGui::Checkbox("Show demo", &show_demo);
+        ImGui::Separator();
+        if (ImGui::Button("Exit"))
+            m_GameCore->m_Run = false;
         ImGui::End();
 
         ImGui::Begin("Component");
         ImGui::End();
+
+        if (show_demo)
+            ImGui::ShowDemoWindow();
     }
 private:
     bool m_showDemo{ false };

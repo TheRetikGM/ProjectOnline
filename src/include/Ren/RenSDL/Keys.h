@@ -249,4 +249,13 @@ namespace Ren
         AUDIOFASTFORWARD = SDL_SCANCODE_AUDIOFASTFORWARD,
         NUM_KEYS = 512
     };
+
+    enum class MouseButton : int {
+        LEFT = SDL_BUTTON_LEFT,
+        MIDDLE = SDL_BUTTON_MIDDLE,
+        RIGHT = SDL_BUTTON_RIGHT,
+        X1 = SDL_BUTTON_X1,
+        X2 = SDL_BUTTON_X2,
+        COUNT = 5   // Use for getting the button count.
+    };
 }

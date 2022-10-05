@@ -7,7 +7,7 @@
 #include "Ren/Core/GameCore.h"
 #include "Ren/RenSDL/Event.hpp"
 #include "Ren/RenSDL/Context.hpp"
-#include "Ren/Core/KeyInterface.hpp"
+#include "Ren/Core/Input.hpp"
 
 namespace Ren
 {

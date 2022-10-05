@@ -48,19 +48,19 @@ public:
     }
     void OnEvent(Ren::Event& e) override
     {
-		if (e.sdl_event.type == SDL_WINDOWEVENT && e.sdl_event.window.event == SDL_WINDOWEVENT_RESIZED)
+		if (e.event.type == SDL_WINDOWEVENT && e.event.window.event == SDL_WINDOWEVENT_RESIZED)
 			m_camera.SetViewportSize(m_GameCore->GetWindowSize());
 
-        if (!(m_GameCore->m_Run = !Ren::Utils::key_pressed(e.sdl_event, SDLK_ESCAPE)))
+        if (!(m_GameCore->m_Run = !Ren::Utils::key_pressed(e.event, SDLK_ESCAPE)))
             e.handled = true;
-		if (e.sdl_event.type == SDL_MOUSEWHEEL) 
+		if (e.event.type == SDL_MOUSEWHEEL) 
 		{
-			if (e.sdl_event.wheel.y > 0)	// scroll up
+			if (e.event.wheel.y > 0)	// scroll up
 				m_camera.SetUnitScale(m_camera.GetUnitScale() + glm::ivec2(10));
 			else
 				m_camera.SetUnitScale(m_camera.GetUnitScale() - glm::ivec2(10));
 		}
-		if (e.sdl_event.type == SDL_MOUSEBUTTONDOWN && e.sdl_event.button.button == SDL_BUTTON_LEFT)
+		if (e.event.type == SDL_MOUSEBUTTONDOWN && e.event.button.button == SDL_BUTTON_LEFT)
 		{
 			glm::ivec2 mouse_pos(0);
 			SDL_GetMouseState(&mouse_pos.x, &mouse_pos.y);
@@ -80,7 +80,7 @@ public:
 			m_scene->GetSystem<Ren::PhysicsSystem>()->InitPhysicsBody(dynamic_body.id);
 		}
 		
-		if (Ren::Utils::key_pressed(e.sdl_event, SDLK_SPACE))
+		if (Ren::Utils::key_pressed(e.event, SDLK_SPACE))
 			m_camera.SetUnitScale(100);
     }
     void OnUpdate(float dt) override

@@ -4,7 +4,7 @@
 #include <entt/entt.hpp>
 
 #include "Ren/Core/Core.h"
-#include "Ren/Core/KeyInterface.hpp"
+#include "Ren/Core/Input.hpp"
 
 namespace Ren
 {
