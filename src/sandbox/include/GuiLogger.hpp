@@ -48,25 +48,25 @@ public:
 
                     ImGui::TableNextRow();                    
                     ImGui::TableNextColumn();
-                    ImGui::Text(e.timestamp.c_str());
+                    ImGui::Text("%s", e.timestamp.c_str());
 
                     ImGui::TableNextColumn();
                     ImGui::Text("%s:%i", e.entry.file.filename().c_str(), e.entry.line);
 
                     ImGui::TableNextColumn();
                     if (e.entry.level == Ren::LogLevel::warning)
-                        ImGui::TextColored({ 1.0f, 1.0f, 0.0f, 1.0f }, Ren::LOG_LEVEL_STRINGS[(int)e.entry.level]);
+                        ImGui::TextColored({ 1.0f, 1.0f, 0.0f, 1.0f }, "%s", Ren::LOG_LEVEL_STRINGS[(int)e.entry.level]);
                     else if (e.entry.level == Ren::LogLevel::error)
-                        ImGui::TextColored({ 1.0f, 0.0f, 0.0f, 1.0f }, Ren::LOG_LEVEL_STRINGS[(int)e.entry.level]);
+                        ImGui::TextColored({ 1.0f, 0.0f, 0.0f, 1.0f }, "%s", Ren::LOG_LEVEL_STRINGS[(int)e.entry.level]);
                     else if (e.entry.level == Ren::LogLevel::info)
-                        ImGui::TextColored({ 0.0f, 1.0f, 1.0f, 1.0f }, Ren::LOG_LEVEL_STRINGS[(int)e.entry.level]);
+                        ImGui::TextColored({ 0.0f, 1.0f, 1.0f, 1.0f }, "%s", Ren::LOG_LEVEL_STRINGS[(int)e.entry.level]);
                     else if (e.entry.level == Ren::LogLevel::critical)
-                        ImGui::TextColored({ 1.0f, 0.0f, 1.0f, 1.0f }, Ren::LOG_LEVEL_STRINGS[(int)e.entry.level]);
+                        ImGui::TextColored({ 1.0f, 0.0f, 1.0f, 1.0f }, "%s", Ren::LOG_LEVEL_STRINGS[(int)e.entry.level]);
                     else
-                        ImGui::TextColored({ 1.0f, 1.0f, 1.0f, 1.0f }, Ren::LOG_LEVEL_STRINGS[(int)e.entry.level]);
+                        ImGui::TextColored({ 1.0f, 1.0f, 1.0f, 1.0f }, "%s", Ren::LOG_LEVEL_STRINGS[(int)e.entry.level]);
 
                     ImGui::TableNextColumn();
-                    ImGui::Text(e.entry.message.c_str());
+                    ImGui::Text("%s", e.entry.message.c_str());
                 }
             }
 

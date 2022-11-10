@@ -12,6 +12,8 @@ namespace Ren
     class Camera
     {
     public:
+        virtual ~Camera() {}
+
         // Camera position in unit space.
         glm::vec2 m_CamPos{ .0f, .0f };
 

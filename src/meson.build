@@ -34,7 +34,7 @@ ren_dep = declare_dependency(
 ############# Sandbox ##############
 sandbox_src = []
 subdir('sandbox')
-executable('sandbox_app', sandbox_src, 
+executable('SDLDemo', sandbox_src, 
   link_args : compile_link_args,
   cpp_args : compile_cpp_args,
   include_directories : ['sandbox/include', conf_inc],

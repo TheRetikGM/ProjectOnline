@@ -74,6 +74,7 @@ namespace Ren
     class LogListener
     {
     public:
+        virtual ~LogListener() {}
         virtual void OnLog(const LogInfo& log) = 0;
     };
     
