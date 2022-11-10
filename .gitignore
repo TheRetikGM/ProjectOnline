@@ -17,3 +17,5 @@ vcpkg
 imgui.ini
 logs
 .vscode
+subprojects/*
+!subprojects/*.wrap

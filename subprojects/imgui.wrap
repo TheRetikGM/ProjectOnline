@@ -1,0 +1,11 @@
+[wrap-git]
+directory = imgui-1.88
+url = https://github.com/ocornut/imgui
+revision = a571933f8b28dd66f9d2e95d2ac88bd7cd46254e
+depth = 1
+patch_filename = imgui_1.88-2_patch.zip
+patch_url = https://wrapdb.mesonbuild.com/v2/imgui_1.88-2/get_patch
+patch_hash = a6c222df21e02092925091a5328283bad07134e04693b038dd10affff0dd9328
+
+[provide]
+imgui = imgui_dep
