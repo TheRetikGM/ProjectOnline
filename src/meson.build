@@ -26,7 +26,7 @@ ren_lib = library('ren', ren_src,
   dependencies : [ren_depends])
 
 ren_dep = declare_dependency(
-  include_directories : ren_inc,
+  include_directories : [ren_inc, conf_inc],
   link_with : ren_lib,
   dependencies : ren_depends)
 
@@ -37,5 +37,5 @@ subdir('sandbox')
 executable('SDLDemo', sandbox_src, 
   link_args : compile_link_args,
   cpp_args : compile_cpp_args,
-  include_directories : ['sandbox/include', conf_inc],
+  include_directories : ['sandbox/include'],
   dependencies : [ren_dep])
