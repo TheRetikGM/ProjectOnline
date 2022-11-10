@@ -1,0 +1,25 @@
+{
+  "adapters": {
+    "cpptools-default": {
+      "command": [
+        "${gadgetDir}/vscode-cpptools/debugAdapters/bin/OpenDebugAD7"
+      ],
+      "name": "cppdbg",
+      "configuration": {
+        "type": "cppdbg"
+      }
+    }
+  },
+  "configurations": {
+    "Debug - simple": {
+      "adapter": "cpptools-default",
+      "filetypes": [ "c", "cpp" ],
+      "configuration": {
+        "request": "launch",
+        "program": "${workspaceRoot}/build/src/SDLDemo",
+        "cwd": "${workspaceRoot}/build",
+        "args": []
+      }
+    }
+  }
+}
