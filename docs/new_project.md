@@ -2,7 +2,7 @@
 
 ## Step 1 - Add to project
 - Create new directory in [src](../src) directory. For example: `app`
-- Link Ren with project (append this to src/CMakeLists.txt)
+- Link Ren with project (append this to src/meson.build)
     ```Meson
     ############# Sandbox ##############
     sandbox_src = []
@@ -17,7 +17,7 @@
     ```
 ## Step 2 - Define source files
 - Create `meson.build` in the `app` directory
-- Add app sources. Example content of **app/CMakeLists.txt**:
+- Add app sources. Example content of **src/app/meson.build**:
     ```Meson
     # Add sources in this directory. Make sure to use the file() function.
     sandbox_src = [sandbox_src, files('AppSrc1.cpp', 'AppSrc2.cpp')]
