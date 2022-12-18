@@ -13,47 +13,41 @@ Concept project which consists of Engine named Ren and Sandbox app.
 ## Windows build dependencies.
 
 - Installed visual studio with tools for C++ and C.
-- CMake (added to PATH)
+- Meson (install using Python's pip) 
+  - `pip install meson`
 - Git (added to PATH)
 
 ## Build - Windows
-
     git clone https://github.com/theretikgm/sdl2-learning
     go to cloned project
     launch configure.bat
     launch compile.bat
-    compiled binary should be in build/src/Release directory
+    compiled binary should be in build/src directory
 
 ## Build - Linux
-
     git clone https://github.com/theretikgm/sdl2-learning
     cd sdl2-learning
-    cmake --preset linux-release
-    cmake --build build
+    meson setup --buildtype=release build
+    meson compile -C build
 
 ## Windows coding environment setup (Visual Studio)
-
-- Install CMake tools using Visual Studio installer.
-- Clone project.
-- Open project folder in visual studio.
-- Make sure that `Windows msvc` preset is selected in the top tool blade.
-- Project -> Configure CMake cache
-- In the right side of the tool blade select which executable you want to run.
-- Use green arrows in the tool blade to build and run (ctrl + F5 or F5).
+- It is possible to generate VS project using meson, but it is not suited for development.
+- I will have to create project files manually in the future ig.
 
 ## Windows coding environment setup (Visual Studio Code)
-
-- Install CMake Tools and C++ tools extensions.
+- Install C++ and meson (from mesonbuild) extensions.
 - Clone project
 - Open project in VSCode
-- Make sure that `Windows msvc` preset is selected in the bottom tool blade (blue strip with buttons).
-- Use arrow or bug in the bottom tool blade to compile and run code.
-- Note: Select debug or release build configuration in bottom blade.
+- Use meson tasks to configure, build and run code.
+
+## Windows/Linux environment setup (CLion)
+- Clone project
+- run configure.bat or `meson setup build` command
+- Open `compile_commands.json` file (the one in project dir) as project using CLion.
 
 ## TODO list
 
-- [ ] Support already installed VCPKG, instead of downloading it
-- [ ] Fix the VCPKG sdl-mixer mess. The add_library directive changes based on weather and OS... what?
+- [ ] Review the event system, to support mouse offsetting and such.
 - [ ] Camera controller on entity.
 - [ ] Tilemap loading
 - [ ] Text component

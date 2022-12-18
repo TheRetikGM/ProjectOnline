@@ -3,28 +3,26 @@
 ## Step 1 - Add to project
 - Create new directory in [src](../src) directory. For example: `app`
 - Link Ren with project (append this to src/CMakeLists.txt)
-    ```CMake
-    ########## NEW_APP ##########
-    set(APP_NAME "NewAPP")
-    add_executable(${APP_NAME} "")
-    # Go into 'app' subdir to add sources for executable.
-    add_subdirectory(app)
-    # Set include path for your app. Ren includes are global, so they are not needed.
-    target_include_directories(${APP_NAME} PRIVATE app/include)
-    # Link with Ren.
-    target_link_libraries(${APP_NAME} PRIVATE REN_LIB)
+    ```Meson
+    ############# Sandbox ##############
+    sandbox_src = []
+    # Add sources in app folder
+    subdir('app')
+    # Add executable linked with Ren. Also add include directories and default compile arguments.
+    executable('NewApp', sandbox_src,
+      link_args : compile_link_args,
+      cpp_args : compile_cpp_args,
+      include_directories : ['sandbox/include'],
+      dependencies : [ren_dep])
     ```
 ## Step 2 - Define source files
-- Create `CMakeLists.txt` in the `app` directory
+- Create `meson.build` in the `app` directory
 - Add app sources. Example content of **app/CMakeLists.txt**:
-    ```CMake
-    target_sources(${APP_NAME}
-        PRIVATE
-            AppSrc1.cpp
-            AppSrc2.cpp
-    )
-    # Go into subdirectory player and additional sources here. This directory must contain CMakeLists.txt, which adds them using target_sources.
-    add_subdirectory(Player)
+    ```Meson
+    # Add sources in this directory. Make sure to use the file() function.
+    sandbox_src = [sandbox_src, files('AppSrc1.cpp', 'AppSrc2.cpp')]
+    # Go into Player directory and do the same as here (execute meson.build file).
+    subdir('Player')
     ```
 ## Step 3 - Code skeleton
 - There is no *main* function.
