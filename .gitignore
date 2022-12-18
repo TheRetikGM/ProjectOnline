@@ -15,6 +15,7 @@ _deps
 vcpkg
 .cache
 imgui.ini
+!assets/imgui.ini
 logs
 .vscode
 subprojects/*
