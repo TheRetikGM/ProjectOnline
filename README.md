@@ -13,6 +13,7 @@ Concept project which consists of Engine named Ren and Sandbox app.
 ## Windows build dependencies.
 
 - Installed visual studio with tools for C++ and C.
+- Installed CMake
 - Meson (install using Python's pip) 
   - `pip install meson`
 - Git (added to PATH)

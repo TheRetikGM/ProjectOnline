@@ -16,7 +16,7 @@ class DemoLayer : public Ren::Layer
 	Ren::Texture2D m_renderTexture;
 public:
 
-    DemoLayer(const std::string& name) : Ren::Layer(name) 
+    DemoLayer(const std::string& name) : Ren::Layer(name)
 	{
 	}
 
@@ -26,7 +26,7 @@ public:
 		m_GameCore->m_ClearColor = { 100, 100, 100, 255 };
 
         sceneFromScratch();
-		//sceneFromFile();
+		// sceneFromFile();
 
 		// Load font.
 		m_textRenderer->Load(ASSETS_DIR "fonts/DejaVuSansCondensed.ttf", 32);
