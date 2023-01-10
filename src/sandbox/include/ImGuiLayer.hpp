@@ -29,24 +29,19 @@ public:
     void OnEvent(Ren::Event& e) override
     {
         ImGuiIO& io = ImGui::GetIO(); (void)io;
-        if (!m_grabInput)
-        {
+        if (!m_grabInput) {
             e.handled = true;
             return;
         }
 
         if (BIT_TEST(e.event.type, SDL_MOUSEMOTION))
-        {
-        }
-
+            ;
     }
     void OnImGui(Ren::ImGuiContext& context) override
     {
         ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
-        if (ImGui::BeginMainMenuBar())
-        {
-            if (ImGui::BeginMenu("File"))
-            {
+        if (ImGui::BeginMainMenuBar()) {
+            if (ImGui::BeginMenu("File")) {
                 if (ImGui::MenuItem("New", "Ctrl+N")) {}
                 if (ImGui::MenuItem("Open..", "Ctrl+O")) {}
                 ImGui::Separator();
@@ -58,8 +53,7 @@ public:
 
                 ImGui::EndMenu();
             }
-            if (ImGui::BeginMenu("Edit"))
-            {
+            if (ImGui::BeginMenu("Edit")) {
                 if (ImGui::MenuItem("Undo", "Ctrl+U")) {}
                 if (ImGui::MenuItem("Redo", "Ctrl+R")) {}
                 ImGui::Separator();

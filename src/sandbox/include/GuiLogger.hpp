@@ -20,10 +20,8 @@ public:
         ImGui::Begin("Logger");
         ImVec2 a_size = ImGui::GetContentRegionMax();
         ImGuiTableFlags flags = ImGuiTableFlags_Resizable | ImGuiTableFlags_ScrollY | ImGuiTableFlags_RowBg | ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_Hideable;
-        if (ImGui::BeginTable("table_log", 4, flags, ImVec2(0.0f, a_size.y - ImGui::GetTextLineHeight() * 2.0f)))
-        {
-            if (ImGui::BeginPopupContextWindow())
-            {
+        if (ImGui::BeginTable("table_log", 4, flags, ImVec2(0.0f, a_size.y - ImGui::GetTextLineHeight() * 2.0f))) {
+            if (ImGui::BeginPopupContextWindow()) {
                 ImGui::MenuItem("Autoscroll", "", &m_autoScroll);
                 ImGui::MenuItem("Pause logging", "", &m_pauseLogging);
                 ImGui::Separator();
@@ -40,10 +38,8 @@ public:
 
             ImGuiListClipper clipper;
             clipper.Begin((int)m_logs.size());
-            while (clipper.Step())
-            {
-                for (int i = clipper.DisplayStart; i < clipper.DisplayEnd; i++)
-                {
+            while (clipper.Step()) {
+                for (int i = clipper.DisplayStart; i < clipper.DisplayEnd; i++) {
                     EntryWrapper& e = m_logs[i];
 
                     ImGui::TableNextRow();                    
