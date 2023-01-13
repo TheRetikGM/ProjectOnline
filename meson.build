@@ -1,11 +1,8 @@
-project('SDLDemo',
-  'cpp',
+project('SDLDemo', 'cpp',
   version : '0.1',
-  default_options : [
-    'cpp_std=c++17',
-    'default_library=static'
-    ]
-  )
+  default_options : ['cpp_std=c++17',
+                     'default_library=static']
+)
 
 # Platform specific compile arguments.
 compile_link_args = [] 

@@ -1,7 +1,9 @@
 #pragma once
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-#include <SDL_ttf.h>
+extern "C" {
+    #include <SDL2/SDL.h>
+    #include <SDL2/SDL_image.h>
+    #include <SDL_ttf.h>
+}
 #include <entt/entt.hpp>
 #include <glm/glm.hpp>
 

@@ -1,5 +1,7 @@
 #pragma once
-#include <SDL2/SDL.h>
+extern "C" {
+    #include <SDL2/SDL.h>
+}
 #include <box2d/box2d.h>
 #include <entt/entt.hpp>
 

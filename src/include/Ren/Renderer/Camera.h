@@ -1,7 +1,9 @@
 #pragma once
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
-#include <SDL2/SDL.h>
+extern "C" {
+    #include <SDL2/SDL.h>
+}
 
 #include "Ren/Core/Core.h"
 #include "Ren/RenSDL/Context.hpp"

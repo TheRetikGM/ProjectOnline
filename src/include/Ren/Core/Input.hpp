@@ -1,5 +1,7 @@
 #pragma once
-#include <SDL2/SDL.h>
+extern "C" {
+    #include <SDL2/SDL.h>
+}
 #include <cstring>  // std::memset
 
 #include "Ren/Core/Core.h"

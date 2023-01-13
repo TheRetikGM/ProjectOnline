@@ -1,5 +1,7 @@
 #pragma once
-#include <SDL2/SDL.h>
+extern "C" {
+    #include <SDL2/SDL.h>
+}
 #include <cstdint>
 #include <glm/glm.hpp>
 #include <imgui.h>

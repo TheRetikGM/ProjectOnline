@@ -1,8 +1,10 @@
 #pragma once
 #include "config.h"
 
-#include <SDL.h>
-#include <SDL_image.h>
+extern "C" {
+    #include <SDL.h>
+    #include <SDL_image.h>
+}
 #include <glm/glm.hpp>
 #include <box2d/box2d.h>
 #include <entt/entt.hpp>
