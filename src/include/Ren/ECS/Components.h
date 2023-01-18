@@ -43,6 +43,7 @@ namespace Ren
         TextureHandle texture_handle;
 
         ImgComponent() = default;
+        /// @param path Path to the image relative to AssetManager::m_ImagePath
         ImgComponent(std::filesystem::path path) : img_path(path), texture_handle() {}
 
         inline SDL_Texture* GetTexture() { return (texture_handle.second) ? texture_handle.second->texture : nullptr; };
@@ -58,6 +59,7 @@ namespace Ren
         // to have same size on different zoom levels of the camera (defined by the ppu ratio).
         glm::ivec2 m_PixelsPerUnit{ glm::ivec2(200) };
 
+        /// @param img_path Path to the image relative to AssetManager::m_ImagePath.
         SpriteComponent(std::filesystem::path img_path = UNDEFINED_PATH, glm::vec3 color = glm::vec3(255)) : ImgComponent(img_path), m_Color(color) {}
 
         // Get size in units (accounting for m_PixelsPerUnit)
@@ -98,7 +100,7 @@ namespace Ren
     struct LuaScriptComponent
     {
         std::unordered_map<std::string, Ref<LuaScript>> scripts;
-        sol::state lua;
+        Ref<sol::state> lua;
 
         LuaScriptComponent();
 

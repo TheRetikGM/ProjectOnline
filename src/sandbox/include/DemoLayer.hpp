@@ -23,11 +23,11 @@ public:
         // Set background color.
         m_GameCore->m_ClearColor = {100, 100, 100, 255};
 
-        sceneFromScratch();
-        // sceneFromFile();
+        // sceneFromScratch(true);
+        sceneFromFile("demo.ren");
 
         // Load font.
-        m_textRenderer->Load(ASSETS_DIR "fonts/DejaVuSansCondensed.ttf", 32);
+        m_textRenderer->Load("DejaVuSansCondensed.ttf", 32);
 
         // Setup camera with initial scale of 50 pixels per unit.
         m_camera.SetUnitScale(50);
@@ -128,7 +128,7 @@ public:
     }
 
 private:
-    void sceneFromFile(std::filesystem::path path = ASSETS_DIR "scenes/demo.ren") 
+    void sceneFromFile(std::filesystem::path path = "scenes/demo.ren") 
     {
         m_scene = Ren::SceneSerializer::Deserialze(path, GetRenderer(), GetInput());
         m_scene->GetSystem<Ren::PhysicsSystem>()->m_DebugRender = true;
@@ -144,10 +144,10 @@ private:
 
         // Create awesomeface entity.
         m_ent = m_scene->CreateEntity({glm::vec2(1.0f), glm::vec2(2.0f)}, {"awesomeface"});
-        m_ent.Add<Ren::SpriteComponent>(ASSETS_DIR "awesomeface.png").m_Color = Ren::Colors3::Magenta;
+        m_ent.Add<Ren::SpriteComponent>("awesomeface.png").m_Color = Ren::Colors3::Magenta;
         m_ent.Add<Ren::NativeScriptComponent>().Bind<MovementScript>();
         m_ent.Get<Ren::TransformComponent>().layer = 2;
-        m_ent.Add<Ren::LuaScriptComponent>().Attach("Test", Ren::AssetManager::GetScript("test.lua"));
+        m_ent.Add<Ren::LuaScriptComponent>().Attach("Test", "test.lua");
         auto &rig = m_ent.Add<Ren::RigidBodyComponent>();
         {
             auto size = m_ent.Get<Ren::SpriteComponent>().GetSize() * 0.5f;
@@ -169,7 +169,7 @@ private:
 
         // Create copy of awesomeface entity (the texture will get reused).
         auto ent_copy = m_scene->CreateEntity({glm::vec2(0.0f), glm::vec2(2.0f)}, {"rotate"});
-        ent_copy.Add<Ren::SpriteComponent>(ASSETS_DIR "awesomeface.png");
+        ent_copy.Add<Ren::SpriteComponent>("awesomeface.png");
         ent_copy.Get<Ren::TransformComponent>().layer = 1;
 
         /////////// Box2D ///////////

@@ -8,9 +8,11 @@
 #include "Ren/ECS/Components.h"
 #include "Ren/Core/Core.h"
 #include "Ren/Utils/Logger.hpp"
+#include "Ren/Scripting/LuaScript.h"
+#include "config.h"
 
 namespace YAML {
-    template<>
+    template<> 
     struct convert<glm::vec3> {
         static Node encode(const glm::vec3& rhs) {
             Node n;
@@ -27,7 +29,8 @@ namespace YAML {
             return true;
         }
     };
-    template<>
+
+    template<> 
     struct convert<glm::vec2> {
         static Node encode(const glm::vec2& rhs) {
             Node n;
@@ -43,7 +46,8 @@ namespace YAML {
             return true;
         }
     };
-    template<>
+
+    template<> 
     struct convert<glm::ivec3> {
         static Node encode(const glm::ivec3& rhs) {
             Node n;
@@ -60,7 +64,8 @@ namespace YAML {
             return true;
         }
     };
-    template<>
+
+    template<> 
     struct convert<glm::ivec2> {
         static Node encode(const glm::ivec2& rhs) {
             Node n;
@@ -76,7 +81,8 @@ namespace YAML {
             return true;
         }
     };
-    template<>
+
+    template<> 
     struct convert<b2Vec2> {
         static Node encode(const b2Vec2& s) {
             Node n;
@@ -89,7 +95,8 @@ namespace YAML {
             return true;
         }
     };
-    template<>
+
+    template<> 
     struct convert<Ren::TransformComponent> {
         static Node encode(const Ren::TransformComponent& t) {
             Node n;
@@ -105,23 +112,47 @@ namespace YAML {
             return true;
         }
     };
-    template<>
+
+    template<> 
     struct convert<Ren::SpriteComponent> {
         static Node encode(const Ren::SpriteComponent& s) {
             Node n;
-            n["img_path"] = std::regex_replace(s.img_path.string(), std::regex(ASSETS_DIR), "");
+            n["img_path"] = s.img_path.string();
             n["color"] = s.m_Color;
             n["ppu"] = s.m_PixelsPerUnit;
             return n;
         }
         static bool decode(const Node& node, Ren::SpriteComponent& s) {
-            s.img_path = ASSETS_DIR + node["img_path"].as<std::string>();
+            s.img_path = node["img_path"].as<std::string>();
             s.m_Color = node["color"].as<glm::vec3>();
             s.m_PixelsPerUnit = node["ppu"].as<glm::ivec2>();
             return true;
         }
     };
-    template<>
+
+    template<>  
+    struct convert<Ren::LuaScriptComponent> {
+        static Node encode(const Ren::LuaScriptComponent& l) {
+            Node node_comp;
+            for (auto& [name, script] : l.scripts) {
+                Node node_script; 
+                node_script["name"] = name;
+                node_script["path"] = script->GetScriptPath();
+                node_comp["scripts"].push_back(node_script);
+            }
+            return node_comp;
+        }
+        static bool decode(const Node& node, Ren::LuaScriptComponent& l) {
+            for (auto& s : node["scripts"]) {
+                auto name = s["name"].as<std::string>();
+                auto path = s["path"].as<std::string>();
+                l.Attach(name, path);
+            }
+            return true;
+        }
+    };
+
+    template<> 
     struct convert<b2BodyDef> {
         static Node encode(const b2BodyDef& s) {
             Node n;
@@ -165,7 +196,7 @@ namespace YAML {
             return true;
         }
     };
-    template<>
+    template<> 
     struct convert<b2FixtureDef> {
         static Node encode(const b2FixtureDef& s) {
             Node n;
@@ -212,7 +243,7 @@ namespace YAML {
             return true;
         }
     };
-    template<>
+    template<> 
     struct convert<Ren::RigidBodyComponent> {
         static Node encode(const Ren::RigidBodyComponent& s) {
             Node n;
@@ -259,7 +290,7 @@ namespace YAML {
         }
     };
 }
-// template<>
+// template<> 
 // struct convert<Ren::RigidBodyComponent> {
 //     static Node encode(const Ren::RigidBodyComponent& s) {
 //         Node n;

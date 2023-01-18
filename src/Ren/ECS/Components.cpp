@@ -25,13 +25,14 @@ namespace Ren
 
     LuaScriptComponent::LuaScriptComponent()
     {
+        lua = CreateRef<sol::state>();
         // Load standard libraries for basic functionality.
-        lua.open_libraries();
+        lua->open_libraries();
     }
     void LuaScriptComponent::Attach(std::string name, std::filesystem::path script_path)
     {
         REN_ASSERT(scripts.count(name) == 0, "Script with name " + name + " is already attached to LuaScriptComponent.");
-        scripts[name] = CreateRef<LuaScript>(name, &lua, script_path);
+        scripts[name] = CreateRef<LuaScript>(name, lua.get(), script_path);
     }
 
     void LuaScriptComponent::Detach(std::string name)

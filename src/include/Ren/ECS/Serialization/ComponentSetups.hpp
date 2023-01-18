@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Ren/ECS/Scene.h"
 #include "Ren/ECS/Components.h"
 #include "Ren/Utils/Logger.hpp"
 
@@ -29,6 +30,7 @@ namespace Ren
         trans.rotation = t.rotation;
         trans.layer = t.layer;
     }
+
     template<>
     void setup_component<SpriteComponent>(Entity e, const SpriteComponent& comp)
     {

@@ -27,6 +27,9 @@ namespace Ren
         ~TextRenderer();
         static Ref<TextRenderer> Create() { return Ref<TextRenderer>(new TextRenderer()); }
 
+        /// Load specified font
+        /// @param font_path Relative path to AssetManager::m_FontDir
+        /// @param fontSize Font size
         void Load(std::string font_path, unsigned int fontSize);
         void RenderText(std::string text, glm::vec2 pos, float scale, Color3 color = Colors3::White, int32_t layer = 0);
         glm::ivec2 GetStringSize(std::string str, float scale = 1.0f) const;

@@ -36,7 +36,7 @@ void LuaScript::init()
 
     // Create metatable instance for this script.
     m_lua->set(INSTANCE_NAME, LuaInterface(this, m_input));
-    m_lua->script_file(m_scriptPath);
+    m_lua->script_file(AssetManager::GetScript(m_scriptPath));
 }
 
 void LuaScript::first_init()

@@ -14,17 +14,20 @@ namespace Ren
     /// Handles communication between LUA and C++
     class LuaScript
     {
-        const std::string NAME{ "global" };
-        const std::string INSTANCE_NAME{ "i_" + NAME };     // Name of the metatable instance in LUA
+        const std::string NAME{ "undefined" };
+        const std::string INSTANCE_NAME{ "i_" + NAME };     // Name of the metatable instance in LUA.
         const std::string ON_INIT{ "OnInit" };
         const std::string ON_DESTROY{ "OnDestroy" };
         const std::string ON_UPDATE{ "OnUpdate" };
     public:
         /// @param name Name of the LUA metatable. Must be unique.
         /// @param lua_state Pointer to the lua state to use.
-        /// @param script_path Path to the LUA script.
+        /// @param script_path Path to script relative to AssetManager::m_ScriptDir
         LuaScript(std::string name, sol::state* lua_state, std::filesystem::path script_path);
         ~LuaScript() {}
+
+        const std::string& GetName() { return NAME; }
+        std::string GetScriptPath() { return m_scriptPath.string(); }
 
         /// Call OnInit() function in LUA
         void OnInit();

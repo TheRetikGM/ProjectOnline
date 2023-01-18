@@ -1,7 +1,5 @@
 #pragma once
 #include <filesystem>
-#include <yaml-cpp/yaml.h>
-#include <fstream>
 #include <regex>
 
 #include "Ren/ECS/Scene.h"
@@ -23,8 +21,8 @@ namespace Ren
         }
     };
 
-    // Serialize scene and save it into a file.
-    // NOTE: For now, does not serialize System settings.
+    /// Serialize scene and save it into a file.
+    /// NOTE: For now, does not serialize System settings.
     class SceneSerializer
     {
     public:
@@ -53,7 +51,7 @@ namespace Ren
         // Note: Returned scene is NOT initialized.
         static Ref<Scene> Deserialze(std::filesystem::path path, SDL_Renderer* renderer, KeyInterface* input)
         {
-            YAML::Node node = YAML::LoadFile(path.string().c_str());
+            YAML::Node node = YAML::LoadFile(AssetManager::GetScene(path).c_str());
 
             Ref<Scene> scene = CreateRef<Scene>(renderer, input);
 
@@ -144,7 +142,8 @@ namespace Ren
         typedef EntitySerializerWrapper<
             TransformComponent,
             SpriteComponent,
-            RigidBodyComponent
+            RigidBodyComponent,
+            LuaScriptComponent
         > EntitySerializer;
     };
 }

@@ -36,9 +36,9 @@ namespace Ren
 
         /// Get full scene path
         /// @param scene_path Scene path relative to m_SceneDir
-        static Path GetScene(Path scene_path) { return m_AssetRoot / m_ImagePath / scene_path; }
+        static Path GetScene(Path scene_path) { return m_AssetRoot / m_ScenePath / scene_path; }
         /// Get full scene directory path
-        static Path GetSceneDir() { return m_AssetRoot / m_ImagePath; }
+        static Path GetSceneDir() { return m_AssetRoot / m_ScenePath; }
 
         /// Get full image path
         /// @param scene_path Image path relative to m_ImageDir

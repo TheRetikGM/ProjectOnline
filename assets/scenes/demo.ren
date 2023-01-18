@@ -180,3 +180,7 @@ Entities:
               mask_bits: 65535
               group_index: 0
         ID: 2
+      - scripts:
+          - name: Test
+            path: test.lua
+        ID: 3
