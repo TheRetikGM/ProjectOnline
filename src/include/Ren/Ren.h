@@ -13,9 +13,10 @@ extern "C" {
 #include "Ren/Core/Startup.hpp"
 #include "Ren/Core/GameCore.h"
 #include "Ren/Core/Layer.h"
+#include "Ren/Core/AssetManager.hpp"
 
 #include "ECS/Scene.h"
-#include "ECS/NativeScript.h"
+#include "Scripting/NativeScript.h"
 #include "ECS/Serialization/SceneSerializer.hpp"
 
 #include "Utils/Basic.hpp"

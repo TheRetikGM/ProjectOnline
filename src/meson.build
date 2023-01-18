@@ -10,6 +10,8 @@ ren_depends = [
   subproject('imgui').get_variable('imgui_dep'),
   subproject('box2d').get_variable('box2d_dep'),
   subproject('entt').get_variable('entt_dep'),
+  dependency('lua'),
+  dependency('sol2'),
   cmake.subproject('yaml-cpp').dependency('yaml-cpp')
 ]
 

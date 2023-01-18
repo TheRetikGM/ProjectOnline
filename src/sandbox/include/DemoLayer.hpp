@@ -112,7 +112,7 @@ public:
     }
     void OnRender(SDL_Renderer *renderer) override 
     {
-        Ren::Renderer::BeginRender(&m_camera, &m_renderTexture);
+        Ren::Renderer::BeginRender(&m_camera);
         Ren::Renderer::Clear(m_GameCore->m_ClearColor);
         m_textRenderer->RenderText(
             "WSAD for movement\n"
@@ -147,6 +147,7 @@ private:
         m_ent.Add<Ren::SpriteComponent>(ASSETS_DIR "awesomeface.png").m_Color = Ren::Colors3::Magenta;
         m_ent.Add<Ren::NativeScriptComponent>().Bind<MovementScript>();
         m_ent.Get<Ren::TransformComponent>().layer = 2;
+        m_ent.Add<Ren::LuaScriptComponent>().Attach("Test", Ren::AssetManager::GetScript("test.lua"));
         auto &rig = m_ent.Add<Ren::RigidBodyComponent>();
         {
             auto size = m_ent.Get<Ren::SpriteComponent>().GetSize() * 0.5f;

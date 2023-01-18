@@ -1,8 +1,10 @@
 #include "Ren/ECS/ComponentSystems.h"
 #include "Ren/ECS/Scene.h"
-#include "Ren/ECS/NativeScript.h"
+#include "Ren/Scripting/NativeScript.h"
 #include "Ren/Renderer/Renderer.h"
 #include "Ren/Physics/Physics.h"
+#include "Ren/Scripting/LuaScript.h"
+#include "Ren/ECS/Components.h"
 
 #include "Ren/Utils/Logger.hpp"
 
@@ -30,7 +32,7 @@ void RenderSystem::Render()
 
 // Helper function to iterate through all entities, that have bound script.
 template<typename Func>
-constexpr void for_each_script(Scene* scene, Func func)
+void for_each_native_script(Scene* scene, Func func)
 {
     auto view = scene->m_Registry->view<NativeScriptComponent>();
     for (auto&& ent : view)
@@ -47,7 +49,7 @@ void NativeScriptSystem::Init()
 {
     m_scene->m_Registry->on_destroy<NativeScriptComponent>().connect<&unbind_script>();
 
-    for_each_script(m_scene, [this](entt::entity ent, NativeScript* script) {
+    for_each_native_script(m_scene, [this](entt::entity ent, NativeScript* script) {
         script->m_entity = Entity{ ent, this->m_scene };
         script->m_input = this->m_input;
         script->OnInit();
@@ -55,17 +57,86 @@ void NativeScriptSystem::Init()
 }
 void NativeScriptSystem::Destroy()
 {
-    for_each_script(m_scene, [this](entt::entity ent, NativeScript* script) {
+    for_each_native_script(m_scene, [](entt::entity ent, NativeScript* script) {
         script->OnDestroy();
     });
 }
 void NativeScriptSystem::Update(float dt)
 {
-    for_each_script(m_scene, [&dt](entt::entity ent, NativeScript* script) {
+    for_each_native_script(m_scene, [&dt](entt::entity ent, NativeScript* script) {
         script->OnUpdate(dt);
     });
 }
 #pragma endregion
+
+#pragma reqion --> LuaScript system
+void LuaScriptSystem::InitScript(entt::entity ent, std::string name)
+{
+    // Set data the script needs and initialize it.
+    Entity e = { ent, m_scene };
+    auto& comp = e.Get<LuaScriptComponent>();
+    auto& script = comp.scripts.at(name);
+    script->m_entity = e;
+    script->m_input = m_input;
+    script->init();
+    script->OnInit();
+}
+void LuaScriptSystem::InitScript(entt::entity ent, Ref<LuaScript> script)
+{
+    script->m_entity = { ent, m_scene };
+    script->m_input = m_input;
+    script->init();
+    script->OnInit();
+}
+
+void LuaScriptSystem::DestroyScript(entt::entity ent, std::string name)
+{
+    Entity e = { ent, m_scene };
+    auto& comp = e.Get<LuaScriptComponent>();
+    auto& script = comp.scripts.at(name);
+    script->OnDestroy();
+    script->destroy();
+    script->m_entity = Entity{};
+    script->m_input = nullptr;
+}
+void LuaScriptSystem::DestroyScript(entt::entity ent, Ref<LuaScript> script)
+{
+    script->OnDestroy();
+    script->destroy();
+    script->m_entity = Entity{};
+    script->m_input = nullptr;
+}
+
+template<typename Func>
+void for_each_lua_script(Scene* scene, Func pred)
+{
+    auto view = scene->SceneView<LuaScriptComponent>();
+    for (auto&& ent : view) {
+        auto [lsc] = view.get(ent);
+        for (auto& [name, script] : lsc.scripts)
+            pred(ent, script);
+    }
+}
+void LuaScriptSystem::Init()
+{
+    for_each_lua_script(m_scene, [this](entt::entity ent, Ref<LuaScript> script){
+        InitScript(ent, script);
+    });
+}  
+void LuaScriptSystem::Destroy()
+{
+    for_each_lua_script(m_scene, [this](entt::entity ent, Ref<LuaScript> script){
+        DestroyScript(ent, script);
+    });
+}  
+void LuaScriptSystem::Update(float dt)
+{
+    for_each_lua_script(m_scene, [dt](entt::entity ent, Ref<LuaScript> script){
+        script->OnUpdate(dt);
+    });
+}  
+#pragma endregion
+
 #pragma region --> Physics system
 PhysicsSystem::PhysicsSystem(Scene* scene, KeyInterface* input) 
     : ComponentSystem(scene, input)

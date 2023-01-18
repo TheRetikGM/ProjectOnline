@@ -1,7 +1,9 @@
 #include <algorithm>
 
+#include "Ren/Core/Core.h"
 #include "Ren/ECS/Components.h"
-#include "Ren/ECS/NativeScript.h"
+#include "Ren/Scripting/NativeScript.h"
+#include "Ren/Scripting/LuaScript.h"
 #include "Ren/Utils/Logger.hpp"
 
 namespace Ren
@@ -19,5 +21,22 @@ namespace Ren
     {
         if (script_instance)
             delete script_instance;
+    }
+
+    LuaScriptComponent::LuaScriptComponent()
+    {
+        // Load standard libraries for basic functionality.
+        lua.open_libraries();
+    }
+    void LuaScriptComponent::Attach(std::string name, std::filesystem::path script_path)
+    {
+        REN_ASSERT(scripts.count(name) == 0, "Script with name " + name + " is already attached to LuaScriptComponent.");
+        scripts[name] = CreateRef<LuaScript>(name, &lua, script_path);
+    }
+
+    void LuaScriptComponent::Detach(std::string name)
+    {
+        REN_ASSERT(scripts.count(name) != 0, "Script with name " + name + " is not attached");
+        scripts.erase(name);
     }
 };

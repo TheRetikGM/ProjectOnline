@@ -139,6 +139,17 @@ namespace Ren
             s_logListeners[id] = std::shared_ptr<LogListener>(new T(std::forward<Args>(args)...));
             return dynamic_cast<T*>(s_logListeners[id].get());
         }
+        // Create Instance of specified type (which must be a child of LogListener) using initializer list for construction.
+        template<typename T, typename... Args, typename I>
+        static T* AddListener(std::initializer_list<I> init_list)
+        {
+            int id = getID<T>();
+            if (s_logListeners.count(id) != 0)
+                return dynamic_cast<T*>(s_logListeners[id].get());
+
+            s_logListeners[id] = std::shared_ptr<LogListener>(new T(init_list));
+            return dynamic_cast<T*>(s_logListeners[id].get());
+        }
         // Create instance of a specified type (which must be a child of LogListener).
         template<typename T>
         static T* AddListener()

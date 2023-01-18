@@ -4,6 +4,7 @@ extern "C" {
 }
 #include <box2d/box2d.h>
 #include <entt/entt.hpp>
+#include <optional>
 
 #include "Ren/Core/Core.h"
 #include "Ren/Core/Input.hpp"
@@ -53,6 +54,37 @@ namespace Ren
         void Init() override;
         void Destroy() override;
         void Update(float dt) override;
+    };
+
+    class LuaScript;
+    /// Manage all LuaScriptComponents and initialization/destruction of LuaScripts.
+    class LuaScriptSystem : public ComponentSystem
+    {
+    public:
+        LuaScriptSystem(Scene* p_scene, KeyInterface* p_input) : ComponentSystem(p_scene, p_input) {}
+
+        /// Initializes all scripts currently bound to all LuaScriptComponents.
+        void Init() override;
+        /// Destroy all scripts currencly attached to the LuaScriptComponents.
+        void Destroy() override;
+        /// Update all LuaScripts that are attached to LuaScriptComponents.
+        void Update(float dt) override;
+        /// Initialize script for usage.
+        /// @param ent Entity ID of the entity with LuaScriptComponent.
+        /// @param name Name of the script specified when calling LuaScriptComponent::Attach().
+        void InitScript(entt::entity ent, std::string name);
+        /// Initialize script for usage.
+        /// @param ent Entity ID of the entity with LuaScriptComponent.
+        /// @param script Reference to the LuaScript, which is attached to the LuaScriptComponent.
+        void InitScript(entt::entity ent, Ref<LuaScript> script);
+        /// Destroy script. Call before detaching it from LuaScriptComponent.
+        /// @param ent Entity ID of the entity with LuaScriptComponent.
+        /// @param name Name of the script specified when calling LuaScriptComponent::Attach().
+        void DestroyScript(entt::entity ent, std::string name);
+        /// Destroy script. Call before detaching it from LuaScriptComponent.
+        /// @param ent Entity ID of the entity with LuaScriptComponent.
+        /// @param script Reference to the LuaScript, which is attached to the LuaScriptComponent.
+        void DestroyScript(entt::entity ent, Ref<LuaScript> script);
     };
 
     // Handles updating of all rigid bodies.

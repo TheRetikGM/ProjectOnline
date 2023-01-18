@@ -13,10 +13,13 @@ namespace Ren
         REN_ASSERT(renderer != nullptr, "Invalid renderer.");
         m_Renderer = renderer;
 
+        // Create entt scene
         if (!m_Registry)
             m_Registry = CreateRef<entt::registry>();
         else
             m_Registry->clear();
+
+        // Create texture cache used for storing loaded textures.
         if (!m_textureCache)
             m_textureCache = CreateRef<TextureCache>();
         else
@@ -29,6 +32,7 @@ namespace Ren
         // Add common systems.
         AddSystem<RenderSystem>();
         AddSystem<NativeScriptSystem>();
+        AddSystem<LuaScriptSystem>();
         AddSystem<PhysicsSystem>();
     }
     Scene::~Scene()

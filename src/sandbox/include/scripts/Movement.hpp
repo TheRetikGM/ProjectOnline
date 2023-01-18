@@ -1,5 +1,5 @@
 #pragma once
-#include <Ren/ECS/NativeScript.h>
+#include <Ren/Scripting/NativeScript.h>
 #include <Ren/Utils/Logger.hpp>
 #include "sandbox.h"
 

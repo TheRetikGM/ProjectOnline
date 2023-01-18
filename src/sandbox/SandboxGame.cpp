@@ -16,15 +16,15 @@ public:
     Game(const Ren::GameDefinition& def) : Ren::GameCore(def) 
     {
         auto demo_layer = CreateRef<DemoLayer>("Demo layer");
-        auto gui_layer =  CreateRef<ImGuiLayer>("gui layer");
 
-        gui_layer->m_DemoLayer = demo_layer;
+        // auto gui_layer =  CreateRef<ImGuiLayer>("gui layer");
+        // gui_layer->m_DemoLayer = demo_layer;
 
         // NOTE: Here could be: Rendering layer, network layer, audio layer etc.
         PushLayer(demo_layer);
-        PushLayer(gui_layer);
+        // PushLayer(gui_layer);
 
-        // Ren::LogEmmiter::AddListener<Ren::StreamLogger>();
+        Ren::LogEmmiter::AddListener<Ren::StreamLogger>({ stdout });
     }
 };
 

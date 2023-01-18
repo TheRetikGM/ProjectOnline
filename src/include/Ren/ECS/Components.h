@@ -3,8 +3,10 @@
 #include <string>
 #include <cstdint>
 #include <filesystem>
-#include <box2d/box2d.h>
 #include <typeinfo>
+#include <filesystem>
+#include <box2d/box2d.h>
+#include <sol/sol.hpp>
 
 #include "Loaders.hpp"
 
@@ -89,6 +91,25 @@ namespace Ren
         }
 
         void Unbind();
+    };
+
+    class LuaScript;
+    /// Component providing lua scripting.
+    struct LuaScriptComponent
+    {
+        std::unordered_map<std::string, Ref<LuaScript>> scripts;
+        sol::state lua;
+
+        LuaScriptComponent();
+
+        /// Attach new script to component.
+        /// @param name Name of the script to be indentified with.
+        /// @param script_path Full path to the script file.
+        void Attach(std::string name, std::filesystem::path script_path);
+
+        /// Detach script from component.
+        /// @param name Identifierer of the script.
+        void Detach(std::string name);
     };
 
 } // namespace Ren

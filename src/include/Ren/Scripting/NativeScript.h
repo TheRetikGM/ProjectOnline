@@ -5,7 +5,7 @@
 #include <box2d/box2d.h>
 
 #include "Ren/Core/Input.hpp"
-#include "Scene.h"
+#include "Ren/ECS/Scene.h"
 
 namespace Ren
 {
