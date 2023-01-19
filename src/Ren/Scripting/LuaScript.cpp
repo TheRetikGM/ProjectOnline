@@ -16,6 +16,12 @@ struct LuaInterface
 
     static bool KeyPressed(KeyInterface* p_input, int key) { return p_input->KeyPressed(Key(key)); }
     static bool KeyHeld(KeyInterface* p_input, int key) {    return p_input->KeyHeld(Key(key)); }
+    static void Log(int level, std::string message, std::string file, int line)
+    {
+        // TODO: Maybe somehow tag that this is from LUA?
+        if (level >= 0 && level <= 4)
+            LogEmmiter::Log(LogLevel(level), message, file, line);
+    }
 };
 
 LuaScript::LuaScript(std::string name, sol::state* lua_state, std::filesystem::path script_path)
@@ -48,6 +54,7 @@ void LuaScript::first_init()
     m_lua->set("REN_INPUT", m_input);
     m_lua->set_function("API_KeyPressed", LuaInterface::KeyPressed);
     m_lua->set_function("API_KeyHeld", LuaInterface::KeyHeld);
+    m_lua->set_function("API_Log", LuaInterface::Log);
 
     // Create custom class for LUA with this script specific properties.
     auto lua_type = m_lua->new_usertype<LuaInterface>(NAME, sol::constructors<LuaInterface(LuaScript*, KeyInterface*), LuaInterface()>());
@@ -56,10 +63,11 @@ void LuaScript::first_init()
 
     m_lua->set("LUA_PATH", "?;?.lua;" 
             + AssetManager::GetLuaCoreDir().string() + "/?.lua;"
-            + AssetManager::GetLuaCoreDir().string() + "/?;");
+            + AssetManager::GetLuaCoreDir().string() + "/?;"
+            + AssetManager::GetScriptDir().string() + "/?.lua;"
+            + AssetManager::GetScriptDir().string() + "/?;");
 
-    m_lua->script_file(AssetManager::GetLuaCore("keys.lua"));
-    m_lua->script_file(AssetManager::GetLuaCore("input.lua"));
+    m_lua->script_file(AssetManager::GetLuaCore("core.lua"));
 }
 
 void LuaScript::destroy()

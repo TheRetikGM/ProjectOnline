@@ -56,7 +56,7 @@ namespace Ren
     
     // Error -> When something fails, but program can still go on.
     // Critical -> Program cannot continue with this problem.
-    enum class LogLevel : int { info = 0, status = 1, warning = 2, error = 3, critical = 3 };
+    enum class LogLevel : int { info = 0, status = 1, warning = 2, error = 3, critical = 4 };
     static constexpr const char* LOG_LEVEL_STRINGS[] = { "Info", "Status", "Warning", "Error", "Critical" };
     
     // Holds data of single log entry.

@@ -1,5 +1,9 @@
+package.path = LUA_PATH
+local foo = require("foo")
+
 function Test:OnInit()
     print("[LUA] OnInit(): Hello!")
+    foo.hello()
 end
 
 function Test:OnDestroy()
