@@ -89,7 +89,7 @@ namespace Ren
 
                 YAML::Node ent_info;
 
-                // For now hard-set the UUID
+                // FIXME: For now hard-set the UUID
                 ent_info["UUID"] = 123;
 
                 // Serialize tags.

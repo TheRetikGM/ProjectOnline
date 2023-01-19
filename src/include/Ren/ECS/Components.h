@@ -100,6 +100,7 @@ namespace Ren
     struct LuaScriptComponent
     {
         std::unordered_map<std::string, Ref<LuaScript>> scripts;
+        // Make this a reference, because it is easer to copy (for us -- less template error madness).
         Ref<sol::state> lua;
 
         LuaScriptComponent();

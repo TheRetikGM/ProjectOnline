@@ -1,4 +1,3 @@
-#include <tuple>
 #include <vector>
 #include <algorithm>    // std::find
 
@@ -86,35 +85,37 @@ namespace Ren
         return ent_arr;
     }
 
-    std::tuple<bool, Entity> Scene::GetEntityByTag(const std::string& tag)
+    std::optional<Entity> Scene::GetEntityByTag(const std::string& tag)
     {
         // Check if tag exists at all, so we dont create empty std::list<entt::entity> when using [] operator.
         if (m_tagToEntities.count(tag) == 0)
-            return { false, {} };
+            return {};
 
         auto& found_entities = m_tagToEntities[tag];
-        return { found_entities.size() > 0, { found_entities.front(), this } };
+        if (found_entities.size() > 0)
+            return Entity{ found_entities.front(), this };
+        return {};
     }
     
     void Scene::LoadTexture(ImgComponent* component)
     {
-        auto [success, handle] = LoadTexture(component->img_path);
-        if (success)
-            component->texture_handle = handle;
+        auto handle = LoadTexture(component->img_path);
+        if (handle)
+            component->texture_handle = handle.value();
     }
-    std::tuple<bool, TextureHandle> Scene::LoadTexture(std::filesystem::path path)
+    std::optional<TextureHandle> Scene::LoadTexture(std::filesystem::path path)
     {
         // Load the component, only if the path is specified.
-        // Note that the texture cache load will be unsuccessfull only if the texture is already loaded **NOT** when the load
-        //  of texture itself is unsuccessfull (when that happens, there is undefined behavior). Those cases are already
-        //  accounted for with asserts in the loader.
+        // NOTE: Texture cache load will be unsuccessfull only if the texture is already loaded **NOT** when the load
+        //       of texture itself is unsuccessfull (when that happens, there is undefined behavior). Those cases are already
+        //       accounted for with asserts in the loader.
         if (path != UNDEFINED_PATH)
         {
             auto ret = m_textureCache->load(entt::hashed_string(path.string().c_str()), m_Renderer, path.string().c_str());
-            return std::make_tuple(true, *ret.first);
+            return (TextureHandle)(*ret.first);
         }
         else
             LOG_W("Trying to load image with unspecified path.");
-        return std::make_tuple(false, TextureHandle{});
+        return {};
     }
 } // namespace Ren

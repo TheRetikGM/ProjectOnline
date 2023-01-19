@@ -75,8 +75,7 @@ public:
             fix_def.restitution = Ren::Utils::RandomFloat_0_1();
             dynamic_body_r.fixtures.push_back({box_shape, fix_def});
 
-            m_scene->GetSystem<Ren::PhysicsSystem>()->InitPhysicsBody(
-            dynamic_body.id);
+            m_scene->GetSystem<Ren::PhysicsSystem>()->InitPhysicsBody(dynamic_body.id);
         }
 
         if (Ren::Utils::key_pressed(e.event, SDLK_SPACE))
@@ -132,9 +131,9 @@ private:
     {
         m_scene = Ren::SceneSerializer::Deserialze(path, GetRenderer(), GetInput());
         m_scene->GetSystem<Ren::PhysicsSystem>()->m_DebugRender = true;
-        auto [success, ent] = m_scene->GetEntityByTag("awesomeface");
-        if (success)
-            ent.Add<Ren::NativeScriptComponent>().Bind<MovementScript>();
+        auto ent = m_scene->GetEntityByTag("awesomeface");
+        if (ent)
+            ent->Add<Ren::NativeScriptComponent>().Bind<MovementScript>();
         m_scene->Init();
     }
 
