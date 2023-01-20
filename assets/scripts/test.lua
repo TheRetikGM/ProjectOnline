@@ -1,9 +1,18 @@
-package.path = LUA_PATH
-local foo = require("foo")
+require("vector")
+
+local v1 = Vec3:new(1, 2, 3)
+local v2 = Vec3:new(4, 5, 6)
 
 function Test:OnInit()
     print("[LUA] OnInit(): Hello!")
-    foo.hello()
+    print("[LUA] v1 = " .. v1 .. ", v2 = " .. v2)
+    print("[LUA] v1 + v2 = " .. (v1 + v2))
+    print("[LUA] v1 - v2 = " .. (v1 - v2))
+    print("[LUA] v1 * v2 = " .. (v1 * v2))
+    print("[LUA] v1 / v2 = " .. (v1 / v2))
+    print("[LUA] v1 dot v2 = " .. Vec.dot(v1, v2))
+    print("[LUA] -v1 = " .. (-v1))
+    print("[LUA] ||v1|| = " .. (#v1))
 end
 
 function Test:OnDestroy()
@@ -12,15 +21,16 @@ end
 
 function Test:OnUpdate(dt)
     if (KeyHeld(KEY_A)) then
-        print("Go left!")
+        print("[LUA] Go left!")
     end
     if (KeyHeld(KEY_D)) then
-        print("Go right!")
+        print("[LUA] Go right!")
     end
     if (KeyHeld(KEY_W)) then
-        print("Go UP!")
+        print("[LUA] Go up!")
     end
     if (KeyHeld(KEY_S)) then
-        print("Go Down!")
+        print("[LUA] Go down!")
     end
 end
+

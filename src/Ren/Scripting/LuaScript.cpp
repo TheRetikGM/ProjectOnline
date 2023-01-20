@@ -66,7 +66,6 @@ void LuaScript::first_init()
             + AssetManager::GetLuaCoreDir().string() + "/?;"
             + AssetManager::GetScriptDir().string() + "/?.lua;"
             + AssetManager::GetScriptDir().string() + "/?;");
-
     m_lua->script_file(AssetManager::GetLuaCore("core.lua"));
 }
 
