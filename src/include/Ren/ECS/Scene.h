@@ -61,7 +61,7 @@ namespace Ren
             void RemTag(std::string tag) { p_scene->RemTag(*this, tag); };
             const TagList& GetTags() { return p_scene->m_entityToTags[id]; }
 
-            // Override cast operator for sell painfull converting.
+            // Override cast operator for less painfull converting.
             operator entt::entity() { return this->id; }
         };  // struct Entity
     public:

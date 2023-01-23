@@ -14,8 +14,8 @@ namespace Ren
     /// Handles communication between LUA and C++
     class LuaScript
     {
+        // Name of the table in LUA on which in which can defined following functions.
         const std::string NAME{ "undefined" };
-        const std::string INSTANCE_NAME{ "i_" + NAME };     // Name of the metatable instance in LUA.
         const std::string ON_INIT{ "OnInit" };
         const std::string ON_DESTROY{ "OnDestroy" };
         const std::string ON_UPDATE{ "OnUpdate" };

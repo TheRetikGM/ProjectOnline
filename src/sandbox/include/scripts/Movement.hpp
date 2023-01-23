@@ -26,6 +26,7 @@ public:
 
     void OnUpdate(float dt) override
     {
+        return;
         b2Body* rig = GetComponent<Ren::RigidBodyComponent>().p_body;
 
         float force = 100.0f;
