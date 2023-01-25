@@ -1,3 +1,6 @@
+#include <exception>
+#include <stdexcept>
+
 #include "Ren/Scripting/LuaScript.h"
 #include "Ren/Utils/Logger.hpp"
 #include "Ren/Core/Core.h"
@@ -21,6 +24,14 @@ struct LuaInterface
     }
 };
 
+class UnsupportedTypeException : public std::exception
+{
+    std::string type_name;
+public:
+    UnsupportedTypeException(std::string type_name) : type_name(type_name) {}
+    const char* what() const noexcept override { return type_name.c_str(); }
+};
+
 LuaScript::LuaScript(std::string name, sol::state* lua_state, std::filesystem::path script_path)
     : NAME(name)
     , m_lua(lua_state)
@@ -42,8 +53,29 @@ void LuaScript::init()
     REN_ASSERT(!table_check.valid(), "LuaScript with given name is already bound to this entity.");
 
     // Create metatable instance for this script.
-    (*m_lua)[NAME] = m_lua->create_table_with( "host", this );
+    (*m_lua)[NAME] = m_lua->create_table_with( 
+            "host", this,
+            PARAM, m_lua->create_table_with(),
+            "API_RegParam", [this](std::string name){ 
+                try {
+                    if (std::find_if(m_Parameters.begin(), m_Parameters.end(), [&name](const auto& p) { return p.m_Name == name; }) != m_Parameters.end())
+                        return;
+                    m_Parameters.push_back(LuaParam(this, name));
+                } catch (const UnsupportedTypeException& e) {
+                    LOG_W("Script '" + NAME + "' has a parameter '" + name + "' of unsupported type '" + e.what() + "'. Supported types are number, string and boolean.");
+                    return;
+                }
+            });
+
+    // Setup NAME.PARAM array to automatically inform C++ about new parameters. Defined in core.lua
+    (*m_lua)["C_SetupParam"](NAME, PARAM);
+
+    // Execute script file provided.
     m_lua->script_file(AssetManager::GetScript(m_scriptPath));
+    
+    // Set default values for parameters
+    for (auto i : m_Parameters)
+        i.setFromData();
 }
 
 void LuaScript::first_init()
@@ -110,3 +142,62 @@ inline void lua_method(sol::state* lua, const std::string& instance_name, const 
 void LuaScript::OnInit() {           lua_method(m_lua, NAME, ON_INIT); }
 void LuaScript::OnDestroy() {        lua_method(m_lua, NAME, ON_DESTROY); }
 void LuaScript::OnUpdate(float dt) { lua_method(m_lua, NAME, ON_UPDATE, dt); }
+
+LuaParam::LuaParam(LuaScript* p_script, const std::string& name)
+    : m_Name(name)
+    , m_Script(p_script)
+{
+    std::string s = "_lua_temp = type(" + m_Script->NAME + "." + m_Script->PARAM + "." + name + ")";
+    m_Script->m_lua->script(s);
+    std::string type = m_Script->m_lua->get<std::string>("_lua_temp");
+
+    // Parse the type info enumartion value.
+    if (type == "number") {
+        m_Type = LuaParamType::number;
+        Get<float>();
+    }
+    else if (type == "string") {
+        m_Type = LuaParamType::string;
+        Get<std::string>();
+    }
+    else if (type == "boolean") {
+        m_Type = LuaParamType::boolean;
+        Get<bool>();
+    }
+    else
+        throw UnsupportedTypeException(type);
+}
+
+void LuaParam::setFromData()
+{
+    if (!m_cachedData)
+        return;
+
+    switch (m_Type) {
+        case LuaParamType::number: Set(std::any_cast<float>(*m_cachedData)); break;
+        case LuaParamType::string: Set(std::any_cast<std::string>(*m_cachedData)); break;
+        case LuaParamType::boolean: Set(std::any_cast<bool>(*m_cachedData)); break;
+    }
+}
+
+template<typename T> T LuaParam::Get()
+{
+    T val = (*m_Script->m_lua)[m_Script->NAME][m_Script->PARAM][m_Name];
+    m_data = val;
+    return val;
+}
+
+template<typename T> void LuaParam::Set(T val)
+{
+    (*m_Script->m_lua)[m_Script->NAME][m_Script->PARAM][m_Name] = val;
+}
+
+template<> int LuaParam::Get<int>() { return (int)Get<float>(); }
+template float LuaParam::Get<float>();
+template std::string LuaParam::Get<std::string>();
+template bool LuaParam::Get<bool>();
+template<> void LuaParam::Set<int>(int v) { Set((float)v); }
+template void LuaParam::Set<float>(float);
+template void LuaParam::Set<std::string>(std::string);
+template<> void LuaParam::Set<const char*>(const char* value) { Set(std::string(value)); }
+template void LuaParam::Set<bool>(bool);

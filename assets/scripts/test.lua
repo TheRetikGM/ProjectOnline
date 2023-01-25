@@ -1,6 +1,21 @@
+Test.p.value1 = 1
+Test.p.name = "Anne"
+Test.p.stop = false
+Test.p.hehe = {
+    value = 1
+}
+
 function Test:OnInit()
     self.time = 0
     self.orig_ppu = Sprite.ppu
+
+    print("[LUA] " .. self.p.value1)
+    print("[LUA] " .. self.p.name)
+    if (self.p.stop) then
+        print("[LUA] " .. "STOP!!!")
+    else
+        print("[LUA] " .. "Don't stop")
+    end
 end
 
 function Test:OnUpdate(dt)
@@ -21,6 +36,6 @@ function Test:OnUpdate(dt)
     Transform.rotation = new_rot
 
     self.time = self.time + dt
-    Sprite.ppu = self.orig_ppu + self.orig_ppu * math.abs(math.sin(self.time))
+    Sprite.ppu = self.orig_ppu * (1 + math.abs(math.sin(self.time)))
 end
 

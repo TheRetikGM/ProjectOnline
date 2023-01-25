@@ -1,134 +1,34 @@
-SceneName: Undefined
+SceneName: Scene with LUA parameters
 Entities:
   - UUID: 123
-    Tags: [dynamic_body]
+    Tags: [awesomeface, lua_player]
     Components:
-      - position: [0, 10]
-        scale: [10, 10]
-        layer: 0
-        ID: 0
-      - body_def:
-          type: dynamic
-          position: [0, 10]
-          angle: 0
-          linear_velocity: [0, 0]
-          angular_velocity: 0
-          linear_damping: 0
-          angular_damping: 0
-          allow_sleep: true
-          awake: true
-          fixed_rotation: false
-          bullet: false
-          enabled: true
-          gravity_scale: 1
-        fixtures:
-          - shape_type: polygon
-            shape:
-              centroid: [0, 0]
-              vertices: [[-1.5, -1], [1.5, -1], [1.5, 1], [-1.5, 1]]
-              normals: [[0, -1], [1, 0], [0, 1], [-1, 0]]
-              count: 4
-            friction: 0.300000012
-            restitution: 0.670000017
-            restitution_threshold: 1
-            density: 1
-            is_sensor: false
-            filter:
-              category_bits: 1
-              mask_bits: 65535
-              group_index: 0
-        ID: 2
-  - UUID: 123
-    Tags: [another_body]
-    Components:
-      - position: [-1.70000005, 2]
-        scale: [10, 10]
-        layer: 0
-        ID: 0
-      - body_def:
-          type: static
-          position: [-1.70000005, 2]
-          angle: 0
-          linear_velocity: [0, 0]
-          angular_velocity: 0
-          linear_damping: 0
-          angular_damping: 0
-          allow_sleep: true
-          awake: true
-          fixed_rotation: false
-          bullet: false
-          enabled: true
-          gravity_scale: 1
-        fixtures:
-          - shape_type: polygon
-            shape:
-              centroid: [0, 0]
-              vertices: [[-1, -1], [1, -1], [1, 1], [-1, 1]]
-              normals: [[0, -1], [1, 0], [0, 1], [-1, 0]]
-              count: 4
-            friction: 0.200000003
-            restitution: 0
-            restitution_threshold: 1
-            density: 0
-            is_sensor: false
-            filter:
-              category_bits: 1
-              mask_bits: 65535
-              group_index: 0
-        ID: 2
-  - UUID: 123
-    Tags: [ground]
-    Components:
-      - position: [0, -10]
-        scale: [10, 10]
-        layer: 0
-        ID: 0
-      - body_def:
-          type: static
-          position: [0, -10]
-          angle: 0
-          linear_velocity: [0, 0]
-          angular_velocity: 0
-          linear_damping: 0
-          angular_damping: 0
-          allow_sleep: true
-          awake: true
-          fixed_rotation: false
-          bullet: false
-          enabled: true
-          gravity_scale: 1
-        fixtures:
-          - shape_type: polygon
-            shape:
-              centroid: [0, 0]
-              vertices: [[-50, -10], [50, -10], [50, 10], [-50, 10]]
-              normals: [[0, -1], [1, 0], [0, 1], [-1, 0]]
-              count: 4
-            friction: 0.200000003
-            restitution: 0
-            restitution_threshold: 1
-            density: 0
-            is_sensor: false
-            filter:
-              category_bits: 1
-              mask_bits: 65535
-              group_index: 0
-        ID: 2
-  - UUID: 123
-    Tags: [rotate]
-    Components:
-      - position: [0, 0]
+      - position: [1, 3]
         scale: [2, 2]
-        layer: 1
+        layer: 2
         ID: 0
       - img_path: awesomeface.png
-        color: [255, 255, 255]
-        ppu: [200, 200]
+        color: [0, 255, 255]
+        ppu: [369, 369]
         ID: 1
+      - scripts:
+          - name: Test
+            path: test.lua
+            parameters:
+              - name: value1
+                type: number
+                value: 32
+              - name: name
+                type: string
+                value: Hello from YAML!
+              - name: stop
+                type: boolean
+                value: true
+        ID: 3
   - UUID: 123
     Tags: [awesomeface]
     Components:
-      - position: [1, 1]
+      - position: [1.20956171, 1.28520131]
         scale: [2, 2]
         layer: 2
         ID: 0
@@ -181,17 +81,127 @@ Entities:
               group_index: 0
         ID: 2
   - UUID: 123
-    Tags: [awesomeface, lua_player]
+    Tags: [rotate]
     Components:
-      - position: [1, 3]
+      - position: [0, 0]
         scale: [2, 2]
-        layer: 2
+        layer: 1
         ID: 0
       - img_path: awesomeface.png
-        color: [0, 255, 255]
+        color: [255, 255, 255]
         ppu: [200, 200]
         ID: 1
-      - scripts:
-          - name: Test
-            path: test.lua
-        ID: 3
+  - UUID: 123
+    Tags: [ground]
+    Components:
+      - position: [0, -10]
+        scale: [10, 10]
+        layer: 0
+        ID: 0
+      - body_def:
+          type: static
+          position: [0, -10]
+          angle: 0
+          linear_velocity: [0, 0]
+          angular_velocity: 0
+          linear_damping: 0
+          angular_damping: 0
+          allow_sleep: true
+          awake: true
+          fixed_rotation: false
+          bullet: false
+          enabled: true
+          gravity_scale: 1
+        fixtures:
+          - shape_type: polygon
+            shape:
+              centroid: [0, 0]
+              vertices: [[-50, -10], [50, -10], [50, 10], [-50, 10]]
+              normals: [[0, -1], [1, 0], [0, 1], [-1, 0]]
+              count: 4
+            friction: 0.200000003
+            restitution: 0
+            restitution_threshold: 1
+            density: 0
+            is_sensor: false
+            filter:
+              category_bits: 1
+              mask_bits: 65535
+              group_index: 0
+        ID: 2
+  - UUID: 123
+    Tags: [another_body]
+    Components:
+      - position: [-1.70000005, 2]
+        scale: [10, 10]
+        layer: 0
+        ID: 0
+      - body_def:
+          type: static
+          position: [-1.70000005, 2]
+          angle: 0
+          linear_velocity: [0, 0]
+          angular_velocity: 0
+          linear_damping: 0
+          angular_damping: 0
+          allow_sleep: true
+          awake: true
+          fixed_rotation: false
+          bullet: false
+          enabled: true
+          gravity_scale: 1
+        fixtures:
+          - shape_type: polygon
+            shape:
+              centroid: [0, 0]
+              vertices: [[-1, -1], [1, -1], [1, 1], [-1, 1]]
+              normals: [[0, -1], [1, 0], [0, 1], [-1, 0]]
+              count: 4
+            friction: 0.200000003
+            restitution: 0
+            restitution_threshold: 1
+            density: 0
+            is_sensor: false
+            filter:
+              category_bits: 1
+              mask_bits: 65535
+              group_index: 0
+        ID: 2
+  - UUID: 123
+    Tags: [dynamic_body]
+    Components:
+      - position: [-3.07042336, 5.14672661]
+        scale: [10, 10]
+        layer: 0
+        ID: 0
+      - body_def:
+          type: dynamic
+          position: [0, 10]
+          angle: 0
+          linear_velocity: [0, 0]
+          angular_velocity: 0
+          linear_damping: 0
+          angular_damping: 0
+          allow_sleep: true
+          awake: true
+          fixed_rotation: false
+          bullet: false
+          enabled: true
+          gravity_scale: 1
+        fixtures:
+          - shape_type: polygon
+            shape:
+              centroid: [0, 0]
+              vertices: [[-1.5, -1], [1.5, -1], [1.5, 1], [-1.5, 1]]
+              normals: [[0, -1], [1, 0], [0, 1], [-1, 0]]
+              count: 4
+            friction: 0.300000012
+            restitution: 0.670000017
+            restitution_threshold: 1
+            density: 1
+            is_sensor: false
+            filter:
+              category_bits: 1
+              mask_bits: 65535
+              group_index: 0
+        ID: 2

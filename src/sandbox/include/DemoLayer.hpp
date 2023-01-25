@@ -24,7 +24,7 @@ public:
         m_GameCore->m_ClearColor = {100, 100, 100, 255};
 
         // sceneFromScratch(true);
-        sceneFromFile("demo.ren");
+        sceneFromFile("param.yaml");
 
         // Load font.
         m_textRenderer->Load("DejaVuSansCondensed.ttf", 32);
@@ -106,6 +106,14 @@ public:
         bool mouse_pressed = SDL_GetRelativeMouseState(&mouse_rel_pos.x, &mouse_rel_pos.y) & SDL_BUTTON_RMASK;
         if (mouse_pressed)
             m_camera.m_CamPos -= glm::vec2(mouse_rel_pos.x, -mouse_rel_pos.y) / glm::vec2(m_camera.GetUnitScale());
+
+        if (KeyPressed(Ren::Key::F1)) {
+            Ren::Entity e = m_scene->GetEntityByTag("lua_player").value();
+            auto script = e.Get<Ren::LuaScriptComponent>().scripts["Test"];
+            for (auto& p : script->m_Parameters)
+                LOG_I("PARAM -- name: " + p.m_Name + ", type: " + std::to_string((int)p.m_Type));
+            Ren::SceneSerializer::Serialize(m_scene, SOURCE_DIR "/build/param.yaml");
+    }
 
         m_scene->Update(dt);
     }

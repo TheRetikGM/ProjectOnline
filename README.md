@@ -48,15 +48,24 @@ Concept project which consists of Engine named Ren and Sandbox app.
 
 ## TODO list
 
-- [ ] Review the event system, to support mouse offsetting and such.
-- [ ] Camera controller on entity.
+- [ ] Review the event system, to support mouse offsetting and such
+- [ ] Camera controller on entity
 - [ ] Tilemap loading
 - [ ] Text component
 - [ ] Scene hiearchy
 - [ ] Basic scene editing (far ahead)
 - [ ] Basic networking
-- [ ] Use EnTT groups instead of views.
-- [ ] Layout components / or library.
+- [ ] Use EnTT groups instead of views
+- [ ] Layout components / or library
+- [ ] Lua
+    - [ ] Support for all components
+    - [ ] Box2D functions such as ApplyLinearImpulse
+    - [ ] Box2D collision callbacks
+    - [ ] Edit components of other entities
+    - [ ] Expose parameters of other types such as Vec2 (table)
+    - [ ] Somehow resolve the `undefined global` warning in lua script
+    - [x] ~~Lua basic parameter exposing~~
+    - [x] ~~Lua scripting beginning~~
 - [x] ~~Box2D Collision callbacks~~
 - [x] ~~Box2D shape offsetting~~
 - [x] ~~RigidBodyComponent support for multiple fixtures (and shapes).~~

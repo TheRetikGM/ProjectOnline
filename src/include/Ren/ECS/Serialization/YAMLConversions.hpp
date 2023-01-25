@@ -130,6 +130,48 @@ namespace YAML {
         }
     };
 
+    template<>
+    struct convert<Ren::LuaParam> {
+        static Node encode(const Ren::LuaParam& param) {
+            Node n;
+            n["name"] = param.m_Name;
+            n["type"] = Ren::LUA_PARAM_TYPE_S[(int)param.m_Type];   // String reprezentation of the type.
+            REN_ASSERT(param.m_data.has_value(), "Parameter must have value to be serialized.");
+            switch (param.m_Type) {
+                case Ren::LuaParamType::number: n["value"] = std::any_cast<float>(param.m_data); break;
+                case Ren::LuaParamType::string: n["value"] = std::any_cast<std::string>(param.m_data); break;
+                case Ren::LuaParamType::boolean: n["value"] = std::any_cast<bool>(param.m_data); break;
+            }
+            return n;
+        }
+        static bool decode(const Node& n, Ren::LuaParam& p) {
+            p.m_Name = n["name"].as<std::string>();
+
+            auto& type_s = Ren::LUA_PARAM_TYPE_S;
+            auto type_it = std::find(type_s.begin(), type_s.end(), n["type"].as<std::string>());
+            if (type_it == type_s.end()) {
+                LOG_E("Failed to deserialize LuaParam. Bad type.");
+                return false;
+            }
+
+            p.m_Type = (Ren::LuaParamType)(type_it - type_s.begin());
+            p.m_cachedData = CreateRef<std::any>();
+            switch (p.m_Type) {
+                case Ren::LuaParamType::number: 
+                    (*p.m_cachedData) = n["value"].as<float>(); 
+                    break;
+                case Ren::LuaParamType::string: 
+                    (*p.m_cachedData) = n["value"].as<std::string>(); 
+                    break;
+                case Ren::LuaParamType::boolean: 
+                    (*p.m_cachedData) = n["value"].as<bool>(); 
+                    break;
+            }
+
+            return true;
+        }
+    };
+
     template<>  
     struct convert<Ren::LuaScriptComponent> {
         static Node encode(const Ren::LuaScriptComponent& l) {
@@ -138,6 +180,8 @@ namespace YAML {
                 Node node_script; 
                 node_script["name"] = name;
                 node_script["path"] = script->GetScriptPath();
+                for (auto& i : script->m_Parameters)
+                    node_script["parameters"].push_back(i);
                 node_comp["scripts"].push_back(node_script);
             }
             return node_comp;
@@ -147,6 +191,13 @@ namespace YAML {
                 auto name = s["name"].as<std::string>();
                 auto path = s["path"].as<std::string>();
                 l.Attach(name, path);
+
+                for (auto& p : s["parameters"]) {
+                    Ref<Ren::LuaScript> script = l.scripts[name];
+                    auto param = p.as<Ren::LuaParam>();
+                    param.m_Script = script.get();
+                    l.scripts[name]->m_Parameters.push_back(param);
+                }
             }
             return true;
         }
