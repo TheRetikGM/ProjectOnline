@@ -41,3 +41,13 @@ executable('SDLDemo', sandbox_src,
   cpp_args : compile_cpp_args,
   include_directories : ['sandbox/include'],
   dependencies : [ren_dep])
+
+
+############ Scene editor ############
+editor_src = []
+subdir('editor')
+executable('Editor', editor_src,
+  link_args : compile_link_args,
+  cpp_args : compile_cpp_args,
+  include_directories : ['editor/include'],
+  dependencies : [ren_dep])

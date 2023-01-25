@@ -1,4 +1,4 @@
-/*
+/**
  * Logger implementation designed to be portable and a copy-paste solution for other projects.
  * Use:
  *  - Make sure you have added LogListener
@@ -93,7 +93,7 @@ namespace Ren
         void OnLog(const LogInfo& log) override
         {
             for (std::FILE* stream : m_Streams)
-                std::fprintf(stream, "%s    %8s    %15s:%i    %s\n", 
+                std::fprintf(stream, "%s    %12s    %15s:%-4i    %s\n", 
                     log.time_info.to_string().c_str(),
                     LOG_LEVEL_STRINGS[(int)log.level],
                     log.file.filename().c_str(), log.line,

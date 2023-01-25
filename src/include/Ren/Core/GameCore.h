@@ -13,19 +13,18 @@ extern "C" {
 #define REN_INIT_IMGUI (1 << 0)
 #define REN_INIT_BOX2D (1 << 1)
 // TODO: Implement these
-// #define REN_INIT_FREETYPE (1 << 2)
-// #define REN_INIT_ENTT     (1 << 3)
+/// #define REN_INIT_FREETYPE (1 << 2)
 
 namespace Ren
 {
     // Could be loaded from file or sth.
     struct GameDefinition
     {
-        // Define window and SDL specs.
+        /// Define window and SDL specs.
         SDLContextDef   context_def{};
-        // Init flags for the Ren engine.
+        /// Init flags for the Ren engine.
         uint32_t        init_flags{ REN_INIT_IMGUI | REN_INIT_BOX2D };
-        // Definition of the Ren imgui context.
+        /// Definition of the Ren imgui context.
         ImGuiContextDef imgui_def{};
     };
 

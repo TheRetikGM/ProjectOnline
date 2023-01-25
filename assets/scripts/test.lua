@@ -1,20 +1,17 @@
 Test.p.value1 = 1
 Test.p.name = "Anne"
 Test.p.stop = false
-Test.p.hehe = {
-    value = 1
-}
 
 function Test:OnInit()
     self.time = 0
     self.orig_ppu = Sprite.ppu
 
-    print("[LUA] " .. self.p.value1)
-    print("[LUA] " .. self.p.name)
+    LogI(self.p.value1)
+    LogI(self.p.name)
     if (self.p.stop) then
-        print("[LUA] " .. "STOP!!!")
+        LogI("STOP!!!")
     else
-        print("[LUA] " .. "Don't stop")
+        LogI("Don't stop")
     end
 end
 
