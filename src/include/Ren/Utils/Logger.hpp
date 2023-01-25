@@ -96,7 +96,7 @@ namespace Ren
                 std::fprintf(stream, "%s    %12s    %15s:%-4i    %s\n", 
                     log.time_info.to_string().c_str(),
                     LOG_LEVEL_STRINGS[(int)log.level],
-                    log.file.filename().c_str(), log.line,
+                    log.file.filename().string().c_str(), log.line,
                     log.message.c_str()
             );
         };

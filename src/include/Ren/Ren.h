@@ -1,6 +1,7 @@
 #pragma once
 #include "config.h"
 
+
 extern "C" {
     #include <SDL.h>
     #include <SDL_image.h>

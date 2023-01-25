@@ -1,6 +1,6 @@
 #pragma once
 #include <glm/glm.hpp>
-#include <SDL2/SDL.h>
+#include <SDL.h>
 #include <Ren/Core/Core.h>
 
 namespace Ren

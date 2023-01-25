@@ -71,7 +71,7 @@ public:
         
         ImGui::Begin("Scene view");
         glm::vec2 size = m_DemoLayer->m_renderTexture.m_Size;
-        ImGui::Image(m_DemoLayer->m_renderTexture.m_Texture, { size.x, size.y });
+        ImGui::Image((ImU64)m_DemoLayer->m_renderTexture.m_Texture, { size.x, size.y });
         ImGui::End();
 
         ImGui::Begin("Info");

@@ -2,7 +2,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
 extern "C" {
-    #include <SDL2/SDL.h>
+    #include <SDL.h>
 }
 
 #include "Ren/Core/Core.h"

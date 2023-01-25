@@ -4,6 +4,8 @@ project('SDLDemo', 'cpp',
                      'default_library=static']
 )
 
+add_global_arguments('-DImTextureID=ImU64', language : 'cpp')
+
 # Platform specific compile arguments.
 compile_link_args = [] 
 compile_cpp_args = [] 
@@ -13,7 +15,7 @@ if build_machine.system() == 'linux'
   add_project_arguments('-D_BUILD_LINUX', language : ['c', 'cpp'])
 elif build_machine.system() == 'windows'
   compile_link_args = '/W4 /WX'
-  add_project_arguments('-D_BUILD_WINDOWS', language : ['c', 'cpp'])
+  add_project_arguments(['-D_BUILD_WINDOWS'], language : ['c', 'cpp'])
 endif
 
 # Debug 

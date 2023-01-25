@@ -71,7 +71,7 @@ void LuaScript::init()
     (*m_lua)["C_SetupParam"](NAME, PARAM);
 
     // Execute script file provided.
-    m_lua->script_file(AssetManager::GetScript(m_scriptPath));
+    m_lua->script_file(AssetManager::GetScript(m_scriptPath).string());
     
     // Set default values for parameters
     for (auto i : m_Parameters)
@@ -120,7 +120,7 @@ void LuaScript::first_init()
         "Sprite", std::ref(m_entity.Get<SpriteComponent>())
     );
 
-    m_lua->script_file(AssetManager::GetLuaCore("core.lua"));
+    m_lua->script_file(AssetManager::GetLuaCore("core.lua").string());
 }
 
 void LuaScript::destroy()

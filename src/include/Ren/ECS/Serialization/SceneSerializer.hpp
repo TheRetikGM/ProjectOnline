@@ -51,7 +51,7 @@ namespace Ren
         /// NOTE: Returned scene is NOT initialized.
         static Ref<Scene> Deserialze(std::filesystem::path path, SDL_Renderer* renderer, KeyInterface* input)
         {
-            YAML::Node node = YAML::LoadFile(AssetManager::GetScene(path).c_str());
+            YAML::Node node = YAML::LoadFile(AssetManager::GetScene(path).string());
 
             Ref<Scene> scene = CreateRef<Scene>(renderer, input);
 

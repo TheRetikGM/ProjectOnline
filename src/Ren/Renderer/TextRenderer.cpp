@@ -57,7 +57,7 @@ void TextRenderer::Load(std::string font, unsigned int font_size)
         throw std::runtime_error("Could not init FreeType Library.");
     
     FT_Face face;
-    if(FT_New_Face(ft, AssetManager::GetFont(font).c_str(), 0, &face))
+    if(FT_New_Face(ft, AssetManager::GetFont(font).string().c_str(), 0, &face))
         throw std::runtime_error("Failed to load font '" + font + "'.");
     
     FT_Set_Pixel_Sizes(face, 0, font_size);

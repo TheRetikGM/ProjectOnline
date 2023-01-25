@@ -1,6 +1,6 @@
 #pragma once
 extern "C" {
-    #include <SDL2/SDL.h>
+    #include <SDL.h>
 }
 #include <cstdint>
 #include <glm/glm.hpp>
