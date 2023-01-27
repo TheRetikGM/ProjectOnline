@@ -6,7 +6,7 @@
 #include "Ren/ECS/Components.h"
 #include "Ren/Core/Core.h"
 #include "Ren/ECS/Serialization/YAMLConversions.hpp"
-#include "Ren/ECS/Serialization/ComponentSetups.hpp"
+#include "Ren/ECS/Serialization/ComponentSetups.h"
 
 namespace Ren
 {

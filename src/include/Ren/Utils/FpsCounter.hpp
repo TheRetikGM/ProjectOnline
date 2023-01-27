@@ -17,8 +17,7 @@ namespace Ren::Utils
             m_nSamples++;
             m_values.push_back(1.0f / dt);
             
-            if (m_currentSampleTime >= m_sampleTime)
-            {;
+            if (m_currentSampleTime >= m_sampleTime) {
                 m_fps = m_nSamples / m_currentSampleTime;
                 reset();
             }
@@ -26,7 +25,8 @@ namespace Ren::Utils
         inline float GetFps() { return m_fps; }
         inline void SetSampleTime(float n_sec) { m_sampleTime = n_sec; reset(); }
 
-        void DrawPlotWindow(Ren::ImGuiContext& context, glm::ivec2 win_size)
+        /// Draw ImGui window with plot inside it.
+        void DrawPlotWindow(glm::ivec2 win_size)
         {
             ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav;
             ImGui::SetNextWindowBgAlpha(0.35f); // Transparent background
@@ -36,6 +36,8 @@ namespace Ren::Utils
                 DrawPlot();
             ImGui::End();
         }
+
+        /// Draw only ImGui plot.
         void DrawPlot()
         {
             struct Funcs

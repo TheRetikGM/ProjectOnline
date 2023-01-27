@@ -11,7 +11,7 @@ extern "C" {
 #include <entt/entt.hpp>
 
 #include "Ren/Core/Core.h"
-#include "Ren/Core/Startup.hpp"
+#include "Ren/Core/Startup.h"
 #include "Ren/Core/GameCore.h"
 #include "Ren/Core/Layer.h"
 #include "Ren/Core/AssetManager.hpp"

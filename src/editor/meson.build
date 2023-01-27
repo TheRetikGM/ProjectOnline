@@ -1,3 +1,4 @@
 editor_src += files(
-  'Editor.cpp'
+  'Editor.cpp',
+  'Scene.cpp'
 )

@@ -1,5 +1,6 @@
 #pragma once
 #include <cstdint>
+#include <cstdlib>
 
 namespace Ren::Utils
 {
@@ -26,8 +27,7 @@ namespace Ren::Utils
             mEntries[mEnd % MAX_ENTRIES] = entry;
             mEnd++;
 
-            if (mStart >= MAX_ENTRIES)
-            {
+            if (mStart >= MAX_ENTRIES) {
                 mStart = 0;
                 mEnd = MAX_ENTRIES;
             }

@@ -23,6 +23,14 @@ int SDL_CalculatePitch(Uint32 format, int width)
 void Texture2D::Generate(void* data)
 {
     REN_ASSERT(Renderer::GetRenderer() != nullptr, "No renderer is set");
+    
+    // Regenerate texture if already set.
+    if (m_Texture != nullptr) {
+        SDL_DestroyTexture(m_Texture);
+        m_Texture = nullptr;
+        Generate(data);
+        return;
+    }
 
     if (data != nullptr)
     {

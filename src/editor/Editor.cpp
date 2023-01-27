@@ -17,6 +17,7 @@ Ren::GameCore* CreateGame()
 {
     Ren::GameDefinition def;
     def.context_def.window_name = "Ren scene editor";
-    def.context_def.window_size = { 1600, 900 };
+    def.context_def.window_size = { 1200, 700 };
+    def.context_def.window_flags |= SDL_WINDOW_RESIZABLE;
     return new Editor(def);
 }
