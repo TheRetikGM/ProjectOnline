@@ -53,12 +53,15 @@ public:
                 if (ImGui::MenuItem("New", "Ctrl+n")) {}
                 if (ImGui::MenuItem("Open..", "Ctrl+o")) {
                     nfdchar_t* load_path;
+					LOG_I("Dir: " + Ren::AssetManager::GetSceneDir().string());
                     nfdresult_t res = NFD_OpenDialog(NULL, Ren::AssetManager::GetSceneDir().string().c_str(), &load_path);
                     if (res == NFD_OKAY) {
                         m_scene->Load((const char*)load_path);
                         m_scene->SetDebug(true);
                         free(load_path);
-                    }
+                    } else {
+						LOG_E("NFD: " + std::string(NFD_GetError()));
+					}
                 }
                 if (ImGui::MenuItem("Save", "Ctrl+S")) {}
                 if (ImGui::MenuItem("Save as..")) {}

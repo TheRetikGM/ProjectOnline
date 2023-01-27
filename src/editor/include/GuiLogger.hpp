@@ -47,7 +47,7 @@ public:
                     ImGui::Text("%s", e.timestamp.c_str());
 
                     ImGui::TableNextColumn();
-                    ImGui::Text("%s:%i", e.entry.file.filename().c_str(), e.entry.line);
+                    ImGui::Text("%s:%i", e.entry.file.filename().string().c_str(), e.entry.line);
 
                     ImGui::TableNextColumn();
                     if (e.entry.level == Ren::LogLevel::warning)
