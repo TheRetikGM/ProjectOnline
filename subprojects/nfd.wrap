@@ -1,0 +1,12 @@
+[wrap-git]
+directory = nativefiledialog-116
+url = https://github.com/mlabbe/nativefiledialog
+revision = 67345b80ebb429ecc2aeda94c478b3bcc5f7888e
+depth = 1
+patch_filename = nativefiledialog-116.zip
+patch_url = http://conn.kloubja.cz/patches/nativefiledialog-116.zip
+patch_hash = b5ffacad247c82bc08f48d76d701164349833e9d70af5dba7a52baa884363713
+
+[provide]
+nfd = nfd_dep
+

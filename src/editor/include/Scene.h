@@ -17,6 +17,8 @@ public:
     glm::vec2 m_ScreenPos{ 0.0f, 0.0f };
     /// Disable/Enable input for this scene.
     bool m_AcceptInput = true;
+    /// Edit mode means it will not be updated and you can select entities (TODO).
+    bool m_EditMode = true;
 
     Scene(glm::ivec2 initial_size, SDL_Renderer* sdl_renderer, Ren::KeyInterface* key_interface);
 
@@ -25,6 +27,8 @@ public:
     void Load(std::filesystem::path scene_path);
     /// Unload currently loaded scene without saving.
     void Unload();
+    /// Reset camera position and PPU to default values.
+    inline void ResetCamera() { m_camera.SetUnitScale(m_DefaultPPU); m_camera.m_CamPos = m_DefaultCamPos; }
 
     /// Process input. All input handling should be implemeneted here, as we want
     /// to be able to disable it if needed.

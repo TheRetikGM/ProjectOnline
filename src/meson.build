@@ -50,4 +50,4 @@ executable('Editor', editor_src,
   link_args : compile_link_args,
   cpp_args : compile_cpp_args,
   include_directories : ['editor/include'],
-  dependencies : [ren_dep])
+  dependencies : [ren_dep, dependency('nfd')])

@@ -32,6 +32,8 @@ void Scene::Unload()
     if (m_scene)
         m_scene.reset();
     m_loadedState = false;
+    m_SceneTexture.Generate(); // Clear texture.
+    m_EditMode = true;
 }
 
 void Scene::ProcessInput(float dt)
@@ -54,7 +56,8 @@ void Scene::ProcessMouseWheel(int wheel_y_offset)
 }
 void Scene::Update(float dt)
 {
-    m_scene->Update(dt);
+    if (!m_EditMode)
+        m_scene->Update(dt);
 }
 void Scene::Render()
 {

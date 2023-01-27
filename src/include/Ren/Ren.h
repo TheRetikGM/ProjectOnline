@@ -20,7 +20,7 @@ extern "C" {
 #include "Scripting/NativeScript.h"
 #include "ECS/Serialization/SceneSerializer.hpp"
 
-#include "Utils/Basic.hpp"
+#include "Utils/Basic.h"
 #include "Utils/FpsCounter.hpp"
 #include "Utils/Logger.hpp"
 

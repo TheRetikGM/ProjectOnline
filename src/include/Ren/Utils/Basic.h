@@ -97,4 +97,7 @@ namespace Ren::Utils
 			float((color >> 24) & 0xff)
 		);
 	}
+	
+	// Sprintf-like std::string function.
+	std::string string_format(std::string fmt, ...);
 } // namespace Ren::Utils
