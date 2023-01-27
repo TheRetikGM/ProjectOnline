@@ -96,7 +96,7 @@ public:
             ImVec2 current_win_size = ImGui::GetWindowSize();
             // m_scene-GetSize() is temporary. It is for the initial size. However that will be set by setting m_scene->Resize() after loading a scene.
             if (last_win_size.x != current_win_size.x || last_win_size.y != current_win_size.y || m_scene->GetSize().x != content_size.x || m_scene->GetSize().y != content_size.y)
-                    m_scene->Resize(content_size);
+                m_scene->Resize(content_size);
             last_win_size = current_win_size;
             m_scene->m_ScreenPos = { v_min.x, v_min.y };
             ImVec2 mouse_pos = ImGui::GetMousePos();

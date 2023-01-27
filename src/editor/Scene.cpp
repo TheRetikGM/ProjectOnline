@@ -80,6 +80,11 @@ void Scene::Render()
 }
 void Scene::Resize(glm::ivec2 new_size)
 {
+    if (new_size.x <= 0 || new_size.y <= 0) {
+        LOG_E("Cannot resize scene to size { " + std::to_string(new_size.x) + ", " + std::to_string(new_size.y) + " }.");
+        return;
+    }
+
     m_camera.SetViewportSize(new_size);
     m_SceneTexture.m_Size = new_size;
     m_SceneTexture.Generate();
