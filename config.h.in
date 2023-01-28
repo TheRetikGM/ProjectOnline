@@ -2,8 +2,6 @@
 
 #ifdef REN_INSTALL
 #define SOURCE_DIR ".."
-#define ASSETS_DIR SOURCE_DIR "/assets/"
 #else
-#define SOURCE_DIR "@SOURCE_DIR@"
-#define ASSETS_DIR SOURCE_DIR "/assets/"
+#define SOURCE_DIR R"(@SOURCE_DIR@)"
 #endif

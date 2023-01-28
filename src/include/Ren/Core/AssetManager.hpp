@@ -11,7 +11,7 @@ namespace Ren
     class AssetManager
     {
     public:
-        inline static Path m_AssetRoot{ ASSETS_DIR };
+        inline static Path m_AssetRoot{ Path(SOURCE_DIR) / "assets" };
         inline static Path m_ScriptDir{ "scripts" };
         inline static Path m_FontDir  { "fonts" };
         inline static Path m_ScenePath{ "scenes" };
