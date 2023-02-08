@@ -56,7 +56,7 @@ void LuaScript::init()
     (*m_lua)[NAME] = m_lua->create_table_with( 
             "host", this,
             PARAM, m_lua->create_table_with(),
-            "API_RegParam", [this](std::string name){ 
+            "API_RegParam", [this](const std::string& name){ 
                 try {
                     if (std::find_if(m_Parameters.begin(), m_Parameters.end(), [&name](const auto& p) { return p.m_Name == name; }) != m_Parameters.end())
                         return;
