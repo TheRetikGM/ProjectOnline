@@ -2,7 +2,7 @@
 
 Concept project which consists of Engine named Ren and Sandbox app.
 
-![your face after seeing this project](./assets/awesomeface.png "test")
+![your face after seeing this project](./assets/images/awesomeface.png "test")
 
 ## Docs
 
