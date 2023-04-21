@@ -19,15 +19,15 @@ Concept project which consists of Engine named Ren and Sandbox app.
 - Git (added to PATH)
 
 ## Build - Windows
-    git clone https://github.com/theretikgm/sdl2-learning
-    go to cloned project
-    launch configure.bat
-    launch compile.bat
+    git clone https://github.com/theretikgm/ProjectOnline
+    launch Windows Development command prompt in cloned project
+    meson setup build
+    meson compile -C build
     compiled binary should be in build/src directory
 
 ## Build - Linux
-    git clone https://github.com/theretikgm/sdl2-learning
-    cd sdl2-learning
+    git clone https://github.com/theretikgm/ProjectOnline
+    cd ProjectOnline
     meson setup --buildtype=release build
     meson compile -C build
 
