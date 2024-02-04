@@ -4,7 +4,7 @@
 #include <cstdint>
 #include <box2d/box2d.h>
 
-#include "Ren/Core/Input.hpp"
+#include "Ren/Core/Input.h"
 #include "Ren/ECS/Scene.h"
 
 namespace Ren {

@@ -7,7 +7,7 @@ extern "C" {
 #include <optional>
 
 #include "Ren/Core/Core.h"
-#include "Ren/Core/Input.hpp"
+#include "Ren/Core/Input.h"
 
 namespace Ren {
     class Scene;

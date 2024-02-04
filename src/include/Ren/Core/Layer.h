@@ -7,7 +7,7 @@
 #include "Ren/Core/GameCore.h"
 #include "Ren/RenSDL/Event.hpp"
 #include "Ren/RenSDL/Context.hpp"
-#include "Ren/Core/Input.hpp"
+#include "Ren/Core/Input.h"
 
 namespace Ren {
     class Layer {

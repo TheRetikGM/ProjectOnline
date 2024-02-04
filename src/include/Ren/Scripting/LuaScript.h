@@ -10,7 +10,7 @@
 #include <yaml-cpp/yaml.h>
 
 #include "Ren/ECS/Scene.h"
-#include "Ren/Core/Input.hpp"
+#include "Ren/Core/Input.h"
 
 namespace Ren {
     // We expose only basic types for simplicity.

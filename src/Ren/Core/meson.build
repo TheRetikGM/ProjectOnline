@@ -1,5 +1,6 @@
 ren_src = [ren_src, files(
     'GameCore.cpp',
     'LayerStack.cpp',
-    'Startup.cpp'
-    )]
+    'Startup.cpp',
+    'Input.cpp',
+)]

@@ -8,7 +8,7 @@ extern "C" {
 
 #include "Ren/RenSDL/Context.hpp"
 #include "Ren/Core/LayerStack.h"
-#include "Ren/Core/Input.hpp"
+#include "Ren/Core/Input.h"
 
 #define REN_INIT_IMGUI (1 << 0)
 #define REN_INIT_BOX2D (1 << 1)
