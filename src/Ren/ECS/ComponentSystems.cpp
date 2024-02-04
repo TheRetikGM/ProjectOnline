@@ -6,7 +6,7 @@
 #include "Ren/Scripting/LuaScript.h"
 #include "Ren/ECS/Components.h"
 
-#include "Ren/Utils/Logger.hpp"
+#include <ren_utils/logging.hpp>
 
 using namespace Ren;
 

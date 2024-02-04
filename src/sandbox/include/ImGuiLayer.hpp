@@ -9,9 +9,11 @@
 class ImGuiLayer : public Ren::Layer {
 public:
     Ref<DemoLayer> m_DemoLayer{ nullptr };
+    GuiLogger* m_logger;
 
     ImGuiLayer(const std::string& name) : Ren::Layer(name) {
-        Ren::LogEmmiter::AddListener<GuiLogger>();
+        m_logger = ren_utils::LogEmitter::AddListener<GuiLogger>();
+        assert(m_logger != nullptr);
     }
 
     void OnInit() override {
@@ -76,7 +78,7 @@ public:
         ImGui::End();
 
         ImGui::Begin("Logger");
-        Ren::LogEmmiter::GetListener<GuiLogger>()->Draw();
+        m_logger->Draw();
         ImGui::End();
 
         ImGui::Begin("Options");

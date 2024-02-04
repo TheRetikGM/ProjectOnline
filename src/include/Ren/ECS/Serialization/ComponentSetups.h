@@ -2,7 +2,6 @@
 
 #include "Ren/ECS/Scene.h"
 #include "Ren/ECS/Components.h"
-#include "Ren/Utils/Logger.hpp"
 
 namespace Ren {
     // Function to help user to customize, how a component should be initialized from already existing component data.

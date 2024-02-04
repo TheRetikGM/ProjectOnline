@@ -1,8 +1,8 @@
 #include <exception>
 #include <stdexcept>
+#include <ren_utils/logging.hpp>
 
 #include "Ren/Scripting/LuaScript.h"
-#include "Ren/Utils/Logger.hpp"
 #include "Ren/Core/Core.h"
 #include "Ren/Core/AssetManager.hpp"
 #include "Ren/ECS/Components.h"
@@ -19,7 +19,7 @@ struct LuaInterface {
     {
         // TODO: Maybe somehow tag that this is from LUA?
         if (level >= 0 && level <= 4)
-            LogEmmiter::Log(LogLevel(level), message, file, line);
+            ren_utils::LogEmitter::Log(ren_utils::LogLevel(level), message, file, line);
     }
 };
 

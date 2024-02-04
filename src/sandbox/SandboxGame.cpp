@@ -22,7 +22,7 @@ public:
         PushLayer(demo_layer);
         // PushLayer(gui_layer);
 
-        Ren::LogEmmiter::AddListener<Ren::StreamLogger>({ stdout });
+        ren_utils::LogEmitter::AddListener<ren_utils::StreamLogger>({ stdout });
     }
 };
 

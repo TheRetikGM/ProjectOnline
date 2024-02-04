@@ -1,6 +1,5 @@
 #pragma once
 #include <Ren/Scripting/NativeScript.h>
-#include <Ren/Utils/Logger.hpp>
 #include "sandbox.h"
 
 class MovementScript : public Ren::NativeScript {

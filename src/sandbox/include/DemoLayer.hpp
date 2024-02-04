@@ -62,13 +62,13 @@ public:
             m_scene->CreateEntity({{pos.x, pos.y}}, {"spawned_body"});
             auto &dynamic_body_r = dynamic_body.Add<Ren::RigidBodyComponent>();
             auto box_shape = CreateRef<b2PolygonShape>();
-            box_shape->SetAsBox(Ren::Utils::RandomFloat(0.5f, 2.0f),
-                                Ren::Utils::RandomFloat(0.5f, 2.0f));
+            box_shape->SetAsBox(ren_utils::random_float(0.5f, 2.0f),
+                                ren_utils::random_float(0.5f, 2.0f));
             dynamic_body_r.body_def.type = b2_dynamicBody;
             b2FixtureDef fix_def;
-            fix_def.density = Ren::Utils::RandomFloat(0.5f, 5.0f);
-            fix_def.friction = Ren::Utils::RandomFloat_0_1();
-            fix_def.restitution = Ren::Utils::RandomFloat_0_1();
+            fix_def.density = ren_utils::random_float(0.5f, 5.0f);
+            fix_def.friction = ren_utils::random_float();
+            fix_def.restitution = ren_utils::random_float();
             dynamic_body_r.fixtures.push_back({box_shape, fix_def});
 
             m_scene->GetSystem<Ren::PhysicsSystem>()->InitPhysicsBody(dynamic_body.id);

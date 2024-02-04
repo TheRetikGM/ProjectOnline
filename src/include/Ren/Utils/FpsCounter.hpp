@@ -1,18 +1,21 @@
 #pragma once
 #include <glm/glm.hpp>
 
-#include "Ren/RenSDL/Context.hpp"
-#include "Ren/Utils/Data.hpp"
+#include "imgui.h"
+#include "ren_utils/RingBuffer.hpp"
 
 namespace Ren::Utils {
     class FpsCounter {
-        using ValueArr = CyclingArray<float, 288>;
+        const unsigned NUM_OF_SAMPLES = 288;
+        using ValueArr = ren_utils::RingBuffer<float>;
     public:
+
+        FpsCounter() : m_values(NUM_OF_SAMPLES) {}
 
         void Update(float dt) {
             m_currentSampleTime += dt;
             m_nSamples++;
-            m_values.push_back(1.0f / dt);
+            m_values.PushBack(1.0f / dt);
 
             if (m_currentSampleTime >= m_sampleTime) {
                 m_fps = m_nSamples / m_currentSampleTime;
@@ -45,7 +48,7 @@ namespace Ren::Utils {
             //ImGui::Text("FPS: %.1f", m_fps);
             char avg_fps[20];
             std::sprintf(avg_fps, "avg. %.1f", m_fps);
-            ImGui::PlotLines("FPS", &Funcs::value_getter, &m_values, m_values.size(), 0, avg_fps, 0.0f, 200.0f, ImVec2(0.0f, 80.0f));
+            ImGui::PlotLines("FPS", &Funcs::value_getter, &m_values, m_values.Size(), 0, avg_fps, 0.0f, 200.0f, ImVec2(0.0f, 80.0f));
 
             if (ImGui::BeginPopupContextWindow()) {
                 ImGui::MenuItem("Lock position", NULL, &m_lockPos);

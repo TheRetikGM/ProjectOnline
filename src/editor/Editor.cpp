@@ -4,7 +4,7 @@
 class Editor : public Ren::GameCore {
 public:
     Editor(const Ren::GameDefinition& def) : Ren::GameCore(def) {
-        Ren::LogEmmiter::AddListener<Ren::StreamLogger>({ stdout });
+        ren_utils::LogEmitter::AddListener<ren_utils::StreamLogger>({ stdout });
 
         PushLayer(CreateRef<EditorLayer>("EditorLayer"));
     }

@@ -9,6 +9,7 @@ extern "C" {
 #include <glm/glm.hpp>
 #include <box2d/box2d.h>
 #include <entt/entt.hpp>
+#include <ren_utils/utils.h>
 
 #include "Ren/Core/Core.h"
 #include "Ren/Core/Startup.h"
@@ -20,9 +21,7 @@ extern "C" {
 #include "Scripting/NativeScript.h"
 #include "ECS/Serialization/SceneSerializer.hpp"
 
-#include "Utils/Basic.h"
 #include "Utils/FpsCounter.hpp"
-#include "Utils/Logger.hpp"
 
 #include "Renderer/Renderer.h"
 #include "Renderer/TextRenderer.h"

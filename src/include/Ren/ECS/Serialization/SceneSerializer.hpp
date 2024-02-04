@@ -25,40 +25,11 @@ namespace Ren {
     public:
         SceneSerializer() {};
 
-        static void Serialize(Ref<Scene> scene, std::filesystem::path path) {
-            YAML::Node node;
-
-            node["SceneName"] = scene->m_Name;
-
-            scene->m_Registry->each([&](auto ent) {
-                Entity e{ ent, scene.get() };
-                YAML::Node ent_info;
-                ent_info = EntitySerializer::Serialize(e);
-
-                node["Entities"].push_back(ent_info);
-            });
-
-            std::ofstream file(path);
-            file << node;
-            file.close();
-        }
+        static void Serialize(Ref<Scene> scene, std::filesystem::path path);
 
         /// Deserialize scene.
         /// NOTE: Returned scene is NOT initialized.
-        static Ref<Scene> Deserialze(std::filesystem::path path, SDL_Renderer* renderer, KeyInterface* input) {
-            YAML::Node node = YAML::LoadFile(AssetManager::GetScene(path).string());
-
-            Ref<Scene> scene = CreateRef<Scene>(renderer, input);
-
-            scene->m_Name = node["SceneName"].as<std::string>();
-            for (auto&& ent : node["Entities"]) {
-                Entity e = scene->CreateEntity();
-                // Add components to entity.
-                EntitySerializer::Deserialize(ent, e);
-            }
-
-            return scene;
-        }
+        static Ref<Scene> Deserialze(std::filesystem::path path, SDL_Renderer* renderer, KeyInterface* input);
     private:
 
         template<typename... TComp>

@@ -1,8 +1,8 @@
 #include <vector>
 #include <algorithm>    // std::find
+#include <ren_utils/logging.hpp>
 
 #include "Ren/ECS/Scene.h"
-#include "Ren/Utils/Logger.hpp"
 
 namespace Ren
 {

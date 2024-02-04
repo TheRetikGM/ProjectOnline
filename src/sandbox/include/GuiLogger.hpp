@@ -1,14 +1,15 @@
 #include <Ren/Ren.h>
-#include <Ren/Utils/Data.hpp>
-#include <Ren/Utils/Logger.hpp>
+#include "ren_utils/logging.hpp"
 #define MAX_LOG_ENTRIES 1000
 
-class GuiLogger : public Ren::LogListener {
+class GuiLogger : public ren_utils::LogListener {
 public:
-    void OnLog(const Ren::LogInfo& log) override {
+    GuiLogger() : m_logs(MAX_LOG_ENTRIES) {}
+
+    void OnLog(const ren_utils::LogInfo& log) override {
         if (m_pauseLogging)
             return;
-        m_logs.push_back({ Ren::Utils::TimeInfo().to_string(), log });
+        m_logs.PushBack({ ren_utils::TimeInfo().ToString(), log });
         if (m_autoScroll)
             m_scrollBottom = true;
     }
@@ -23,7 +24,7 @@ public:
                 ImGui::MenuItem("Pause logging", "", &m_pauseLogging);
                 ImGui::Separator();
                 if (ImGui::Selectable("Clear logs"))
-                    m_logs.clear();
+                    m_logs.Clear();
                 ImGui::EndPopup();
             }
             ImGui::TableSetupScrollFreeze(0, 1);
@@ -34,7 +35,7 @@ public:
             ImGui::TableHeadersRow();
 
             ImGuiListClipper clipper;
-            clipper.Begin((int)m_logs.size());
+            clipper.Begin((int)m_logs.Size());
             while (clipper.Step()) {
                 for (int i = clipper.DisplayStart; i < clipper.DisplayEnd; i++) {
                     EntryWrapper& e = m_logs[i];
@@ -47,16 +48,16 @@ public:
                     ImGui::Text("%s:%i", e.entry.file.filename().c_str(), e.entry.line);
 
                     ImGui::TableNextColumn();
-                    if (e.entry.level == Ren::LogLevel::warning)
-                        ImGui::TextColored({ 1.0f, 1.0f, 0.0f, 1.0f }, "%s", Ren::LOG_LEVEL_STRINGS[(int)e.entry.level]);
-                    else if (e.entry.level == Ren::LogLevel::error)
-                        ImGui::TextColored({ 1.0f, 0.0f, 0.0f, 1.0f }, "%s", Ren::LOG_LEVEL_STRINGS[(int)e.entry.level]);
-                    else if (e.entry.level == Ren::LogLevel::info)
-                        ImGui::TextColored({ 0.0f, 1.0f, 1.0f, 1.0f }, "%s", Ren::LOG_LEVEL_STRINGS[(int)e.entry.level]);
-                    else if (e.entry.level == Ren::LogLevel::critical)
-                        ImGui::TextColored({ 1.0f, 0.0f, 1.0f, 1.0f }, "%s", Ren::LOG_LEVEL_STRINGS[(int)e.entry.level]);
+                    if (e.entry.level == ren_utils::LogLevel::warning)
+                        ImGui::TextColored({ 1.0f, 1.0f, 0.0f, 1.0f }, "%s", ren_utils::LOG_LEVEL_STRINGS[(int)e.entry.level]);
+                    else if (e.entry.level == ren_utils::LogLevel::error)
+                        ImGui::TextColored({ 1.0f, 0.0f, 0.0f, 1.0f }, "%s", ren_utils::LOG_LEVEL_STRINGS[(int)e.entry.level]);
+                    else if (e.entry.level == ren_utils::LogLevel::info)
+                        ImGui::TextColored({ 0.0f, 1.0f, 1.0f, 1.0f }, "%s", ren_utils::LOG_LEVEL_STRINGS[(int)e.entry.level]);
+                    else if (e.entry.level == ren_utils::LogLevel::critical)
+                        ImGui::TextColored({ 1.0f, 0.0f, 1.0f, 1.0f }, "%s", ren_utils::LOG_LEVEL_STRINGS[(int)e.entry.level]);
                     else
-                        ImGui::TextColored({ 1.0f, 1.0f, 1.0f, 1.0f }, "%s", Ren::LOG_LEVEL_STRINGS[(int)e.entry.level]);
+                        ImGui::TextColored({ 1.0f, 1.0f, 1.0f, 1.0f }, "%s", ren_utils::LOG_LEVEL_STRINGS[(int)e.entry.level]);
 
                     ImGui::TableNextColumn();
                     ImGui::Text("%s", e.entry.message.c_str());
@@ -72,8 +73,8 @@ public:
         ImGui::End();
     }
 private:
-    struct EntryWrapper { std::string timestamp; Ren::LogInfo entry; };
-    Ren::Utils::CyclingArray<EntryWrapper, MAX_LOG_ENTRIES> m_logs;
+    struct EntryWrapper { std::string timestamp; ren_utils::LogInfo entry; };
+    ren_utils::RingBuffer<EntryWrapper> m_logs;
     bool m_autoScroll = true;
     bool m_scrollBottom = false;
     bool m_pauseLogging = false;

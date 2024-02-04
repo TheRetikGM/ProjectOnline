@@ -12,6 +12,7 @@ ren_depends = [
   subproject('entt').get_variable('entt_dep'),
   dependency('lua'),
   dependency('sol2'),
+  dependency('ren_utils'),
   cmake.subproject('yaml-cpp').dependency('yaml-cpp')
 ]
 

@@ -1,10 +1,10 @@
 #include <algorithm>
+#include <ren_utils/logging.hpp>
 
 #include "Ren/Core/Core.h"
 #include "Ren/ECS/Components.h"
 #include "Ren/Scripting/NativeScript.h"
 #include "Ren/Scripting/LuaScript.h"
-#include "Ren/Utils/Logger.hpp"
 
 namespace Ren
 {

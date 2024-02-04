@@ -1,3 +1,4 @@
 ren_src += files(
-    'ComponentSetups.cpp'
+    'ComponentSetups.cpp',
+    './SceneSerializer.cpp'
 )

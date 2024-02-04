@@ -5,10 +5,10 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <ft2build.h>
 #include FT_FREETYPE_H
+#include <ren_utils/logging.hpp>
 
 #include "Ren/Renderer/Renderer.h"
 #include "Ren/RenSDL/Texture.h"
-#include "Ren/Utils/Logger.hpp"
 #include "Ren/Core/AssetManager.hpp"
 
 using namespace Ren;

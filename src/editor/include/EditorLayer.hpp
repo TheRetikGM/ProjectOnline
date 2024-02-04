@@ -17,7 +17,7 @@ public:
     EditorLayer(std::string name) : Ren::Layer(name) { }
 
     void OnInit() override {
-        m_logger  = Ren::LogEmmiter::AddListener<GuiLogger>();
+        m_logger  = ren_utils::LogEmitter::AddListener<GuiLogger>();
         m_scene = CreateRef<Scene>(glm::ivec2( 1200, 700 ), GetRenderer(), GetInput());
     }
 
@@ -111,7 +111,7 @@ public:
 
         ImGui::Begin("Settings");
         {
-            std::string play_label = Ren::Utils::string_format("%s scene", m_scene->m_EditMode ? "Play" : "Stop");
+            std::string play_label = strfmt("%s scene", m_scene->m_EditMode ? "Play" : "Stop");
             if (ImGui::Button(play_label.c_str()))
                 m_scene->m_EditMode = !m_scene->m_EditMode;
 
