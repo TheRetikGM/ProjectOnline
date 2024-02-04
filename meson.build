@@ -5,7 +5,6 @@ project('SDLDemo', 'cpp',
 )
 
 add_global_arguments('-DImTextureID=ImU64', language : 'cpp')
-# add_global_arguments('-Wno-declaration-after-statement', language: ['cpp', 'c'])
 
 # Platform specific compile arguments.
 compile_link_args = []

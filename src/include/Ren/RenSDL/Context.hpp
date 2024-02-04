@@ -6,8 +6,8 @@
 #include <cstdint>
 #include <string>
 #include <imgui.h>
-#include <imgui_impl_sdl.h>
-#include <imgui_impl_sdlrenderer.h>
+#include <imgui_impl_sdl2.h>
+#include <imgui_impl_sdlrenderer2.h>
 
 #include "Ren/Core/Core.h"
 
@@ -120,14 +120,14 @@ namespace Ren {
 
             // Setup Platform/Renderer backends
             ImGui_ImplSDL2_InitForSDLRenderer(window, renderer);
-            ImGui_ImplSDLRenderer_Init(renderer);
+            ImGui_ImplSDLRenderer2_Init(renderer);
 
             REN_STATUS("Dear ImGui context created.");
         }
 
         // Destroy context.
         void Destroy() {
-            ImGui_ImplSDLRenderer_Shutdown();
+            ImGui_ImplSDLRenderer2_Shutdown();
             ImGui_ImplSDL2_Shutdown();
             ImGui::DestroyContext();
 

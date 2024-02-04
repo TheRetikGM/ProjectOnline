@@ -1,8 +1,8 @@
 #include "Ren/Core/GameCore.h"
 #include "Ren/Core/Core.h"
 #include <algorithm>
-#include <imgui_impl_sdl.h>
-#include <imgui_impl_sdlrenderer.h>
+#include <imgui_impl_sdl2.h>
+#include <imgui_impl_sdlrenderer2.h>
 #include "Ren/Core/Layer.h"
 #include "Ren/Renderer/Renderer.h"
 
@@ -117,7 +117,7 @@ void GameCore::Loop() {
         }
 
         // Start the Dear ImGui frame
-        ImGui_ImplSDLRenderer_NewFrame();
+        ImGui_ImplSDLRenderer2_NewFrame();
         ImGui_ImplSDL2_NewFrame();
         ImGui::NewFrame();
 
@@ -138,7 +138,7 @@ void GameCore::Loop() {
 
         // Render Dear ImGui.
         ImGui::Render();
-        ImGui_ImplSDLRenderer_RenderDrawData(ImGui::GetDrawData());
+        ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData());
 
         // Update the screen (swap back and front buffers).
         SDL_RenderPresent(m_context.renderer);
