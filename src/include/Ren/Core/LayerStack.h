@@ -1,3 +1,10 @@
+/**
+ * @file Ren/Core/LayerStack.hpp
+ * @brief Declaration of layer architecture.
+ *
+ * This engine is divided into layers. Each layer can do anything the user wants.
+ */
+
 #pragma once
 #include <list>
 #include <string>

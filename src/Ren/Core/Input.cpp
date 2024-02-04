@@ -1,6 +1,6 @@
 /**
+ * #file Ren/Core/Input.cpp
  * @brief Implementation of input
- * #file Core/Input.cpp
  */
 #include "Ren/Core/Input.h"
 extern "C" {

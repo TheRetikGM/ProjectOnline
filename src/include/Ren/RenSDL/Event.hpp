@@ -1,3 +1,8 @@
+/**
+ * @file Ren/RenSDL/Event.hpp
+ * @brief Declaration of custom Ren event wrapper for SDL event.
+ */
+
 #pragma once
 #include <SDL.h>
 #include <glm/glm.hpp>

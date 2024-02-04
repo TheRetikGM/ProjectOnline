@@ -1,3 +1,7 @@
+/**
+ * @file LuaScript.cpp
+ * @brief Implementation of LuaScript
+ */
 #include <exception>
 #include <stdexcept>
 #include <ren_utils/logging.hpp>

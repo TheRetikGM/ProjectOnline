@@ -1,3 +1,9 @@
+/**
+ * @file Ren/Core/GameCore.cpp
+ * @brief Implementation of core functionality for create engine.
+ *
+ * This includes creation of context and main loop.
+ */
 #include "Ren/Core/GameCore.h"
 #include "Ren/Core/Core.h"
 #include <algorithm>

@@ -1,3 +1,7 @@
+/**
+ * @file Ren/Renderer/Renderer.hpp
+ * @brief Declaration of main renderer class.
+ */
 #pragma once
 #include <vector>
 #include <algorithm>

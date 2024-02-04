@@ -1,3 +1,8 @@
+/**
+ * @file Ren/Renderer/TextRenderer.cpp
+ * @brief Implementation of TextREnderer
+ */
+
 #include "Ren/Renderer/TextRenderer.h"
 #include <iostream>
 #include <exception>

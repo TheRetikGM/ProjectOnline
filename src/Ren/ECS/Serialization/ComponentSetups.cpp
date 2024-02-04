@@ -1,3 +1,8 @@
+/**
+ * @file Ren/ECS/Serialization/ComponentSetups.cpp
+ * @brief Implementation of component setups.
+ */
+
 #include "Ren/ECS/Serialization/ComponentSetups.h"
 
 using namespace Ren;

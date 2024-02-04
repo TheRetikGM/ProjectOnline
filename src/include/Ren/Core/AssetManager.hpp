@@ -1,3 +1,9 @@
+/**
+ * @file Ren/Core/AssetManager.hpp
+ * @brief Handle access to assets.
+ * @note Always use AssetManager. Never raw paths.
+ */
+
 #pragma once
 #include <filesystem>
 #include <string>

@@ -1,3 +1,7 @@
+/**
+ * @file Ren/Physics/Physics.hpp
+ * @brief For future more detailed declaration of physics API.
+ */
 #pragma once
 #include <cstdint>
 #include <glm/glm.hpp>

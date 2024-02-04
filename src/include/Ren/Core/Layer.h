@@ -1,3 +1,10 @@
+/**
+ * @file Ren/Core/Layer.hpp
+ * @brief Declaration of a single layer.
+ *
+ * Single layer in Ren engine means an object that can be updated in given layer each frame. All functionality should be implemented inside layers.
+ */
+
 #pragma once
 #include <vector>
 #include <list>

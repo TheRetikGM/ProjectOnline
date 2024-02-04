@@ -1,3 +1,11 @@
+/**
+ * @file Ren/Renderer/RenderCommand.hpp
+ * @brief ENTT static polymorphism declaration for RenderCommand.
+ *
+ * Why not clasic inheritance? Idk I just wated to try this. Also I don't have to create these clases on heap and can
+ * pass them by value without any possible leaks.
+ */
+
 #pragma once
 #include <entt/entt.hpp>
 

@@ -1,3 +1,8 @@
+/**
+ * @file Ren/ECS/Scene.cpp
+ * @brief Implementation of scene object.
+ */
+
 #include <ren_utils/logging.hpp>
 
 #include "Scene.h"

@@ -1,3 +1,8 @@
+/**
+ * @file Ren/Utils/FpsCounter.hpp
+ * @brief Declaration of FpsCounter object.
+ */
+
 #pragma once
 #include <glm/glm.hpp>
 

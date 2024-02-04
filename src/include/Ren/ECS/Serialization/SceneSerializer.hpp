@@ -1,3 +1,7 @@
+/**
+ * @file Ren/ECS/SceneSerializer.cpp
+ * @brief Declaration of SceneSerializer
+ */
 #pragma once
 #include <filesystem>
 #include <regex>

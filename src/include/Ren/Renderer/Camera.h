@@ -1,3 +1,7 @@
+/**
+ * @file Ren/Renderer/Camera.hpp
+ * @brief Declaration of Camera classes used during rendering.
+ */
 #pragma once
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>

@@ -1,3 +1,8 @@
+/**
+ * @file Ren/ECS/Scene.cpp
+ * @brief Implementation of scene object.
+ */
+
 #include <vector>
 #include <algorithm>    // std::find
 #include <ren_utils/logging.hpp>

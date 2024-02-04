@@ -1,3 +1,8 @@
+/**
+ * @file Ren/Core/Startup.hpp
+ * @brief Entry point for execution.
+ */
+
 #pragma once
 #include "Ren/Core/GameCore.h"
 

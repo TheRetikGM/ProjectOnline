@@ -1,3 +1,9 @@
+/**
+ * @file Ren/ECS/SystemsManager.hpp
+ * @brief Declaration and implementation of systems manager.
+ *
+ * All component systems are managed by this object.
+ */
 #pragma once
 #include <unordered_map>
 #include <typeinfo>

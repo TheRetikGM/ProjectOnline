@@ -1,3 +1,7 @@
+/**
+ * @file Ren/RenSDL/Context.hpp
+ * @brief Declaration of Ren context.
+ */
 #pragma once
 #include <SDL.h>
 #include <SDL_image.h>

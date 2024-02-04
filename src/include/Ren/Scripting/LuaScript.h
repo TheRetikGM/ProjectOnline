@@ -1,3 +1,7 @@
+/**
+ * @file Ren/Scripting/LuaScript.hpp
+ * @brief Declaration of LuaScript.
+ */
 #pragma once
 #include <vector>
 #include <string>

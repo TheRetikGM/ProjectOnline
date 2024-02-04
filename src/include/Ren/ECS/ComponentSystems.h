@@ -1,3 +1,9 @@
+/**
+ * @file Ren/ECS/ComponentSystem.hpp
+ * @brief Declaration of all conponent systems.
+ *
+ * Component systems are objects that handle instances of some specific component types. For example all SpriteComponents.
+ */
 #pragma once
 extern "C" {
     #include <SDL.h>

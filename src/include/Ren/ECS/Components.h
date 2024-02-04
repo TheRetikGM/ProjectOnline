@@ -1,3 +1,7 @@
+/**
+ * @file Ren/ECS/Components.hpp
+ * @brief Declaration of all ECS components.
+ */
 #pragma once
 #include <glm/glm.hpp>
 #include <string>

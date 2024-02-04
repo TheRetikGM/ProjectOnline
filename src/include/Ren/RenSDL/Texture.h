@@ -1,3 +1,7 @@
+/**
+ * @file Ren/RenSDL/Texture.hpp
+ * @brief Declaration of custom texture class wrapper for SDL_Texture.
+ */
 #pragma once
 #include <glm/glm.hpp>
 #include <SDL.h>

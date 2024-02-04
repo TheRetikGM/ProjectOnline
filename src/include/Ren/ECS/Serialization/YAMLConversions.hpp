@@ -1,3 +1,7 @@
+/**
+ * @file Ren/ECS/YAMLConversions.hpp
+ * @brief This file contains all template specializations needed for converting custom objects to the YAML object format.
+ */
 #pragma once
 #include <filesystem>
 #include <yaml-cpp/yaml.h>

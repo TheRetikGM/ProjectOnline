@@ -1,3 +1,7 @@
+/**
+ * @file Ren/ECS/ComponentSystems.cpp
+ * @brief Implementation of component systems.
+ */
 #include "Ren/ECS/ComponentSystems.h"
 #include "Ren/ECS/Scene.h"
 #include "Ren/Scripting/NativeScript.h"

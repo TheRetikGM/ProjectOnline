@@ -1,3 +1,7 @@
+/**
+ * @file Ren/ECS/Scene.hpp
+ * @brief Declaration of scene object.
+ */
 #pragma once
 #include <entt/entt.hpp>
 #include <filesystem> // std::filesystem::path

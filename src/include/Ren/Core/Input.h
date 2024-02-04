@@ -1,6 +1,6 @@
 /**
+ * @file Ren/Core/Input.hpp
  * @brief Check for input from mouse and keyboard
- * @file Input.h
  */
 #pragma once
 #include <cstring>  // std::memset

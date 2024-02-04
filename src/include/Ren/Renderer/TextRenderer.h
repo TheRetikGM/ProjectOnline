@@ -1,3 +1,8 @@
+/**
+ * @file Ren/Renderer/TextRenderer.hpp
+ * @brief Declaration of text renderer.
+ * @note Why not use the SDL_ttf? Because it's slow and API is horrible.
+ */
 #pragma once
 
 #include <map>

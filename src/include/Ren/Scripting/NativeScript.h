@@ -1,3 +1,8 @@
+/**
+ * @file Ren/Scripting/NativeScript.hpp
+ * @brief Declaration of NativeScript.
+ */
+
 #pragma once
 #include <glm/glm.hpp>
 #include <string>

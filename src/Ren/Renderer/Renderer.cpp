@@ -1,3 +1,7 @@
+/**
+ * @file Ren/Renderer/Renderer.cpp
+ * @brief Implementation of rendering in Ren.
+ */
 #define _USE_MATH_DEFINES
 #include <cmath>
 #include "Ren/Renderer/Renderer.h"

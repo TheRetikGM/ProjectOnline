@@ -1,3 +1,8 @@
+/**
+ * @file Ren/RenSDL/Keys.hpp
+ * @brief Wrapper for SDL key defines.
+ */
+
 #pragma once
 #include <SDL.h>
 

@@ -1,3 +1,7 @@
+/**
+ * @file Ren/Core/GameCore.hpp
+ * @brief Declaration of core functionality for create engine.
+ */
 #pragma once
 extern "C" {
     #include <SDL.h>

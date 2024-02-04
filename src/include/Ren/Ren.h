@@ -1,3 +1,8 @@
+/**
+ * @file Ren/Ren.h
+ * @brief Include everything with one file. This is just for ease of use for users.
+ */
+
 #pragma once
 #include "config.h"
 

@@ -1,3 +1,7 @@
+/**
+ * @file Ren/Core/Startup.cpp
+ * @brief Handle engine startup.
+ */
 #include "Ren/Core/Startup.h"
 
 int main(int argc, char* argv[]) {

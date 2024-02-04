@@ -1,3 +1,8 @@
+/**
+ * @file Ren/Core/LayerStack.cpp
+ * @brief Implementation of layer architecture.
+ */
+
 #include <algorithm>
 
 #include "Ren/Core/LayerStack.h"

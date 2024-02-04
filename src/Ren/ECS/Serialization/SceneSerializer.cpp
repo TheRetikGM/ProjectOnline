@@ -1,6 +1,6 @@
 /**
+ * @file Ren/ECS/Serialization/SceneSerializer.cpp
  * @brief Implementation of scene serialization
- * @file ECS/Serialization/SceneSerializer.cpp
  */
 #include "Ren/ECS/Serialization/SceneSerializer.hpp"
 #include "Ren/Core/AssetManager.hpp"

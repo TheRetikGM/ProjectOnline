@@ -1,3 +1,8 @@
+/**
+ * @file Ren/Core/Core.hpp
+ * @brief Core ren engine defines and helper functions.
+ */
+
 #pragma once
 #include <memory>
 #include <iostream>

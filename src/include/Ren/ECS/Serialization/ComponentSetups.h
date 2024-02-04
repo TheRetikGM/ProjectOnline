@@ -1,3 +1,10 @@
+/**
+ * @file Ren/ECS/Serialization/ComponentSetups.hpp
+ * @brief Component setup declarations.
+ *
+ * Some components need a special setup, when they are created from an existing data. This happens during serialization.
+ */
+
 #pragma once
 
 #include "Ren/ECS/Scene.h"

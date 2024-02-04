@@ -1,3 +1,7 @@
+/**
+ * @file Ren/ECS/Components.cpp
+ * @brief Implementation of ECS components.
+ */
 #include <algorithm>
 #include <ren_utils/logging.hpp>
 
