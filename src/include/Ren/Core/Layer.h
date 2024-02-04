@@ -9,17 +9,15 @@
 #include "Ren/RenSDL/Context.hpp"
 #include "Ren/Core/Input.hpp"
 
-namespace Ren
-{
-    class Layer
-    {
+namespace Ren {
+    class Layer {
     public:
         GameCore* m_GameCore{ nullptr };
         bool m_Enabled{ true };
 
         Layer(const std::string& name) : m_name(name) {}
         virtual ~Layer() {}
-    
+
         virtual void OnInit() {}
         virtual void OnDestroy() {}
         virtual void OnEvent(Ren::Event& e) {}
@@ -35,7 +33,7 @@ namespace Ren
     private:
         // Name of the layer.
         std::string m_name{ "Layer" };
-    
+
         friend class Ren::GameCore;
     };
 } // namespace Ren

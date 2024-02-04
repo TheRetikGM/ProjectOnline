@@ -7,12 +7,10 @@
 #include "Ren/Core/Input.hpp"
 #include "Ren/ECS/Scene.h"
 
-namespace Ren
-{
+namespace Ren {
     class NativeScriptSystem;
 
-    class NativeScript
-    {
+    class NativeScript {
     public:
         virtual ~NativeScript() {}
 
@@ -32,7 +30,7 @@ namespace Ren
     protected:
         KeyInterface* m_input;
         Entity& self = m_entity;
-        
+
         template<typename T>
         inline T& GetComponent() { return self.Get<T>(); }
         inline bool HasTag(std::string tag) { return m_entity.p_scene->HasTag(m_entity, tag); }

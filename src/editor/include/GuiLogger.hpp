@@ -3,11 +3,9 @@
 #include <Ren/Utils/Logger.hpp>
 #define MAX_LOG_ENTRIES 1000
 
-class GuiLogger : public Ren::LogListener
-{
+class GuiLogger : public Ren::LogListener {
 public:
-    void OnLog(const Ren::LogInfo& log) override
-    {
+    void OnLog(const Ren::LogInfo& log) override {
         if (m_pauseLogging)
             return;
         m_logs.push_back({ Ren::Utils::TimeInfo().to_string(), log });
@@ -15,8 +13,7 @@ public:
             m_scrollBottom = true;
     }
 
-    void Draw()
-    {
+    void Draw() {
         ImGui::Begin("Logger");
         ImVec2 a_size = ImGui::GetContentRegionMax();
         ImGuiTableFlags flags = ImGuiTableFlags_Resizable | ImGuiTableFlags_ScrollY | ImGuiTableFlags_RowBg | ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_Hideable;
@@ -42,7 +39,7 @@ public:
                 for (int i = clipper.DisplayStart; i < clipper.DisplayEnd; i++) {
                     EntryWrapper& e = m_logs[i];
 
-                    ImGui::TableNextRow();                    
+                    ImGui::TableNextRow();
                     ImGui::TableNextColumn();
                     ImGui::Text("%s", e.timestamp.c_str());
 

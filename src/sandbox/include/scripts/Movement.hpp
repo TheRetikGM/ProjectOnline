@@ -3,29 +3,24 @@
 #include <Ren/Utils/Logger.hpp>
 #include "sandbox.h"
 
-class MovementScript : public Ren::NativeScript
-{
+class MovementScript : public Ren::NativeScript {
 public:
-    void OnInit() override
-    {
+    void OnInit() override {
         SAND_STATUS("Native movement script initialized.");
     }
 
-    void OnDestroy() override
-    {
+    void OnDestroy() override {
         SAND_STATUS("Native movement script destroyed.");
     }
 
-    void OnContactBegin(Ren::Entity e, b2Contact* contact) override
-    {
+    void OnContactBegin(Ren::Entity e, b2Contact* contact) override {
         std::string tags = "";
         for (auto&& tag : e.GetTags())
             tags += tag + " ";
         LOG_I("Contact with entity! Tags = " + tags);
     }
 
-    void OnUpdate(float dt) override
-    {
+    void OnUpdate(float dt) override {
         return;
         b2Body* rig = GetComponent<Ren::RigidBodyComponent>().p_body;
 

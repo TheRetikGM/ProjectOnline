@@ -2,23 +2,21 @@
 #include <cstdint>
 #include <cstdlib>
 
-namespace Ren::Utils
-{
-    // Cycling array in a sense that when the maximum capacity is reached, new elements are 
+namespace Ren::Utils {
+    // Cycling array in a sense that when the maximum capacity is reached, new elements are
     // inserted from the beginning, thus overriding already existent elements there.
     // Example use case: FpsCounter, Logging
     template<typename T, std::size_t MAX_ENTRIES>
-    class CyclingArray
-    {
+    class CyclingArray {
         T mEntries[MAX_ENTRIES];
         uint32_t mStart = 0;
         uint32_t mEnd = 0;
     public:
         inline size_t size() { return mEnd - mStart; }
-        void push_back(const T& entry) 
+        void push_back(const T& entry)
         {
             // We store two numbers identifying begin and end of current array.
-            // When maxmimum is reached, all we need to do is to set end to 
+            // When maxmimum is reached, all we need to do is to set end to
             // the begining of array.
 
             if (mEnd >= MAX_ENTRIES)
@@ -36,8 +34,7 @@ namespace Ren::Utils
         inline T& operator[] (const int& index) { return mEntries[(mStart + index) % MAX_ENTRIES]; }
         inline T& at(const int& index) { return (*this)[index]; }
 
-        class iterator
-        {
+        class iterator {
             uint32_t index = 0;
             CyclingArray* pArr = nullptr;
         public:

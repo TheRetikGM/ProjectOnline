@@ -1,7 +1,6 @@
 #include "Ren/Core/Startup.h"
 
-int main(int argc, char* argv[])
-{
+int main(int argc, char* argv[]) {
     Ren::GameCore* game = CreateGame();
 
     try {

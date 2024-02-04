@@ -10,11 +10,9 @@
 const int WINDOW_WIDTH = 1600;
 const int WINDOW_HEIGHT = 900;
 
-class Game : public Ren::GameCore
-{
+class Game : public Ren::GameCore {
 public:
-    Game(const Ren::GameDefinition& def) : Ren::GameCore(def) 
-    {
+    Game(const Ren::GameDefinition& def) : Ren::GameCore(def) {
         auto demo_layer = CreateRef<DemoLayer>("Demo layer");
 
         // auto gui_layer =  CreateRef<ImGuiLayer>("gui layer");
@@ -28,8 +26,7 @@ public:
     }
 };
 
-Ren::GameCore* CreateGame()
-{
+Ren::GameCore* CreateGame() {
     Ren::GameDefinition def;
     def.context_def.window_size = { WINDOW_WIDTH, WINDOW_HEIGHT };
     def.context_def.window_name = "Demo project";

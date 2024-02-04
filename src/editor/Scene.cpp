@@ -10,8 +10,7 @@ Scene::Scene(glm::ivec2 initial_size, SDL_Renderer* sdl_renderer, Ren::KeyInterf
     m_SceneTexture.Generate();
 }
 
-void Scene::Load(std::filesystem::path scene_path)
-{
+void Scene::Load(std::filesystem::path scene_path) {
     // Discard the current scene if loaded.
     Unload();
 
@@ -27,8 +26,7 @@ void Scene::Load(std::filesystem::path scene_path)
         LOG_E("Failed to load scene. Error: " + std::string(e.what()));
     }
 }
-void Scene::Unload()
-{
+void Scene::Unload() {
     if (m_scene)
         m_scene.reset();
     m_loadedState = false;
@@ -36,8 +34,7 @@ void Scene::Unload()
     m_EditMode = true;
 }
 
-void Scene::ProcessInput(float dt)
-{
+void Scene::ProcessInput(float dt) {
     if (!m_AcceptInput)
         return;
 
@@ -47,20 +44,17 @@ void Scene::ProcessInput(float dt)
     if (mouse_pressed)
         m_camera.m_CamPos -= glm::vec2(x, -y) / glm::vec2(m_camera.GetUnitScale());
 }
-void Scene::ProcessMouseWheel(int wheel_y_offset)
-{
+void Scene::ProcessMouseWheel(int wheel_y_offset) {
     if (!m_AcceptInput)
         return;
 
     m_camera.SetUnitScale(m_camera.GetUnitScale() + wheel_y_offset * ZOOM_SENSITIVITY);
 }
-void Scene::Update(float dt)
-{
+void Scene::Update(float dt) {
     if (!m_EditMode)
         m_scene->Update(dt);
 }
-void Scene::Render()
-{
+void Scene::Render() {
     Ren::Renderer::BeginRender(&m_camera, &m_SceneTexture);
     Ren::Renderer::Clear({ 20, 20, 20, 255 });
     m_scene->Render();
@@ -76,10 +70,9 @@ void Scene::Render()
 
     Ren::Renderer::Render();
     Ren::Renderer::EndRender();
-    
+
 }
-void Scene::Resize(glm::ivec2 new_size)
-{
+void Scene::Resize(glm::ivec2 new_size) {
     if (new_size.x <= 0 || new_size.y <= 0) {
         LOG_E("Cannot resize scene to size { " + std::to_string(new_size.x) + ", " + std::to_string(new_size.y) + " }.");
         return;
@@ -89,8 +82,7 @@ void Scene::Resize(glm::ivec2 new_size)
     m_SceneTexture.m_Size = new_size;
     m_SceneTexture.Generate();
 }
-void Scene::Save()
-{
+void Scene::Save() {
     try {
         if (!m_scene)
             return;
@@ -99,8 +91,7 @@ void Scene::Save()
         LOG_E("Failed to save scene. Error: " + std::string(e.what()));
     }
 }
-void Scene::SaveAs(std::filesystem::path path) 
-{
+void Scene::SaveAs(std::filesystem::path path) {
     try {
         if (!m_scene)
             return;
@@ -109,8 +100,7 @@ void Scene::SaveAs(std::filesystem::path path)
         LOG_E("Failed to save scene as '" + path.string() + "'. Error: " + std::string(e.what()));
     }
 }
-void Scene::SetDebug(bool enable)
-{
+void Scene::SetDebug(bool enable) {
     if (!m_loadedState) {
         LOG_E("Scene is not loaded. Cannot set debug mode.");
         return;

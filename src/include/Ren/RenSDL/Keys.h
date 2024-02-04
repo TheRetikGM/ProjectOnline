@@ -1,8 +1,7 @@
 #pragma once
 #include <SDL.h>
 
-namespace Ren
-{
+namespace Ren {
     enum class Key : int {
         UNKNOWN = SDL_SCANCODE_UNKNOWN,
         A = SDL_SCANCODE_A,

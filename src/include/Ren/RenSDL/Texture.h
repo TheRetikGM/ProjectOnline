@@ -3,10 +3,8 @@
 #include <SDL.h>
 #include <Ren/Core/Core.h>
 
-namespace Ren
-{
-    class Texture2D
-    {
+namespace Ren {
+    class Texture2D {
     public:
         glm::ivec2 m_Size{ 512, 512 };
         Uint32 m_Format{ SDL_PIXELFORMAT_RGBA32 };
@@ -16,8 +14,7 @@ namespace Ren
         void Generate(void* data = nullptr);
 
         // Set which color should be discarded when rendering.
-        inline void SetColorKey(Uint32 sdl_color)
-        {
+        inline void SetColorKey(Uint32 sdl_color) {
             m_hasColorKey = true;
             m_colorKey = sdl_color;
         }

@@ -10,8 +10,7 @@
 #include "SystemsManager.hpp"
 #include "Ren/Physics/Physics.h"
 
-namespace Ren
-{
+namespace Ren {
     using TagList = std::list<std::string>;
 
     /*
@@ -20,14 +19,12 @@ namespace Ren
             - Holds systems manager.
             - Holds component resources (loaded textures, ...)
     */
-    class Scene
-    {
+    class Scene {
     public:
         /// Wrapper for EnTT entity. It is used for cleaner code and easier acces to the scene.
-        ///     - Note: Has to be inside scene, because it references scene (and scene references entity) with inline definitions. We could 
+        ///     - Note: Has to be inside scene, because it references scene (and scene references entity) with inline definitions. We could
         ///             also move the definitions outside of the struct, but that would be pain with templates.
-        struct Entity
-        {
+        struct Entity {
             entt::entity id{ entt::null };
             Scene* p_scene{ nullptr };
 
@@ -86,10 +83,10 @@ namespace Ren
         /// Shortcut to EnTT registry view.
         template<typename... TComponents>
         inline auto SceneView() { return m_Registry->view<TComponents...>(); }
-        
+
         /// Get all entities with given tag.
         Ref<std::vector<Entity>> GetEntitiesByTag(const std::string& tag);
-        /// Get the first entity with given tag. 
+        /// Get the first entity with given tag.
         std::optional<Entity> GetEntityByTag(const std::string& tag);
 
         void AddTag(Entity ent, std::string tag);
@@ -108,7 +105,7 @@ namespace Ren
         inline TextureCache* GetTextureCache() { return m_textureCache.get(); }
 
         /* Systems manager forwarders */
-        
+
         /// Add component system. Note that the type must inherit from ComponentSystem base class.
         template<typename T, typename... Args>
         inline T* AddSystem(Args... args) { return m_sysManager.Add<T>(this, m_input, std::forward<Args>(args)...); }
@@ -128,7 +125,7 @@ namespace Ren
         inline void Update(float dt) { m_sysManager.Update(dt); }
         /// Call render on all component systems.
         inline void Render() { m_sysManager.Render(); }
-        
+
     private:
         // Cache for storing loaded textures of components.
         Ref<TextureCache> m_textureCache{ nullptr };

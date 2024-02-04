@@ -2,8 +2,7 @@
 #include <Ren/Ren.h>
 
 /// Manage scene in editor.
-class Scene
-{
+class Scene {
     // Defines the rate of change of camera PPU on zoom.
     const glm::ivec2 ZOOM_SENSITIVITY{ 10 };
 public:

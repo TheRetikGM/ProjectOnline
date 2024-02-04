@@ -5,11 +5,9 @@
 #include "Ren/Core/Core.h"
 #include "ComponentSystems.h"
 
-namespace Ren
-{
-    class SystemsManager
-    {
-    public: 
+namespace Ren {
+    class SystemsManager {
+    public:
         // Create new system of specified type.
         // NOTE: Type must inherit from ComponentSystem base class.
         template<typename T, typename... Args>
@@ -19,7 +17,7 @@ namespace Ren
 
             // Check if system was already created.
             REN_ASSERT(m_systems.count(sys_id) == 0, "System of type '" + std::string(typeid(T).name()) + "' already exists.");
-            
+
             // Create new instance, down-cast it to base class type and store it in Ref.
             m_systems[sys_id] = Ref<ComponentSystem>(dynamic_cast<ComponentSystem*>(new T(std::forward<Args>(args)...)));
 
@@ -28,16 +26,14 @@ namespace Ren
 
         // Return specified system.
         template<typename T>
-        inline T* Get()
-        {
+        inline T* Get() {
             int32_t sys_id = getID<T>();
             return m_systems.count(sys_id) ? dynamic_cast<T*>(m_systems[sys_id].get()) : nullptr;
         }
 
         // Remove specified system.
         template<typename T>
-        inline void Remove()
-        {
+        inline void Remove() {
             int32_t sys_id = getID<T>();
             REN_ASSERT(m_systems.count(sys_id) == 1, "Trying to remove non-existent system of type '" + std::string(typeid(T).name()) + "'.");
             m_systems.erase(sys_id);
@@ -64,8 +60,7 @@ namespace Ren
 
         // Get ID of specified system type.
         template<typename T>
-        inline static int32_t getID()
-        {
+        inline static int32_t getID() {
             static int32_t id = ms_lastSystemID++;
             return id;
         }

@@ -17,11 +17,10 @@ GameCore::GameCore(const GameDefinition& def)
         m_imguiContext.Init(m_context.window, m_context.renderer, m_gameDefinition.imgui_def);
     if (def.init_flags & REN_INIT_BOX2D)
         init_box2d();
-    
+
     Renderer::SetRenderer(m_context.renderer);
 }
-GameCore::~GameCore()
-{
+GameCore::~GameCore() {
     // Destroy subsystems.
     if (m_gameDefinition.init_flags & REN_INIT_IMGUI)
         m_imguiContext.Destroy();
@@ -34,8 +33,7 @@ GameCore::~GameCore()
 ///////////////////////
 /////// INIT //////////
 ///////////////////////
-void GameCore::Init()
-{
+void GameCore::Init() {
     // Save init ticks, so that first delta isn't as big as initialization time.
     m_lastFrameTicks = SDL_GetTicks();
 
@@ -48,16 +46,14 @@ void GameCore::Init()
     REN_STATUS("Game core initialized.");
 }
 
-void GameCore::init_box2d()
-{
+void GameCore::init_box2d() {
     REN_STATUS("Box2D initialization not implemented yet.");
 }
 
 ///////////////////////
 ///// Destruction /////
 ///////////////////////
-void GameCore::Destroy()
-{
+void GameCore::Destroy() {
     // User destroy all layers in reverse order.
     for (auto it = m_layerStack.rbegin(); it != m_layerStack.rend(); it++)
         (*it)->OnDestroy();
@@ -67,21 +63,19 @@ void GameCore::Destroy()
     m_initialized = false;
     REN_STATUS("Game core destroyed.");
 }
-void GameCore::destroy_box2d()
-{
+
+void GameCore::destroy_box2d() {
     REN_STATUS("Box2D destruction not implemented yet.");
 }
 
 ////////////////////////
 //////// Other /////////
 ////////////////////////
-void GameCore::Loop()
-{
+void GameCore::Loop() {
     REN_ASSERT(m_initialized, "Game not initialized! Call GameCore::Init() first.");
 
 
-    while (m_Run)
-    {
+    while (m_Run) {
         // Calculate delta time.
         uint64_t current_ticks = SDL_GetTicks64();
         uint64_t ticks_delta = current_ticks - m_lastFrameTicks;
@@ -95,8 +89,7 @@ void GameCore::Loop()
         // Poll events.
         SDL_Event e;
         // Event processing order: ImGui -> Layers in reverse (overlay -> normal layers) -> core layer -> input
-        while (SDL_PollEvent(&e))
-        {
+        while (SDL_PollEvent(&e)) {
             // If the event is QUIT, then don't process it any further. We always want a way to the close application without killing it.
             if (e.type == SDL_QUIT) {
                 m_Run = false;
@@ -107,7 +100,7 @@ void GameCore::Loop()
 
             // TODO: Check if imgui used the event and prevent other layers from accessing it.
             ImGui_ImplSDL2_ProcessEvent(&e);
-            
+
             Event ren_event{ e, false };
             // Pass events to all layers in reverse order, so that overlay layers will get the event first.
             for (auto it = m_layerStack.rbegin(); it != m_layerStack.rend(); it++)
@@ -122,7 +115,7 @@ void GameCore::Loop()
             if (!ren_event.handled)
                 m_Input.OnEvent(e);
         }
-        
+
         // Start the Dear ImGui frame
         ImGui_ImplSDLRenderer_NewFrame();
         ImGui_ImplSDL2_NewFrame();
@@ -137,12 +130,12 @@ void GameCore::Loop()
         for (auto&& layer : m_layerStack)
             layer->OnRender(m_context.renderer);
         OnRender(m_context.renderer);
-        
+
         // User defined imgui actions of all layers.
         for (auto&& layer : m_layerStack)
             layer->OnImGui(m_imguiContext);
         OnImGui(m_imguiContext);
-        
+
         // Render Dear ImGui.
         ImGui::Render();
         ImGui_ImplSDLRenderer_RenderDrawData(ImGui::GetDrawData());

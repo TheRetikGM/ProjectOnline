@@ -15,11 +15,9 @@ extern "C" {
 // TODO: Implement these
 /// #define REN_INIT_FREETYPE (1 << 2)
 
-namespace Ren
-{
+namespace Ren {
     // Could be loaded from file or sth.
-    struct GameDefinition
-    {
+    struct GameDefinition {
         /// Define window and SDL specs.
         SDLContextDef   context_def{};
         /// Init flags for the Ren engine.
@@ -28,8 +26,7 @@ namespace Ren
         ImGuiContextDef imgui_def{};
     };
 
-    namespace Utils
-    {
+    namespace Utils {
         inline bool key_pressed(const SDL_Event& e, SDL_Keycode key) { return e.type == SDL_KEYDOWN && e.key.keysym.sym == key && e.key.repeat == 0; }
         inline bool key_released(const SDL_Event& e, SDL_Keycode key) { return e.type == SDL_KEYUP && e.key.keysym.sym == key && e.key.repeat == 0; }
     }
@@ -44,8 +41,7 @@ namespace Ren
                 - Updates all layers
                 - Flushes SDL renderer
     */
-    class GameCore
-    {
+    class GameCore {
     public:
         // Set this to false, if you want to end loop.
         bool         m_Run{ true };

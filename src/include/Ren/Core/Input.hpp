@@ -7,12 +7,10 @@ extern "C" {
 #include "Ren/Core/Core.h"
 #include "Ren/RenSDL/Keys.h"
 
-namespace Ren
-{
+namespace Ren {
     // Key interface used for checking if key was pressed or if it is being held down.
     // Use this, if you cannot (or don't want to) use SDL_Event.
-    class KeyInterface
-    {
+    class KeyInterface {
         const static size_t NUM_KEYS = (size_t)Key::NUM_KEYS;
         bool m_keys[NUM_KEYS];
         bool m_keysProcessed[NUM_KEYS];
@@ -22,15 +20,12 @@ namespace Ren
             : m_keys()
             , m_keysProcessed() {}
 
-        void Clear()
-        {
+        void Clear() {
             std::memset(m_keys, 0, sizeof(m_keys));
             std::memset(m_keysProcessed, 0, sizeof(m_keysProcessed));
         }
-        void OnEvent(const SDL_Event& e)
-        {
-            switch(e.type)
-            {
+        void OnEvent(const SDL_Event& e) {
+            switch(e.type) {
             case SDL_KEYDOWN:
                 if (e.key.keysym.scancode < NUM_KEYS && e.key.repeat == 0)
                     m_keys[e.key.keysym.scancode] = true;
@@ -48,34 +43,28 @@ namespace Ren
         }
 
         // Check if key was pressed (will evaluate to true only once when holding the key).
-        inline bool KeyPressed(Key key)
-        {
-            if (m_keys[(int)key] && !m_keysProcessed[(int)key])
-            {
+        inline bool KeyPressed(Key key) {
+            if (m_keys[(int)key] && !m_keysProcessed[(int)key]) {
                 m_keysProcessed[(int)key] = true;
                 return true;
             }
             return false;
         }
-        
+
         // Check if key is being held down.
-        inline bool KeyHeld(Key key)
-        {
+        inline bool KeyHeld(Key key) {
             return m_keys[(int)key];
         }
     };
 
-    class MouseInterface
-    {
+    class MouseInterface {
     public:
 
-        void OnEvent(const SDL_Event& e)
-        {
+        void OnEvent(const SDL_Event& e) {
             m_lastAPos = m_aPos;
             m_wheelOffset = 0;
 
-            switch (e.type)
-            {
+            switch (e.type) {
             case SDL_MOUSEMOTION:
                 m_aPos.x = e.motion.x;
                 m_aPos.y = e.motion.y;
@@ -107,10 +96,8 @@ namespace Ren
         // Set offset of the mouse position. Using this, you can achieve relative mouse position.
         inline void SetOffset(glm::ivec2 offset) { m_offset = offset; }
 
-        bool ButtonPressed(MouseButton b)
-        {
-            if (m_buttons[(int)b] && !m_buttonsProcessed[(int)b])
-            {
+        bool ButtonPressed(MouseButton b) {
+            if (m_buttons[(int)b] && !m_buttonsProcessed[(int)b]) {
                 m_buttonsProcessed[(int)b] = true;
                 return true;
             }

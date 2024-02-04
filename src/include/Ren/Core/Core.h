@@ -29,11 +29,9 @@ using Ref = std::shared_ptr<T>;
 template<class T, class... Args>
 inline Ref<T> CreateRef(Args... args) { return std::make_shared<T>(std::forward<Args>(args)...); }
 
-namespace Ren
-{
+namespace Ren {
     template<typename T>
-    struct Colors
-    {
+    struct Colors {
         const inline static T Black =   T(glm::ivec4(  0,   0,   0, 255));
         const inline static T Red =     T(glm::ivec4(255,   0,   0, 255));
         const inline static T Green =   T(glm::ivec4(  0, 255,   0, 255));
@@ -49,8 +47,7 @@ namespace Ren
     using Color4 = glm::ivec4;
 
     // Rectangle with float precision.
-    struct Rect 
-    { 
+    struct Rect {
         glm::vec2 pos, size;
         float& x{ pos.x };
         float& y{ pos.y };

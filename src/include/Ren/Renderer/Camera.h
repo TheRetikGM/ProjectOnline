@@ -8,11 +8,9 @@ extern "C" {
 #include "Ren/Core/Core.h"
 #include "Ren/RenSDL/Context.hpp"
 
-namespace Ren
-{
+namespace Ren {
     // Represents interface for different viewing spaces and provides transformations from them to viewport's pixel-space.
-    class Camera
-    {
+    class Camera {
     public:
         virtual ~Camera() {}
 
@@ -54,19 +52,16 @@ namespace Ren
 
     // Basic camera used for the default SDL pixel space. (camera position is left top cornet)
     // Allows for camera position and scaling.
-    class PixelCamera : public Camera
-    {
+    class PixelCamera : public Camera {
         inline glm::vec2 UpDir() const { return { 0.0f, -1.0f }; }
         inline glm::vec2 RightDir() const { return { 1.0f, 0.0f }; }
-        inline glm::mat4 GetPV() override
-        {
+        inline glm::mat4 GetPV() override {
             glm::mat4 view(1.0f);
             view = glm::translate(view, { -m_CamPos, 0.0f });
             view = glm::scale(view, { glm::vec2(m_pixelsPerUnit), 1.0f });
             return view;
         }
-        inline SDL_Rect ConvertRect(const Rect& rect, const glm::mat4& pv) override
-        {
+        inline SDL_Rect ConvertRect(const Rect& rect, const glm::mat4& pv) override {
             glm::vec2 new_pos = pv * glm::vec4(rect.x, rect.y, 0.0f, 1.0f);
             glm::vec2 new_size{ rect.w * m_pixelsPerUnit.x, rect.h * m_pixelsPerUnit.y };
             return { (int)new_pos.x, (int)new_pos.y, (int)new_size.x, (int)new_size.y };
@@ -75,11 +70,9 @@ namespace Ren
 
     // Camera used for converting from cartesian-space into pixel space.
     // It is needed to provide camera position in cartesian-space, unit scale and viewport size to correcly scale things.
-    class CartesianCamera : public Camera
-    {
+    class CartesianCamera : public Camera {
     public:
-        glm::mat4 GetPV() override
-        {
+        glm::mat4 GetPV() override {
             // Get camera size in units.
             glm::vec2 size = GetSize();
 
@@ -97,8 +90,8 @@ namespace Ren
             glm::mat4 proj(1.0f);
             proj = glm::translate(proj, { l * w / (l - r), t * h / (t - b), 0.0f });
             proj = glm::scale(proj, { w / (r - l), h / (b - t), 1.0f });
-            
-            /* Projection matrix = 
+
+            /* Projection matrix =
                 [ w/(r-l)     0     l*w/(l-r) ]
                 [    0     h/(b-t)  t*h/(t-b) ]
                 [    0        0         1     ]
@@ -111,17 +104,16 @@ namespace Ren
             */
 
             return proj * view;
-        } 
+        }
 
         // Convert rectangle defined in unit-space to window-space.
         // FIXME: maybe position of rectangle should be the center of rectangle?
-        SDL_Rect ConvertRect(const Rect& rect, const glm::mat4& pv) override
-        {
+        SDL_Rect ConvertRect(const Rect& rect, const glm::mat4& pv) override {
             // Just apply the matrix to get a corrent position and scale the size using the unit scale.
             glm::vec2 new_pos { pv * glm::vec4(rect.x, rect.y, 0.0f, 1.0f) };
             glm::vec2 new_size{ rect.w * m_pixelsPerUnit.x, rect.h * m_pixelsPerUnit.y };
 
-            // Also we need to subtract height from pos, because in pixel-space position of rectangle is represented by 
+            // Also we need to subtract height from pos, because in pixel-space position of rectangle is represented by
             // top-left corner (in cartesian it is bottom left corder).
             return { (int)new_pos.x, (int)(new_pos.y - new_size.y), (int)new_size.x, (int)new_size.y };
         }

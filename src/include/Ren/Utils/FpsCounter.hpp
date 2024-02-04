@@ -4,19 +4,16 @@
 #include "Ren/RenSDL/Context.hpp"
 #include "Ren/Utils/Data.hpp"
 
-namespace Ren::Utils
-{
-    class FpsCounter
-    {
+namespace Ren::Utils {
+    class FpsCounter {
         using ValueArr = CyclingArray<float, 288>;
     public:
 
-        void Update(float dt)
-        {
+        void Update(float dt) {
             m_currentSampleTime += dt;
             m_nSamples++;
             m_values.push_back(1.0f / dt);
-            
+
             if (m_currentSampleTime >= m_sampleTime) {
                 m_fps = m_nSamples / m_currentSampleTime;
                 reset();
@@ -26,8 +23,7 @@ namespace Ren::Utils
         inline void SetSampleTime(float n_sec) { m_sampleTime = n_sec; reset(); }
 
         /// Draw ImGui window with plot inside it.
-        void DrawPlotWindow(glm::ivec2 win_size)
-        {
+        void DrawPlotWindow(glm::ivec2 win_size) {
             ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav;
             ImGui::SetNextWindowBgAlpha(0.35f); // Transparent background
             if (m_lockPos)
@@ -38,12 +34,9 @@ namespace Ren::Utils
         }
 
         /// Draw only ImGui plot.
-        void DrawPlot()
-        {
-            struct Funcs
-            {
-                static float value_getter(void* p_arr, int i)
-                {
+        void DrawPlot() {
+            struct Funcs {
+                static float value_getter(void* p_arr, int i) {
                     ValueArr* arr = (ValueArr*)p_arr;
                     return arr->at(i);
                 }
@@ -53,9 +46,8 @@ namespace Ren::Utils
             char avg_fps[20];
             std::sprintf(avg_fps, "avg. %.1f", m_fps);
             ImGui::PlotLines("FPS", &Funcs::value_getter, &m_values, m_values.size(), 0, avg_fps, 0.0f, 200.0f, ImVec2(0.0f, 80.0f));
-            
-            if (ImGui::BeginPopupContextWindow())
-            {
+
+            if (ImGui::BeginPopupContextWindow()) {
                 ImGui::MenuItem("Lock position", NULL, &m_lockPos);
                 ImGui::EndPopup();
             }
@@ -70,8 +62,7 @@ namespace Ren::Utils
 
         float m_fps{ 0.0f };
 
-        void reset()
-        {
+        void reset() {
             m_currentSampleTime = 0.0f;
             m_nSamples = 0;
         }

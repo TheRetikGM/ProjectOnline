@@ -4,12 +4,10 @@
 
 #include "Ren/Core/Core.h"
 
-namespace Ren
-{
+namespace Ren {
     class Layer;
 
-    class LayerStack
-    {
+    class LayerStack {
         using Stack = std::list<Ref<Layer>>;
     public:
         LayerStack();

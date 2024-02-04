@@ -15,10 +15,8 @@
 #define WINDOWPOS_UNDEFINED glm::ivec2(SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED)
 #define WINDOWPOS_CENTERED  glm::ivec2(SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED)
 
-namespace Ren
-{
-    struct SDLContextDef
-    {
+namespace Ren {
+    struct SDLContextDef {
         glm::ivec2 window_pos = WINDOWPOS_UNDEFINED;
         glm::ivec2 window_size = INVALID_WINDOW_SIZE;
         std::string window_name{ "Window name" };
@@ -27,8 +25,7 @@ namespace Ren
         uint32_t window_flags{ SDL_WINDOW_SHOWN };
         uint32_t renderer_flags{ SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC };
     };
-    struct SDLContext
-    {
+    struct SDLContext {
         SDL_Window*     window{ nullptr };
         SDL_Renderer*   renderer{ nullptr };
         SDLContextDef definition;
@@ -40,8 +37,7 @@ namespace Ren
         inline void Init(glm::ivec2 window_size) { Init(SDLContextDef{ WINDOWPOS_UNDEFINED, window_size }); }
 
         // Create context with custom presets.
-        inline void Init(const SDLContextDef& def)
-        {
+        inline void Init(const SDLContextDef& def) {
             this->definition = def;
 
             // Initialize SDL
@@ -70,8 +66,7 @@ namespace Ren
         }
 
         // If you called Init(), then you should call this to destroy context.
-        inline void Destroy()
-        {
+        inline void Destroy() {
             SDL_DestroyRenderer(renderer);
             TTF_Quit();
             IMG_Quit();
@@ -91,15 +86,13 @@ namespace Ren
     // FIXME: Name collides with ImGuiStyle from imgui.h. For now it is fixed by using namespace Ren, but it would be cleaner to think of another name.
     enum class ImGuiStyle : uint8_t { dark, light, classic };
 
-    struct ImGuiContextDef
-    {
+    struct ImGuiContextDef {
         Ren::ImGuiStyle style{ ImGuiStyle::dark };
         ImGuiConfigFlags config_flags = ImGuiConfigFlags_DockingEnable | ImGuiConfigFlags_ViewportsEnable;
     };
     // Imgui context.
     // FIXME: Name collides with ImGuiContext from imgui.h. For now it is fixed by using namespace Ren, but it would be cleaner to think of another name.
-    struct ImGuiContext
-    {
+    struct ImGuiContext {
         ImGuiContextDef definition;
         ImGuiIO* io;
 
@@ -107,8 +100,7 @@ namespace Ren
         inline void Init(SDL_Window* window, SDL_Renderer* renderer) { Init(window, renderer, ImGuiContextDef()); };
 
         // Create context with custom presets.
-        void Init(SDL_Window* window, SDL_Renderer* renderer, const ImGuiContextDef& def)
-        {
+        void Init(SDL_Window* window, SDL_Renderer* renderer, const ImGuiContextDef& def) {
             this->definition = def;
 
             REN_ASSERT(window != nullptr, "Invalid window");
@@ -118,10 +110,9 @@ namespace Ren
             ImGui::CreateContext();
             io = &ImGui::GetIO(); (void)(*io);
             io->ConfigFlags |= def.config_flags;
-            
+
             // Setup Dear ImGui style
-            switch (def.style)
-            {
+            switch (def.style) {
                 case ImGuiStyle::dark: ImGui::StyleColorsDark(); break;
                 case ImGuiStyle::light: ImGui::StyleColorsLight(); break;
                 case ImGuiStyle::classic: ImGui::StyleColorsClassic(); break;
@@ -135,8 +126,7 @@ namespace Ren
         }
 
         // Destroy context.
-        void Destroy()
-        {
+        void Destroy() {
             ImGui_ImplSDLRenderer_Shutdown();
             ImGui_ImplSDL2_Shutdown();
             ImGui::DestroyContext();

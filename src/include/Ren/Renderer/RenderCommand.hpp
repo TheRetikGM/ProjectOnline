@@ -4,13 +4,11 @@
 #include "Ren/ECS/Scene.h"
 #include "Ren/Renderer/Camera.h"
 
-namespace Ren
-{
+namespace Ren {
     // Define base class for render commands using static polymorphism implemented using EnTT::poly
     // This class defines that when some structure has Render() and GetLayer() member functions, they can be used as render commands.
     // --> For details check docs: https://github.com/skypjack/entt/wiki/Crash-Course:-poly
-    struct RenderCommandPoly : entt::type_list<void(SDL_Renderer*), int() const> 
-    {
+    struct RenderCommandPoly : entt::type_list<void(SDL_Renderer*), int() const> {
         template<typename Base>
         struct type: Base {
             void Render(SDL_Renderer* renderer) { entt::poly_call<0>(*this, renderer); }

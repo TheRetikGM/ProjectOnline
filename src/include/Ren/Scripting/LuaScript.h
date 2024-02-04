@@ -12,16 +12,14 @@
 #include "Ren/ECS/Scene.h"
 #include "Ren/Core/Input.hpp"
 
-namespace Ren
-{
+namespace Ren {
     // We expose only basic types for simplicity.
     enum class LuaParamType : int { number = 0, string, boolean };
-    const static std::array<const char*, 3> LUA_PARAM_TYPE_S = { "number", "string", "boolean" }; 
+    const static std::array<const char*, 3> LUA_PARAM_TYPE_S = { "number", "string", "boolean" };
 
     class LuaScript;
     /// Hold information about parameters present in given LuaScript instance.
-    class LuaParam
-    {
+    class LuaParam {
     public:
         /// Name of the parameter in LUA parameter array.
         std::string m_Name;
@@ -58,8 +56,7 @@ namespace Ren
     };
 
     /// Handles communication between LUA and C++
-    class LuaScript
-    {
+    class LuaScript {
         // Name of the table in LUA on which in which can defined following functions.
         const std::string NAME{ "undefined" };
         // Name of the parameter table inside NAME table.
