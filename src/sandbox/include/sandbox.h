@@ -1,5 +1,4 @@
 #pragma once
-#include <Ren/Utils/Logger.hpp>
 
 // FIXME: This is temporary and should be changed in the future to give the user a chocie to choose between sandbox debug and release.
 #ifdef REN_DEBUG

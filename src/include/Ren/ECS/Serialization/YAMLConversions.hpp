@@ -1,18 +1,22 @@
+/**
+ * @file Ren/ECS/YAMLConversions.hpp
+ * @brief This file contains all template specializations needed for converting custom objects to the YAML object format.
+ */
 #pragma once
 #include <filesystem>
 #include <yaml-cpp/yaml.h>
 #include <fstream>
 #include <regex>
+#include <ren_utils/logging.hpp>
 
 #include "Ren/ECS/Scene.h"
 #include "Ren/ECS/Components.h"
 #include "Ren/Core/Core.h"
-#include "Ren/Utils/Logger.hpp"
 #include "Ren/Scripting/LuaScript.h"
 #include "config.h"
 
 namespace YAML {
-    template<> 
+    template<>
     struct convert<glm::vec3> {
         static Node encode(const glm::vec3& rhs) {
             Node n;
@@ -30,7 +34,7 @@ namespace YAML {
         }
     };
 
-    template<> 
+    template<>
     struct convert<glm::vec2> {
         static Node encode(const glm::vec2& rhs) {
             Node n;
@@ -47,7 +51,7 @@ namespace YAML {
         }
     };
 
-    template<> 
+    template<>
     struct convert<glm::ivec3> {
         static Node encode(const glm::ivec3& rhs) {
             Node n;
@@ -65,7 +69,7 @@ namespace YAML {
         }
     };
 
-    template<> 
+    template<>
     struct convert<glm::ivec2> {
         static Node encode(const glm::ivec2& rhs) {
             Node n;
@@ -82,7 +86,7 @@ namespace YAML {
         }
     };
 
-    template<> 
+    template<>
     struct convert<b2Vec2> {
         static Node encode(const b2Vec2& s) {
             Node n;
@@ -96,7 +100,7 @@ namespace YAML {
         }
     };
 
-    template<> 
+    template<>
     struct convert<Ren::TransformComponent> {
         static Node encode(const Ren::TransformComponent& t) {
             Node n;
@@ -113,7 +117,7 @@ namespace YAML {
         }
     };
 
-    template<> 
+    template<>
     struct convert<Ren::SpriteComponent> {
         static Node encode(const Ren::SpriteComponent& s) {
             Node n;
@@ -157,14 +161,14 @@ namespace YAML {
             p.m_Type = (Ren::LuaParamType)(type_it - type_s.begin());
             p.m_cachedData = CreateRef<std::any>();
             switch (p.m_Type) {
-                case Ren::LuaParamType::number: 
-                    (*p.m_cachedData) = n["value"].as<float>(); 
+                case Ren::LuaParamType::number:
+                    (*p.m_cachedData) = n["value"].as<float>();
                     break;
-                case Ren::LuaParamType::string: 
-                    (*p.m_cachedData) = n["value"].as<std::string>(); 
+                case Ren::LuaParamType::string:
+                    (*p.m_cachedData) = n["value"].as<std::string>();
                     break;
-                case Ren::LuaParamType::boolean: 
-                    (*p.m_cachedData) = n["value"].as<bool>(); 
+                case Ren::LuaParamType::boolean:
+                    (*p.m_cachedData) = n["value"].as<bool>();
                     break;
             }
 
@@ -172,12 +176,12 @@ namespace YAML {
         }
     };
 
-    template<>  
+    template<>
     struct convert<Ren::LuaScriptComponent> {
         static Node encode(const Ren::LuaScriptComponent& l) {
             Node node_comp;
             for (auto& [name, script] : l.scripts) {
-                Node node_script; 
+                Node node_script;
                 node_script["name"] = name;
                 node_script["path"] = script->GetScriptPath();
                 for (auto& i : script->m_Parameters)
@@ -203,7 +207,7 @@ namespace YAML {
         }
     };
 
-    template<> 
+    template<>
     struct convert<b2BodyDef> {
         static Node encode(const b2BodyDef& s) {
             Node n;
@@ -231,7 +235,7 @@ namespace YAML {
             if (type == "dynamic")        s.type = b2_dynamicBody;
             else if (type == "static")    s.type = b2_staticBody;
             else if (type == "kinematic") s.type = b2_kinematicBody;
-            
+
             s.position        = n["position"].as<b2Vec2>();
             s.angle           = n["angle"].as<float>();
             s.linearVelocity  = n["linear_velocity"].as<b2Vec2>();
@@ -247,7 +251,7 @@ namespace YAML {
             return true;
         }
     };
-    template<> 
+    template<>
     struct convert<b2FixtureDef> {
         static Node encode(const b2FixtureDef& s) {
             Node n;
@@ -294,7 +298,7 @@ namespace YAML {
             return true;
         }
     };
-    template<> 
+    template<>
     struct convert<Ren::RigidBodyComponent> {
         static Node encode(const Ren::RigidBodyComponent& s) {
             Node n;
@@ -308,7 +312,7 @@ namespace YAML {
         }
         static bool decode(const Node& n, Ren::RigidBodyComponent& s) {
             s.body_def = n["body_def"].as<b2BodyDef>();
-                        
+
             for (auto&& n_fix : n["fixtures"])
             {
                 b2FixtureDef fix_def = n_fix.as<b2FixtureDef>();
@@ -336,12 +340,12 @@ namespace YAML {
                 REN_ASSERT(shape, "Fixture has an unknown shape type. Type = " + n_fix["shape_type"].as<std::string>());
                 s.fixtures.push_back({ shape, fix_def });
             }
-            
+
             return true;
         }
     };
 }
-// template<> 
+// template<>
 // struct convert<Ren::RigidBodyComponent> {
 //     static Node encode(const Ren::RigidBodyComponent& s) {
 //         Node n;

@@ -1,0 +1,7 @@
+[wrap-git]
+url = https://github.com/theretikgm/ren-utils
+revision = 80efbb62c2fc324eb120469a86ff476c939f9d6e
+depth = 1
+
+[provide]
+ren_utils = ren_utils_dep

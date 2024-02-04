@@ -1,8 +1,12 @@
+/**
+ * @file LuaScript.cpp
+ * @brief Implementation of LuaScript
+ */
 #include <exception>
 #include <stdexcept>
+#include <ren_utils/logging.hpp>
 
 #include "Ren/Scripting/LuaScript.h"
-#include "Ren/Utils/Logger.hpp"
 #include "Ren/Core/Core.h"
 #include "Ren/Core/AssetManager.hpp"
 #include "Ren/ECS/Components.h"
@@ -12,20 +16,18 @@
 
 using namespace Ren;
 
-struct LuaInterface
-{
+struct LuaInterface {
     static bool KeyPressed(KeyInterface* p_input, int key) { return p_input->KeyPressed(Key(key)); }
     static bool KeyHeld(KeyInterface* p_input, int key) {    return p_input->KeyHeld(Key(key)); }
     static void Log(int level, std::string message, std::string file, int line)
     {
         // TODO: Maybe somehow tag that this is from LUA?
         if (level >= 0 && level <= 4)
-            LogEmmiter::Log(LogLevel(level), message, file, line);
+            ren_utils::LogEmitter::Log(ren_utils::LogLevel(level), message, file, line);
     }
 };
 
-class UnsupportedTypeException : public std::exception
-{
+class UnsupportedTypeException : public std::exception {
     std::string type_name;
 public:
     UnsupportedTypeException(std::string type_name) : type_name(type_name) {}
@@ -38,8 +40,7 @@ LuaScript::LuaScript(std::string name, sol::state* lua_state, std::filesystem::p
     , m_scriptPath(script_path)
 {}
 
-void LuaScript::init()
-{
+void LuaScript::init() {
     REN_ASSERT(m_input != nullptr, "Did you call this from LuaScriptSystem::InitScript?");
     REN_ASSERT(m_entity.id != Entity{}.id, "Entity must be set.");
 
@@ -53,10 +54,10 @@ void LuaScript::init()
     REN_ASSERT(!table_check.valid(), "LuaScript with given name is already bound to this entity.");
 
     // Create metatable instance for this script.
-    (*m_lua)[NAME] = m_lua->create_table_with( 
+    (*m_lua)[NAME] = m_lua->create_table_with(
             "host", this,
             PARAM, m_lua->create_table_with(),
-            "API_RegParam", [this](const std::string& name){ 
+            "API_RegParam", [this](const std::string& name){
                 try {
                     if (std::find_if(m_Parameters.begin(), m_Parameters.end(), [&name](const auto& p) { return p.m_Name == name; }) != m_Parameters.end())
                         return;
@@ -72,14 +73,13 @@ void LuaScript::init()
 
     // Execute script file provided.
     m_lua->script_file(AssetManager::GetScript(m_scriptPath).string());
-    
+
     // Set default values for parameters
     for (auto i : m_Parameters)
         i.setFromData();
 }
 
-void LuaScript::first_init()
-{
+void LuaScript::first_init() {
     m_lua->set("_lua_int_set", true);
 
     // Set functions provided for all scripts on this component.
@@ -108,7 +108,7 @@ void LuaScript::first_init()
             "color", &SpriteComponent::m_Color,
             "ppu", &SpriteComponent::m_PixelsPerUnit);
 
-    m_lua->set("LUA_PATH", "?;?.lua;" 
+    m_lua->set("LUA_PATH", "?;?.lua;"
             + AssetManager::GetLuaCoreDir().string() + "/?.lua;"
             + AssetManager::GetLuaCoreDir().string() + "/?;"
             + AssetManager::GetScriptDir().string() + "/?.lua;"
@@ -123,16 +123,14 @@ void LuaScript::first_init()
     m_lua->script_file(AssetManager::GetLuaCore("core.lua").string());
 }
 
-void LuaScript::destroy()
-{
+void LuaScript::destroy() {
     // For now there is nothing to do.
     // There we could free up any resources and stuff that we created in LuaScript::init()
 }
 
 // Call "method" on metatable named 'instance_name'.
 template<typename... Args>
-inline void lua_method(sol::state* lua, const std::string& instance_name, const std::string& method_name, Args... args)
-{
+inline void lua_method(sol::state* lua, const std::string& instance_name, const std::string& method_name, Args... args) {
     sol::table t = (*lua)[instance_name];
     auto method = t[method_name];
     if (method.valid())
@@ -168,8 +166,7 @@ LuaParam::LuaParam(LuaScript* p_script, const std::string& name)
         throw UnsupportedTypeException(type);
 }
 
-void LuaParam::setFromData()
-{
+void LuaParam::setFromData() {
     if (!m_cachedData)
         return;
 
@@ -180,15 +177,13 @@ void LuaParam::setFromData()
     }
 }
 
-template<typename T> T LuaParam::Get()
-{
+template<typename T> T LuaParam::Get() {
     T val = (*m_Script->m_lua)[m_Script->NAME][m_Script->PARAM][m_Name];
     m_data = val;
     return val;
 }
 
-template<typename T> void LuaParam::Set(T val)
-{
+template<typename T> void LuaParam::Set(T val) {
     (*m_Script->m_lua)[m_Script->NAME][m_Script->PARAM][m_Name] = val;
 }
 

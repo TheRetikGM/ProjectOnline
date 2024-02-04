@@ -1,20 +1,17 @@
 #include <Ren/Ren.h>
 #include "EditorLayer.hpp"
 
-class Editor : public Ren::GameCore
-{
+class Editor : public Ren::GameCore {
 public:
-    Editor(const Ren::GameDefinition& def) : Ren::GameCore(def)
-    {
-        Ren::LogEmmiter::AddListener<Ren::StreamLogger>({ stdout });
+    Editor(const Ren::GameDefinition& def) : Ren::GameCore(def) {
+        ren_utils::LogEmitter::AddListener<ren_utils::StreamLogger>({ stdout });
 
         PushLayer(CreateRef<EditorLayer>("EditorLayer"));
     }
 };
 
 
-Ren::GameCore* CreateGame()
-{
+Ren::GameCore* CreateGame() {
     Ren::GameDefinition def;
     def.context_def.window_name = "Ren scene editor";
     def.context_def.window_size = { 1200, 700 };

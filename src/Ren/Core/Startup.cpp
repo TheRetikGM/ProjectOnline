@@ -1,7 +1,10 @@
+/**
+ * @file Ren/Core/Startup.cpp
+ * @brief Handle engine startup.
+ */
 #include "Ren/Core/Startup.h"
 
-int main(int argc, char* argv[])
-{
+int main(int argc, char* argv[]) {
     Ren::GameCore* game = CreateGame();
 
     try {

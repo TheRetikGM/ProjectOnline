@@ -1,3 +1,7 @@
+/**
+ * @file Ren/RenSDL/Texture.cpp
+ * @brief Implementation of Texture wrapper.
+ */
 #include "Ren/RenSDL/Texture.h"
 #include "Ren/Core/Core.h"
 #include "Ren/Renderer/Renderer.h"
@@ -6,8 +10,7 @@
 using namespace Ren;
 
 // Takem from: https://stackoverflow.com/questions/29061505/where-can-i-get-correct-pitch-parameter-for-sdl-renderreadpixels-function-in-sdl.
-int SDL_CalculatePitch(Uint32 format, int width)
-{
+int SDL_CalculatePitch(Uint32 format, int width) {
     int pitch;
 
     if (SDL_ISPIXELFORMAT_FOURCC(format) || SDL_BITSPERPIXEL(format) >= 8) {
@@ -20,10 +23,9 @@ int SDL_CalculatePitch(Uint32 format, int width)
 }
 
 
-void Texture2D::Generate(void* data)
-{
+void Texture2D::Generate(void* data) {
     REN_ASSERT(Renderer::GetRenderer() != nullptr, "No renderer is set");
-    
+
     // Regenerate texture if already set.
     if (m_Texture != nullptr) {
         SDL_DestroyTexture(m_Texture);
@@ -32,24 +34,20 @@ void Texture2D::Generate(void* data)
         return;
     }
 
-    if (data != nullptr)
-    {
+    if (data != nullptr) {
         int pitch = SDL_CalculatePitch(m_Format, m_Size.x);
         int n_channels = pitch / m_Size.x;
         REN_ASSERT(n_channels == 3 || n_channels == 4, "Channel count " + std::to_string(n_channels) + " is not supported.");
 
         Uint32 rmask, gmask, bmask, amask;
 
-        if constexpr (SDL_BYTEORDER == SDL_BIG_ENDIAN)
-        {
+        if constexpr (SDL_BYTEORDER == SDL_BIG_ENDIAN) {
             int shift = n_channels == 3 ? 8 : 0;
             rmask = 0xff000000 >> shift;
             gmask = 0x00ff0000 >> shift;
             bmask = 0x0000ff00 >> shift;
             amask = 0x000000ff >> shift;
-        }
-        else    // Litle endian like x86
-        {
+        } else {    // Litle endian like x86
             rmask = 0x000000ff;
             gmask = 0x0000ff00;
             bmask = 0x00ff0000;

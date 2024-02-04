@@ -1,8 +1,12 @@
+/**
+ * @file Ren/RenSDL/Keys.hpp
+ * @brief Wrapper for SDL key defines.
+ */
+
 #pragma once
 #include <SDL.h>
 
-namespace Ren
-{
+namespace Ren {
     enum class Key : int {
         UNKNOWN = SDL_SCANCODE_UNKNOWN,
         A = SDL_SCANCODE_A,

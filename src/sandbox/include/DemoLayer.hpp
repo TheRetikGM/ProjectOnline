@@ -7,8 +7,7 @@
 
 using namespace entt::literals;
 
-class DemoLayer : public Ren::Layer 
-{
+class DemoLayer : public Ren::Layer {
     Ref<Ren::TextRenderer> m_textRenderer = Ren::TextRenderer::Create();
     Ref<Ren::Scene> m_scene;
     Ren::Entity m_ent;
@@ -18,8 +17,7 @@ class DemoLayer : public Ren::Layer
 public:
     DemoLayer(const std::string &name) : Ren::Layer(name) {}
 
-    void OnInit() override 
-    {
+    void OnInit() override {
         // Set background color.
         m_GameCore->m_ClearColor = {100, 100, 100, 255};
 
@@ -38,14 +36,12 @@ public:
         m_renderTexture.m_Access = SDL_TextureAccess::SDL_TEXTUREACCESS_TARGET;
         m_renderTexture.Generate();
     }
-    void OnDestroy() override 
-    {
+    void OnDestroy() override {
         // Destroy native script component.
         m_scene->Destroy();
         m_scene.reset();
     }
-    void OnEvent(Ren::Event &e) override 
-    {
+    void OnEvent(Ren::Event &e) override {
         if (e.event.type == SDL_WINDOWEVENT && e.event.window.event == SDL_WINDOWEVENT_RESIZED)
             m_camera.SetViewportSize(m_GameCore->GetWindowSize());
 
@@ -66,13 +62,13 @@ public:
             m_scene->CreateEntity({{pos.x, pos.y}}, {"spawned_body"});
             auto &dynamic_body_r = dynamic_body.Add<Ren::RigidBodyComponent>();
             auto box_shape = CreateRef<b2PolygonShape>();
-            box_shape->SetAsBox(Ren::Utils::RandomFloat(0.5f, 2.0f),
-                                Ren::Utils::RandomFloat(0.5f, 2.0f));
+            box_shape->SetAsBox(ren_utils::random_float(0.5f, 2.0f),
+                                ren_utils::random_float(0.5f, 2.0f));
             dynamic_body_r.body_def.type = b2_dynamicBody;
             b2FixtureDef fix_def;
-            fix_def.density = Ren::Utils::RandomFloat(0.5f, 5.0f);
-            fix_def.friction = Ren::Utils::RandomFloat_0_1();
-            fix_def.restitution = Ren::Utils::RandomFloat_0_1();
+            fix_def.density = ren_utils::random_float(0.5f, 5.0f);
+            fix_def.friction = ren_utils::random_float();
+            fix_def.restitution = ren_utils::random_float();
             dynamic_body_r.fixtures.push_back({box_shape, fix_def});
 
             m_scene->GetSystem<Ren::PhysicsSystem>()->InitPhysicsBody(dynamic_body.id);
@@ -81,8 +77,7 @@ public:
         if (Ren::Utils::key_pressed(e.event, SDLK_SPACE))
             m_camera.SetUnitScale(100);
     }
-    void OnUpdate(float dt) override 
-    {
+    void OnUpdate(float dt) override {
         // Rotate entities with 'rotate' tag.
         const float rotation_speed = 90.0f; // 90 degrees per second.
         auto entities = m_scene->GetEntitiesByTag("rotate");
@@ -113,12 +108,11 @@ public:
             for (auto& p : script->m_Parameters)
                 LOG_I("PARAM -- name: " + p.m_Name + ", type: " + std::to_string((int)p.m_Type));
             Ren::SceneSerializer::Serialize(m_scene, SOURCE_DIR "/build/param.yaml");
-    }
+        }
 
         m_scene->Update(dt);
     }
-    void OnRender(SDL_Renderer *renderer) override 
-    {
+    void OnRender(SDL_Renderer *renderer) override {
         Ren::Renderer::BeginRender(&m_camera);
         Ren::Renderer::Clear(m_GameCore->m_ClearColor);
         m_textRenderer->RenderText(
@@ -135,8 +129,7 @@ public:
     }
 
 private:
-    void sceneFromFile(std::filesystem::path path = "scenes/demo.ren") 
-    {
+    void sceneFromFile(std::filesystem::path path = "scenes/demo.ren") {
         m_scene = Ren::SceneSerializer::Deserialze(path, GetRenderer(), GetInput());
         m_scene->GetSystem<Ren::PhysicsSystem>()->m_DebugRender = true;
         auto ent = m_scene->GetEntityByTag("awesomeface");
@@ -145,8 +138,7 @@ private:
         m_scene->Init();
     }
 
-    void sceneFromScratch(bool serialize = false) 
-    {
+    void sceneFromScratch(bool serialize = false) {
         m_scene = CreateRef<Ren::Scene>(GetRenderer(), GetInput());
 
         // Create awesomeface entity.

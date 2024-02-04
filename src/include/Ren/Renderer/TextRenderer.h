@@ -1,3 +1,8 @@
+/**
+ * @file Ren/Renderer/TextRenderer.hpp
+ * @brief Declaration of text renderer.
+ * @note Why not use the SDL_ttf? Because it's slow and API is horrible.
+ */
 #pragma once
 
 #include <map>
@@ -8,18 +13,16 @@
 #include "Ren/Core/Core.h"
 #include "Ren/RenSDL/Texture.h"
 
-namespace Ren
-{
+namespace Ren {
     struct Character {
         Texture2D texture;
         bool has_texture;
         glm::ivec2 size;
         glm::ivec2 bearing;
         uint32_t advance;
-    }; 
+    };
 
-    class TextRenderer
-    {
+    class TextRenderer {
     public:
         std::map<char, Character> m_Characters;
         unsigned int m_RowSpacing = 20;

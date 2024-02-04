@@ -1,3 +1,7 @@
+/**
+ * @file Ren/Renderer/Renderer.hpp
+ * @brief Declaration of main renderer class.
+ */
 #pragma once
 #include <vector>
 #include <algorithm>
@@ -6,17 +10,14 @@
 #include "Ren/Renderer/Camera.h"
 #include "Ren/RenSDL/Texture.h"
 
-namespace Ren
-{
+namespace Ren {
     // Class which is used for centralized rendering across the engine.
     // Submit RenderCommands, that imeplents the needs of RenderCommand (implements needed functions. For more info check RenderCommand.hpp)
-    class Renderer
-    {
+    class Renderer {
     public:
         // Use this function on the start of render phase.
         // TODO: Maybe submit render texture target here?
-        static void BeginRender(Camera* camera, Texture2D* render_target = nullptr)
-        {
+        static void BeginRender(Camera* camera, Texture2D* render_target = nullptr) {
             m_renderCommands.clear();
             m_camera = camera;
             m_cameraPV = m_camera->GetPV();
@@ -26,8 +27,7 @@ namespace Ren
             if (render_target)
                 SDL_SetRenderTarget(m_renderer, render_target->m_Texture);
         }
-        static void EndRender()
-        {
+        static void EndRender() {
             if (m_renderTarget)
                 SDL_SetRenderTarget(m_renderer, nullptr);
             m_renderTarget = nullptr;
@@ -48,8 +48,7 @@ namespace Ren
 
         // Executes all render commands, that were submitted earlier.
         // TODO: Rendering optimizations like culling
-        static void Render()
-        {
+        static void Render() {
             // Sort by layer, so that the commands are executed in correct order. For commands in same layer, preserve the order they were submitted in.
             std::stable_sort(m_renderCommands.begin(), m_renderCommands.end(), [](const RenderCommand& a, const RenderCommand& b) { return a->GetLayer() < b->GetLayer(); });
             for (auto&& command : m_renderCommands)
@@ -58,7 +57,7 @@ namespace Ren
 
         // Clear current render target.
         static void Clear(Ren::Color4 color = Ren::Colors4::Black);
-        inline static SDL_Renderer* GetRenderer() { return m_renderer; } 
+        inline static SDL_Renderer* GetRenderer() { return m_renderer; }
         inline static void SetRenderer(SDL_Renderer* renderer) { m_renderer = renderer; }
         inline static SDL_Rect ConvertRect(const Ren::Rect& rect) { return m_camera->ConvertRect(rect, m_cameraPV); }
         inline static Camera* GetCamera() { return m_camera; }

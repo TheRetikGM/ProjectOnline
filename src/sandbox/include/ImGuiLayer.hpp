@@ -6,28 +6,25 @@
 #include "GuiLogger.hpp"
 #define BIT_TEST(a, b) ((a & b) == b)
 
-class ImGuiLayer : public Ren::Layer
-{
+class ImGuiLayer : public Ren::Layer {
 public:
     Ref<DemoLayer> m_DemoLayer{ nullptr };
-    
-    ImGuiLayer(const std::string& name) : Ren::Layer(name) 
-    {
-        Ren::LogEmmiter::AddListener<GuiLogger>();
+    GuiLogger* m_logger;
+
+    ImGuiLayer(const std::string& name) : Ren::Layer(name) {
+        m_logger = ren_utils::LogEmitter::AddListener<GuiLogger>();
+        assert(m_logger != nullptr);
     }
 
-    void OnInit() override
-    {
+    void OnInit() override {
         m_pixCam.SetViewportSize(m_GameCore->GetWindowSize());
     }
-    void OnUpdate(float dt) override 
-    {
-        m_fpsCounter.Update(dt);		
+    void OnUpdate(float dt) override {
+        m_fpsCounter.Update(dt);
         if (KeyPressed(Ren::Key::I))
             m_showDemo = !m_showDemo;
     }
-    void OnEvent(Ren::Event& e) override
-    {
+    void OnEvent(Ren::Event& e) override {
         ImGuiIO& io = ImGui::GetIO(); (void)io;
         if (!m_grabInput) {
             e.handled = true;
@@ -37,8 +34,7 @@ public:
         if (BIT_TEST(e.event.type, SDL_MOUSEMOTION))
             ;
     }
-    void OnImGui(Ren::ImGuiContext& context) override
-    {
+    void OnImGui(Ren::ImGuiContext& context) override {
         ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
         if (ImGui::BeginMainMenuBar()) {
             if (ImGui::BeginMenu("File")) {
@@ -68,7 +64,7 @@ public:
         // m_fpsCounter.DrawPlot(context, m_GameCore->GetWindowSize());
         if (m_showDemo)
             ImGui::ShowDemoWindow();
-        
+
         ImGui::Begin("Scene view");
         glm::vec2 size = m_DemoLayer->m_renderTexture.m_Size;
         ImGui::Image((ImU64)m_DemoLayer->m_renderTexture.m_Texture, { size.x, size.y });
@@ -82,7 +78,7 @@ public:
         ImGui::End();
 
         ImGui::Begin("Logger");
-        Ren::LogEmmiter::GetListener<GuiLogger>()->Draw();
+        m_logger->Draw();
         ImGui::End();
 
         ImGui::Begin("Options");

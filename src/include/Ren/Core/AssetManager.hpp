@@ -1,15 +1,19 @@
+/**
+ * @file Ren/Core/AssetManager.hpp
+ * @brief Handle access to assets.
+ * @note Always use AssetManager. Never raw paths.
+ */
+
 #pragma once
 #include <filesystem>
 #include <string>
 #include "config.h"
 
-namespace Ren
-{
+namespace Ren {
     using Path = std::filesystem::path;
 
     /// Manage asset paths.
-    class AssetManager
-    {
+    class AssetManager {
     public:
         inline static Path m_AssetRoot{ Path(SOURCE_DIR) / "assets" };
         inline static Path m_ScriptDir{ "scripts" };
@@ -46,7 +50,7 @@ namespace Ren
         /// Get full image directory path
         static Path GetImageDir() { return m_AssetRoot / m_ImagePath; }
 
-        /// Get full path to core lua script. 
+        /// Get full path to core lua script.
         /// @param core_path Core script path relative to m_LuaCorePath
         static Path GetLuaCore(Path core_path) { return m_AssetRoot / m_LuaCorePath / core_path; }
         /// Get full directory path to core lua scripts.

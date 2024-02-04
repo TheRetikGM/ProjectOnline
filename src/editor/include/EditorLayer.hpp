@@ -16,21 +16,18 @@ class EditorLayer : public Ren::Layer
 public:
     EditorLayer(std::string name) : Ren::Layer(name) { }
 
-    void OnInit() override
-    {
-        m_logger  = Ren::LogEmmiter::AddListener<GuiLogger>();
+    void OnInit() override {
+        m_logger  = ren_utils::LogEmitter::AddListener<GuiLogger>();
         m_scene = CreateRef<Scene>(glm::ivec2( 1200, 700 ), GetRenderer(), GetInput());
     }
 
-    void OnEvent(Ren::Event& e) override
-    {
+    void OnEvent(Ren::Event& e) override {
         // Zoom in and out with mouse wheel
         if (e.event.type == SDL_MOUSEWHEEL && e.event.wheel.y != 0)
             m_scene->ProcessMouseWheel(e.event.wheel.y);
     }
 
-    void OnUpdate(float dt) override
-    {
+    void OnUpdate(float dt) override {
         if (KeyPressed(Ren::Key::ESCAPE))
             m_GameCore->m_Run = false;
 
@@ -44,8 +41,7 @@ public:
             m_fpsCounter.Update(dt);
     }
 
-    void OnImGui(Ren::ImGuiContext& context) override
-    {
+    void OnImGui(Ren::ImGuiContext& context) override {
         ImGui::DockSpaceOverViewport();
 
         if (ImGui::BeginMainMenuBar()) {
@@ -79,7 +75,7 @@ public:
         }
 
         m_logger->Draw();
-        
+
         ImGui::Begin("Info");
         ImGui::LabelText("Scene accept input", "%s", m_scene->m_AcceptInput ? "yes" : "no");
         m_fpsCounter.DrawPlot();
@@ -115,7 +111,7 @@ public:
 
         ImGui::Begin("Settings");
         {
-            std::string play_label = Ren::Utils::string_format("%s scene", m_scene->m_EditMode ? "Play" : "Stop");
+            std::string play_label = strfmt("%s scene", m_scene->m_EditMode ? "Play" : "Stop");
             if (ImGui::Button(play_label.c_str()))
                 m_scene->m_EditMode = !m_scene->m_EditMode;
 
@@ -125,8 +121,7 @@ public:
         ImGui::End();
     }
 
-    void OnRender(SDL_Renderer* renderer) override
-    {
+    void OnRender(SDL_Renderer* renderer) override {
         if (m_scene->GetLoadState())
             m_scene->Render();
     }

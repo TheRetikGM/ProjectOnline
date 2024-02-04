@@ -1,3 +1,7 @@
+/**
+ * @file Ren/ECS/Components.hpp
+ * @brief Declaration of all ECS components.
+ */
 #pragma once
 #include <glm/glm.hpp>
 #include <string>
@@ -13,16 +17,13 @@
 #define UNDEFINED_TAG "undefined"
 #define UNDEFINED_PATH "undefined_path"
 
-namespace Ren
-{
-    namespace Utils
-    {
+namespace Ren {
+    namespace Utils {
         template<typename T>
         static std::string type_name() { return typeid(T).name(); }
     }
 
-    struct TransformComponent
-    {
+    struct TransformComponent {
         glm::vec2 position{ .0f, .0f };
         glm::vec2 scale { .0f, .0f };
         // Rotation in degrees ccw from positive x.
@@ -31,15 +32,14 @@ namespace Ren
 
         // Use this if entity has RigidBodyComponent and you want to enforce transform as position.
         bool dirty = false;
-        
+
         TransformComponent(glm::vec2 pos = glm::vec2(0.0f), glm::vec2 scale = glm::vec2(10.0f), int32_t layer = 0)
             : position(pos), scale(scale), layer(layer) {}
     };
 
     // Base class for components, that has to load some texture.
-    struct ImgComponent
-    {
-        std::filesystem::path img_path = UNDEFINED_PATH; 
+    struct ImgComponent {
+        std::filesystem::path img_path = UNDEFINED_PATH;
         TextureHandle texture_handle;
 
         ImgComponent() = default;
@@ -50,8 +50,7 @@ namespace Ren
         inline entt::resource<TextureResource> GetTextureResource() { return texture_handle.second; }
     };
 
-    class SpriteComponent : public ImgComponent
-    {
+    class SpriteComponent : public ImgComponent {
     public:
         glm::ivec3 m_Color{ glm::ivec3(255) };
         // Texture size is defined in pixels, so we have to scale it to match our desired size in unit-space.
@@ -67,8 +66,7 @@ namespace Ren
     };
 
     // TODO support for multiple fixtures
-    struct RigidBodyComponent
-    {
+    struct RigidBodyComponent {
         using ShapeFix = std::pair<Ref<b2Shape>, b2FixtureDef>;
         b2BodyDef body_def{};
         b2Body* p_body{ nullptr };
@@ -81,13 +79,11 @@ namespace Ren
     ///////////////////////////////////////
 
     class NativeScript;
-    struct NativeScriptComponent
-    {
+    struct NativeScriptComponent {
         NativeScript* script_instance{ nullptr };
 
         template<typename T>
-        void Bind()
-        {
+        void Bind() {
             REN_ASSERT(script_instance == nullptr, "There is already bound script to this component. Multiple bound scripts are not supported yet.");
             script_instance = dynamic_cast<NativeScript*>(new T());
         }
@@ -97,8 +93,7 @@ namespace Ren
 
     class LuaScript;
     /// Component providing lua scripting.
-    struct LuaScriptComponent
-    {
+    struct LuaScriptComponent {
         std::unordered_map<std::string, Ref<LuaScript>> scripts;
         // Make this a reference, because it is easer to copy (for us -- less template error madness).
         Ref<sol::state> lua;

@@ -1,18 +1,21 @@
+/**
+ * @file Ren/Scripting/NativeScript.hpp
+ * @brief Declaration of NativeScript.
+ */
+
 #pragma once
 #include <glm/glm.hpp>
 #include <string>
 #include <cstdint>
 #include <box2d/box2d.h>
 
-#include "Ren/Core/Input.hpp"
+#include "Ren/Core/Input.h"
 #include "Ren/ECS/Scene.h"
 
-namespace Ren
-{
+namespace Ren {
     class NativeScriptSystem;
 
-    class NativeScript
-    {
+    class NativeScript {
     public:
         virtual ~NativeScript() {}
 
@@ -32,7 +35,7 @@ namespace Ren
     protected:
         KeyInterface* m_input;
         Entity& self = m_entity;
-        
+
         template<typename T>
         inline T& GetComponent() { return self.Get<T>(); }
         inline bool HasTag(std::string tag) { return m_entity.p_scene->HasTag(m_entity, tag); }

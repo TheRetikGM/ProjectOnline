@@ -12,6 +12,7 @@ ren_depends = [
   subproject('entt').get_variable('entt_dep'),
   dependency('lua'),
   dependency('sol2'),
+  dependency('ren_utils'),
   cmake.subproject('yaml-cpp').dependency('yaml-cpp')
 ]
 
@@ -21,7 +22,7 @@ ren_inc = include_directories('include')
 ############## Ren library ##############
 ren_src = []
 subdir('Ren')
-ren_lib = library('ren', ren_src, 
+ren_lib = library('ren', ren_src,
   link_args : compile_link_args,
   cpp_args : compile_cpp_args,
   include_directories : [ren_inc, conf_inc],
@@ -36,7 +37,7 @@ ren_dep = declare_dependency(
 ############# Sandbox ##############
 sandbox_src = []
 subdir('sandbox')
-executable('SDLDemo', sandbox_src, 
+executable('SDLDemo', sandbox_src,
   link_args : compile_link_args,
   cpp_args : compile_cpp_args,
   include_directories : ['sandbox/include'],

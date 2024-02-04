@@ -1,3 +1,4 @@
 ren_src = [ren_src, files(
-  'Texture.cpp'
-  )]
+  'Texture.cpp',
+  './Context.cpp'
+)]

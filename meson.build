@@ -7,8 +7,8 @@ project('SDLDemo', 'cpp',
 add_global_arguments('-DImTextureID=ImU64', language : 'cpp')
 
 # Platform specific compile arguments.
-compile_link_args = [] 
-compile_cpp_args = [] 
+compile_link_args = []
+compile_cpp_args = []
 if build_machine.system() == 'linux'
   compile_link_args = ['-Wall', '-Wextra']
   compile_cpp_args = ['-Wno-shadow', '-Wno-unused-parameter', '-Wno-unknown-pragmas']
@@ -18,7 +18,7 @@ elif build_machine.system() == 'windows'
   add_project_arguments(['-D_BUILD_WINDOWS'], language : ['c', 'cpp'])
 endif
 
-# Debug 
+# Debug
 if get_option('debug') == true
   add_project_arguments('-DREN_DEBUG', language : ['c', 'cpp'])
 endif

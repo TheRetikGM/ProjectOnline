@@ -1,8 +1,13 @@
+/**
+ * @file Ren/ECS/Scene.cpp
+ * @brief Implementation of scene object.
+ */
+
 #include <vector>
 #include <algorithm>    // std::find
+#include <ren_utils/logging.hpp>
 
 #include "Ren/ECS/Scene.h"
-#include "Ren/Utils/Logger.hpp"
 
 namespace Ren
 {
@@ -34,34 +39,29 @@ namespace Ren
         AddSystem<LuaScriptSystem>();
         AddSystem<PhysicsSystem>();
     }
-    Scene::~Scene()
-    {
+    Scene::~Scene() {
         m_sysManager.Clear();
         m_textureCache->clear();
         m_Registry->clear();
     }
 
-    Entity Scene::CreateEntity(const TransformComponent& transform_comp, const TagList& tag_list)
-    {
+    Entity Scene::CreateEntity(const TransformComponent& transform_comp, const TagList& tag_list) {
         Entity ent{ m_Registry->create(), this };
         ent.Add<TransformComponent>() = transform_comp;
         for (auto&& tag : tag_list)
             AddTag(ent, tag);
         return ent;
     };
-    void Scene::AddTag(Entity ent, std::string tag)
-    {
+    void Scene::AddTag(Entity ent, std::string tag) {
         if (HasTag(ent, tag))
             return;
         m_entityToTags[ent.id].push_back(tag);
         m_tagToEntities[tag].push_back(ent.id);
     }
-    bool Scene::HasTag(Entity ent, std::string tag)
-    {
+    bool Scene::HasTag(Entity ent, std::string tag) {
         return std::find(m_entityToTags[ent.id].begin(), m_entityToTags[ent.id].end(), tag) != m_entityToTags[ent.id].end();
     }
-    void Scene::RemTag(Entity ent, std::string tag)
-    {
+    void Scene::RemTag(Entity ent, std::string tag) {
         auto tag_iter = std::find(m_entityToTags[ent.id].begin(), m_entityToTags[ent.id].end(), tag);
         if (tag_iter == m_entityToTags[ent.id].end())
             return;
@@ -70,14 +70,13 @@ namespace Ren
         m_entityToTags[ent.id].erase(tag_iter);
         m_tagToEntities[tag].erase(ent_iter);
     }
-    Ref<std::vector<Entity>> Scene::GetEntitiesByTag(const std::string& tag)
-    {
+    Ref<std::vector<Entity>> Scene::GetEntitiesByTag(const std::string& tag) {
         auto ent_arr = CreateRef<std::vector<Entity>>();
-        
+
         // Check if tag exists at all, so we dont create empty std::list<entt::entity> when using [] operator.
         if (m_tagToEntities.count(tag) == 0)
             return ent_arr;
-        
+
         std::list<entt::entity>& found_entities = m_tagToEntities[tag];
         for (auto&& ent : found_entities)
             ent_arr->push_back({ ent, this });
@@ -85,8 +84,7 @@ namespace Ren
         return ent_arr;
     }
 
-    std::optional<Entity> Scene::GetEntityByTag(const std::string& tag)
-    {
+    std::optional<Entity> Scene::GetEntityByTag(const std::string& tag) {
         // Check if tag exists at all, so we dont create empty std::list<entt::entity> when using [] operator.
         if (m_tagToEntities.count(tag) == 0)
             return {};
@@ -96,26 +94,23 @@ namespace Ren
             return Entity{ found_entities.front(), this };
         return {};
     }
-    
-    void Scene::LoadTexture(ImgComponent* component)
-    {
+
+    void Scene::LoadTexture(ImgComponent* component) {
         auto handle = LoadTexture(component->img_path);
         if (handle)
             component->texture_handle = handle.value();
     }
-    std::optional<TextureHandle> Scene::LoadTexture(std::filesystem::path path)
-    {
+    std::optional<TextureHandle> Scene::LoadTexture(std::filesystem::path path) {
         // Load the component, only if the path is specified.
         // NOTE: Texture cache load will be unsuccessfull only if the texture is already loaded **NOT** when the load
         //       of texture itself is unsuccessfull (when that happens, there is undefined behavior). Those cases are already
         //       accounted for with asserts in the loader.
-        if (path != UNDEFINED_PATH)
-        {
+        if (path != UNDEFINED_PATH) {
             auto ret = m_textureCache->load(entt::hashed_string(path.string().c_str()), m_Renderer, path.string().c_str());
             return (TextureHandle)(*ret.first);
-        }
-        else
+        } else {
             LOG_W("Trying to load image with unspecified path.");
+        }
         return {};
     }
 } // namespace Ren

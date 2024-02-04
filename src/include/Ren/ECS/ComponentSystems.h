@@ -1,3 +1,9 @@
+/**
+ * @file Ren/ECS/ComponentSystem.hpp
+ * @brief Declaration of all conponent systems.
+ *
+ * Component systems are objects that handle instances of some specific component types. For example all SpriteComponents.
+ */
 #pragma once
 extern "C" {
     #include <SDL.h>
@@ -7,10 +13,9 @@ extern "C" {
 #include <optional>
 
 #include "Ren/Core/Core.h"
-#include "Ren/Core/Input.hpp"
+#include "Ren/Core/Input.h"
 
-namespace Ren
-{
+namespace Ren {
     class Scene;
 
     /*
@@ -19,8 +24,7 @@ namespace Ren
         NOTE: When creating new systems, put the base constructor parameters in front of others,
               so that the Scene class can automatically fill them in.
     */
-    class ComponentSystem
-    {
+    class ComponentSystem {
     public:
         ComponentSystem(Scene* p_scene, KeyInterface* p_input) : m_scene(p_scene), m_input(p_input) {}
         virtual ~ComponentSystem() {}
@@ -37,17 +41,15 @@ namespace Ren
     };
 
     // System which handles rendering.
-    class RenderSystem : public ComponentSystem
-    {
+    class RenderSystem : public ComponentSystem {
     public:
         RenderSystem(Scene* p_scene, KeyInterface* p_input) : ComponentSystem(p_scene, p_input) {}
-        
+
         void Render() override;
     };
 
     // System which handles native scripts.
-    class NativeScriptSystem : public ComponentSystem
-    {
+    class NativeScriptSystem : public ComponentSystem {
     public:
         NativeScriptSystem(Scene* p_scene, KeyInterface* p_input) : ComponentSystem(p_scene, p_input) {}
 
@@ -58,8 +60,7 @@ namespace Ren
 
     class LuaScript;
     /// Manage all LuaScriptComponents and initialization/destruction of LuaScripts.
-    class LuaScriptSystem : public ComponentSystem
-    {
+    class LuaScriptSystem : public ComponentSystem {
     public:
         LuaScriptSystem(Scene* p_scene, KeyInterface* p_input) : ComponentSystem(p_scene, p_input) {}
 
@@ -88,12 +89,10 @@ namespace Ren
     };
 
     // Handles updating of all rigid bodies.
-    class PhysicsSystem : public ComponentSystem
-    {
+    class PhysicsSystem : public ComponentSystem {
         const b2Vec2 GRAVITY{ 0.0f, -9.81f };
 
-        class ContactListener : public b2ContactListener
-        {
+        class ContactListener : public b2ContactListener {
             PhysicsSystem* m_sys{ nullptr };
         public:
             ContactListener(PhysicsSystem* sys) : m_sys(sys) {}
@@ -109,7 +108,7 @@ namespace Ren
         bool m_DebugRender{ false };
         // Time of a single physics frame.
         // TODO: implement this. System should be running in separate thread and have a stable refresh rate.
-        float m_RefreshRate{ 1.0f / 60.0f };        
+        float m_RefreshRate{ 1.0f / 60.0f };
         // These are the recommended number of iterations from box2d docs.
         // If you need more/less precision you can try tweaking these values.
         int32_t m_VelocityIterations{ 6 };
