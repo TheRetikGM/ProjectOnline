@@ -1,5 +1,5 @@
 /**
- * @file Ren/Ren.h
+ * @file Ren/Ren.hpp
  * @brief Include everything with one file. This is just for ease of use for users.
  */
 
