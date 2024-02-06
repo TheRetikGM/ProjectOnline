@@ -3,7 +3,7 @@
  * @file Ren/ECS/Loaders.cpp
  */
 #include "Ren/ECS/Loaders.hpp"
-#include "Ren/Core/Core.h"
+#include "Ren/Core/Core.hpp"
 #include "Ren/Core/AssetManager.hpp"
 
 using namespace Ren;

@@ -5,8 +5,8 @@
 
 #include <algorithm>
 
-#include "Ren/Core/LayerStack.h"
-#include "Ren/Core/Layer.h"
+#include "Ren/Core/LayerStack.hpp"
+#include "Ren/Core/Layer.hpp"
 
 using namespace Ren;
 

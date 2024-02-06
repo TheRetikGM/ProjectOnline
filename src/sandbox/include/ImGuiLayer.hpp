@@ -1,7 +1,7 @@
 #pragma once
-#include <Ren/Ren.h>
+#include <Ren/Ren.hpp>
 #include <Ren/Utils/FpsCounter.hpp>
-#include <Ren/Physics/Physics.h>
+#include <Ren/Physics/Physics.hpp>
 #include "DemoLayer.hpp"
 #include "GuiLogger.hpp"
 #define BIT_TEST(a, b) ((a & b) == b)

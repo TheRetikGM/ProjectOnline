@@ -4,13 +4,13 @@
  *
  * This includes creation of context and main loop.
  */
-#include "Ren/Core/GameCore.h"
-#include "Ren/Core/Core.h"
+#include "Ren/Core/GameCore.hpp"
+#include "Ren/Core/Core.hpp"
 #include <algorithm>
 #include <imgui_impl_sdl2.h>
 #include <imgui_impl_sdlrenderer2.h>
-#include "Ren/Core/Layer.h"
-#include "Ren/Renderer/Renderer.h"
+#include "Ren/Core/Layer.hpp"
+#include "Ren/Renderer/Renderer.hpp"
 
 using namespace Ren;
 

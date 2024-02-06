@@ -9,7 +9,7 @@
 #include <list>
 #include <string>
 
-#include "Ren/Core/Core.h"
+#include "Ren/Core/Core.hpp"
 
 namespace Ren {
     class Layer;

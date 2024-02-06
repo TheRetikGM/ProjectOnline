@@ -6,11 +6,11 @@
 #include <filesystem>
 #include <regex>
 
-#include "Ren/ECS/Scene.h"
-#include "Ren/ECS/Components.h"
-#include "Ren/Core/Core.h"
+#include "Ren/ECS/Scene.hpp"
+#include "Ren/ECS/Components.hpp"
+#include "Ren/Core/Core.hpp"
 #include "Ren/ECS/Serialization/YAMLConversions.hpp"
-#include "Ren/ECS/Serialization/ComponentSetups.h"
+#include "Ren/ECS/Serialization/ComponentSetups.hpp"
 
 namespace Ren {
     namespace Utils {

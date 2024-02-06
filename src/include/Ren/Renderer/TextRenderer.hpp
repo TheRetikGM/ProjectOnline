@@ -10,8 +10,8 @@
 #include <string>
 #include <vector>
 
-#include "Ren/Core/Core.h"
-#include "Ren/RenSDL/Texture.h"
+#include "Ren/Core/Core.hpp"
+#include "Ren/RenSDL/Texture.hpp"
 
 namespace Ren {
     struct Character {

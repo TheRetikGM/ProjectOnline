@@ -5,7 +5,7 @@
 #pragma once
 #include <glm/glm.hpp>
 #include <SDL.h>
-#include <Ren/Core/Core.h>
+#include <Ren/Core/Core.hpp>
 
 namespace Ren {
     class Texture2D {

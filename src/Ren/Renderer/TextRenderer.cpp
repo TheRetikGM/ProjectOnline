@@ -3,7 +3,7 @@
  * @brief Implementation of TextREnderer
  */
 
-#include "Ren/Renderer/TextRenderer.h"
+#include "Ren/Renderer/TextRenderer.hpp"
 #include <iostream>
 #include <exception>
 #include <stdexcept>
@@ -12,8 +12,8 @@
 #include FT_FREETYPE_H
 #include <ren_utils/logging.hpp>
 
-#include "Ren/Renderer/Renderer.h"
-#include "Ren/RenSDL/Texture.h"
+#include "Ren/Renderer/Renderer.hpp"
+#include "Ren/RenSDL/Texture.hpp"
 #include "Ren/Core/AssetManager.hpp"
 
 using namespace Ren;

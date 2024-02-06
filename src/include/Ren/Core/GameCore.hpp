@@ -11,8 +11,8 @@ extern "C" {
 #include <imgui.h>
 
 #include "Ren/RenSDL/Context.hpp"
-#include "Ren/Core/LayerStack.h"
-#include "Ren/Core/Input.h"
+#include "Ren/Core/LayerStack.hpp"
+#include "Ren/Core/Input.hpp"
 
 #define REN_INIT_IMGUI (1 << 0)
 #define REN_INIT_BOX2D (1 << 1)

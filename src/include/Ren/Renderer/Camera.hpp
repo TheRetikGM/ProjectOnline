@@ -9,7 +9,7 @@ extern "C" {
     #include <SDL.h>
 }
 
-#include "Ren/Core/Core.h"
+#include "Ren/Core/Core.hpp"
 
 namespace Ren {
     // Represents interface for different viewing spaces and provides transformations from them to viewport's pixel-space.

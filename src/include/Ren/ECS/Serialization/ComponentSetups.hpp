@@ -7,8 +7,8 @@
 
 #pragma once
 
-#include "Ren/ECS/Scene.h"
-#include "Ren/ECS/Components.h"
+#include "Ren/ECS/Scene.hpp"
+#include "Ren/ECS/Components.hpp"
 
 namespace Ren {
     // Function to help user to customize, how a component should be initialized from already existing component data.

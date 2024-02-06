@@ -9,10 +9,10 @@
 #include <regex>
 #include <ren_utils/logging.hpp>
 
-#include "Ren/ECS/Scene.h"
-#include "Ren/ECS/Components.h"
-#include "Ren/Core/Core.h"
-#include "Ren/Scripting/LuaScript.h"
+#include "Ren/ECS/Scene.hpp"
+#include "Ren/ECS/Components.hpp"
+#include "Ren/Core/Core.hpp"
+#include "Ren/Scripting/LuaScript.hpp"
 #include "config.h"
 
 namespace YAML {

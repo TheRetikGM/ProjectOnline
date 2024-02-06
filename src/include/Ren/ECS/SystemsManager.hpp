@@ -8,8 +8,8 @@
 #include <unordered_map>
 #include <typeinfo>
 
-#include "Ren/Core/Core.h"
-#include "ComponentSystems.h"
+#include "Ren/Core/Core.hpp"
+#include "ComponentSystems.hpp"
 
 namespace Ren {
     class SystemsManager {

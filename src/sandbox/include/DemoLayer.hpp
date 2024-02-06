@@ -1,5 +1,5 @@
 #pragma once
-#include <Ren/Ren.h>
+#include <Ren/Ren.hpp>
 #include <box2d/box2d.h>
 #include <fstream>
 

@@ -2,13 +2,13 @@
  * @file Ren/ECS/ComponentSystems.cpp
  * @brief Implementation of component systems.
  */
-#include "Ren/ECS/ComponentSystems.h"
-#include "Ren/ECS/Scene.h"
-#include "Ren/Scripting/NativeScript.h"
-#include "Ren/Renderer/Renderer.h"
-#include "Ren/Physics/Physics.h"
-#include "Ren/Scripting/LuaScript.h"
-#include "Ren/ECS/Components.h"
+#include "Ren/ECS/ComponentSystems.hpp"
+#include "Ren/ECS/Scene.hpp"
+#include "Ren/Scripting/NativeScript.hpp"
+#include "Ren/Renderer/Renderer.hpp"
+#include "Ren/Physics/Physics.hpp"
+#include "Ren/Scripting/LuaScript.hpp"
+#include "Ren/ECS/Components.hpp"
 
 #include <ren_utils/logging.hpp>
 

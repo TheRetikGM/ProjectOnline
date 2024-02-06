@@ -7,8 +7,8 @@
 #include <algorithm>
 
 #include "RenderCommand.hpp"
-#include "Ren/Renderer/Camera.h"
-#include "Ren/RenSDL/Texture.h"
+#include "Ren/Renderer/Camera.hpp"
+#include "Ren/RenSDL/Texture.hpp"
 
 namespace Ren {
     // Class which is used for centralized rendering across the engine.

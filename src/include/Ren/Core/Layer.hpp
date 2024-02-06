@@ -10,11 +10,11 @@
 #include <list>
 #include <string>
 
-#include "Ren/Core/Core.h"
-#include "Ren/Core/GameCore.h"
+#include "Ren/Core/Core.hpp"
+#include "Ren/Core/GameCore.hpp"
 #include "Ren/RenSDL/Event.hpp"
 #include "Ren/RenSDL/Context.hpp"
-#include "Ren/Core/Input.h"
+#include "Ren/Core/Input.hpp"
 
 namespace Ren {
     class Layer {

@@ -1,4 +1,4 @@
-#include <Ren/Ren.h>
+#include <Ren/Ren.hpp>
 #include "EditorLayer.hpp"
 
 class Editor : public Ren::GameCore {

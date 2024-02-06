@@ -13,8 +13,8 @@
 #include <array>
 #include <yaml-cpp/yaml.h>
 
-#include "Ren/ECS/Scene.h"
-#include "Ren/Core/Input.h"
+#include "Ren/ECS/Scene.hpp"
+#include "Ren/Core/Input.hpp"
 
 namespace Ren {
     // We expose only basic types for simplicity.

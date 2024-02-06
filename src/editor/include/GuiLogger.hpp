@@ -1,4 +1,4 @@
-#include <Ren/Ren.h>
+#include <Ren/Ren.hpp>
 #define MAX_LOG_ENTRIES 1000
 
 class GuiLogger : public ren_utils::LogListener {

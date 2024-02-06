@@ -1,5 +1,5 @@
 #pragma once
-#include <Ren/Ren.h>
+#include <Ren/Ren.hpp>
 
 /// Manage scene in editor.
 class Scene {

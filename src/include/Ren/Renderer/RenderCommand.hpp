@@ -9,8 +9,8 @@
 #pragma once
 #include <entt/entt.hpp>
 
-#include "Ren/ECS/Scene.h"
-#include "Ren/Renderer/Camera.h"
+#include "Ren/ECS/Scene.hpp"
+#include "Ren/Renderer/Camera.hpp"
 
 namespace Ren {
     // Define base class for render commands using static polymorphism implemented using EnTT::poly

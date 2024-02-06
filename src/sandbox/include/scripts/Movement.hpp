@@ -1,6 +1,6 @@
 #pragma once
-#include <Ren/Scripting/NativeScript.h>
-#include "sandbox.h"
+#include <Ren/Scripting/NativeScript.hpp>
+#include "sandbox.hpp"
 
 class MovementScript : public Ren::NativeScript {
 public:

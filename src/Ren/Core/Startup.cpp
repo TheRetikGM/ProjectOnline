@@ -2,7 +2,7 @@
  * @file Ren/Core/Startup.cpp
  * @brief Handle engine startup.
  */
-#include "Ren/Core/Startup.h"
+#include "Ren/Core/Startup.hpp"
 
 int main(int argc, char* argv[]) {
     Ren::GameCore* game = CreateGame();

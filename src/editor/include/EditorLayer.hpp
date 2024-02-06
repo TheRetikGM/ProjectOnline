@@ -1,8 +1,8 @@
 #pragma once
-#include <Ren/Ren.h>
+#include <Ren/Ren.hpp>
 #include "GuiLogger.hpp"
 #include "imgui.h"
-#include "Scene.h"
+#include "Scene.hpp"
 extern "C" {
     #include <nfd.h>
 }

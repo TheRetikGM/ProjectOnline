@@ -4,7 +4,7 @@
  */
 
 #pragma once
-#include "Ren/Core/GameCore.h"
+#include "Ren/Core/GameCore.hpp"
 
 extern Ren::GameCore* CreateGame();
 

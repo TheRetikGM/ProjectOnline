@@ -7,12 +7,12 @@
 #include <filesystem> // std::filesystem::path
 #include <optional>
 
-#include "Ren/Core/Core.h"
-#include "Components.h"
+#include "Ren/Core/Core.hpp"
+#include "Components.hpp"
 #include "Loaders.hpp"
-#include "ComponentSystems.h"
+#include "ComponentSystems.hpp"
 #include "SystemsManager.hpp"
-#include "Ren/Physics/Physics.h"
+#include "Ren/Physics/Physics.hpp"
 
 namespace Ren {
     using TagList = std::list<std::string>;

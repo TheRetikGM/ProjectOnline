@@ -16,19 +16,19 @@ extern "C" {
 #include <entt/entt.hpp>
 #include <ren_utils/utils.h>
 
-#include "Ren/Core/Core.h"
-#include "Ren/Core/Startup.h"
-#include "Ren/Core/GameCore.h"
-#include "Ren/Core/Layer.h"
+#include "Ren/Core/Core.hpp"
+#include "Ren/Core/Startup.hpp"
+#include "Ren/Core/GameCore.hpp"
+#include "Ren/Core/Layer.hpp"
 #include "Ren/Core/AssetManager.hpp"
 
-#include "ECS/Scene.h"
-#include "Scripting/NativeScript.h"
+#include "ECS/Scene.hpp"
+#include "Scripting/NativeScript.hpp"
 #include "ECS/Serialization/SceneSerializer.hpp"
 
 #include "Utils/FpsCounter.hpp"
 
-#include "Renderer/Renderer.h"
-#include "Renderer/TextRenderer.h"
+#include "Renderer/Renderer.hpp"
+#include "Renderer/TextRenderer.hpp"
 
-#include "Ren/Physics/Physics.h"
+#include "Ren/Physics/Physics.hpp"

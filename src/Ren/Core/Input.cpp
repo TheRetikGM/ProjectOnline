@@ -2,7 +2,7 @@
  * #file Ren/Core/Input.cpp
  * @brief Implementation of input
  */
-#include "Ren/Core/Input.h"
+#include "Ren/Core/Input.hpp"
 extern "C" {
     #include <SDL.h>
 }

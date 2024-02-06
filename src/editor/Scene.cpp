@@ -5,7 +5,7 @@
 
 #include <ren_utils/logging.hpp>
 
-#include "Scene.h"
+#include "Scene.hpp"
 
 Scene::Scene(glm::ivec2 initial_size, SDL_Renderer* sdl_renderer, Ren::KeyInterface* key_interface)
     : m_sdlRenderer(sdl_renderer)

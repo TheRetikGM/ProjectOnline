@@ -6,10 +6,10 @@
 #include <stdexcept>
 #include <ren_utils/logging.hpp>
 
-#include "Ren/Scripting/LuaScript.h"
-#include "Ren/Core/Core.h"
+#include "Ren/Scripting/LuaScript.hpp"
+#include "Ren/Core/Core.hpp"
 #include "Ren/Core/AssetManager.hpp"
-#include "Ren/ECS/Components.h"
+#include "Ren/ECS/Components.hpp"
 
 #include "sol/types.hpp"
 #include "sol/property.hpp"

@@ -1,4 +1,4 @@
-#include <Ren/Ren.h>
+#include <Ren/Ren.hpp>
 #include "ren_utils/logging.hpp"
 #define MAX_LOG_ENTRIES 1000
 

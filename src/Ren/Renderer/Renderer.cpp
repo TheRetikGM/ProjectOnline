@@ -4,7 +4,7 @@
  */
 #define _USE_MATH_DEFINES
 #include <cmath>
-#include "Ren/Renderer/Renderer.h"
+#include "Ren/Renderer/Renderer.hpp"
 
 using namespace Ren;
 

@@ -12,8 +12,8 @@ extern "C" {
 #include <entt/entt.hpp>
 #include <optional>
 
-#include "Ren/Core/Core.h"
-#include "Ren/Core/Input.h"
+#include "Ren/Core/Core.hpp"
+#include "Ren/Core/Input.hpp"
 
 namespace Ren {
     class Scene;

@@ -9,8 +9,8 @@
 #include <cstdint>
 #include <box2d/box2d.h>
 
-#include "Ren/Core/Input.h"
-#include "Ren/ECS/Scene.h"
+#include "Ren/Core/Input.hpp"
+#include "Ren/ECS/Scene.hpp"
 
 namespace Ren {
     class NativeScriptSystem;

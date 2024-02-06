@@ -2,9 +2,9 @@
  * @file Ren/RenSDL/Texture.cpp
  * @brief Implementation of Texture wrapper.
  */
-#include "Ren/RenSDL/Texture.h"
-#include "Ren/Core/Core.h"
-#include "Ren/Renderer/Renderer.h"
+#include "Ren/RenSDL/Texture.hpp"
+#include "Ren/Core/Core.hpp"
+#include "Ren/Renderer/Renderer.hpp"
 
 
 using namespace Ren;

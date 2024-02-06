@@ -3,7 +3,7 @@
  * @brief Implementation of component setups.
  */
 
-#include "Ren/ECS/Serialization/ComponentSetups.h"
+#include "Ren/ECS/Serialization/ComponentSetups.hpp"
 
 using namespace Ren;
 

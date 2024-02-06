@@ -7,7 +7,7 @@
 #include <algorithm>    // std::find
 #include <ren_utils/logging.hpp>
 
-#include "Ren/ECS/Scene.h"
+#include "Ren/ECS/Scene.hpp"
 
 namespace Ren
 {

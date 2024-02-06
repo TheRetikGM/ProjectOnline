@@ -1,7 +1,7 @@
 #include <iostream>
-#include <Ren/Ren.h>
-#include <Ren/Core/Layer.h>
-#include <Ren/Renderer/Renderer.h>
+#include <Ren/Ren.hpp>
+#include <Ren/Core/Layer.hpp>
+#include <Ren/Renderer/Renderer.hpp>
 
 #include "DemoLayer.hpp"
 #include "ImGuiLayer.hpp"

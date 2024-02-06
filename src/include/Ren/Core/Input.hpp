@@ -5,7 +5,7 @@
 #pragma once
 #include <cstring>  // std::memset
 #include <glm/glm.hpp>
-#include "Ren/RenSDL/Keys.h"
+#include "Ren/RenSDL/Keys.hpp"
 
 namespace Ren {
     // Key interface used for checking if key was pressed or if it is being held down.

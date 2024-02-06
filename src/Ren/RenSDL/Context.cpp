@@ -3,7 +3,7 @@
  * @file Ren/RenSDL/Context.cpp
  */
 #include "Ren/RenSDL/Context.hpp"
-#include "Ren/Core/Core.h"
+#include "Ren/Core/Core.hpp"
 
 using namespace Ren;
 

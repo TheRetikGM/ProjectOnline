@@ -2,7 +2,7 @@
  * @brief Implementation of various cameras
  * @file Ren/Renderer/Camera.cpp
  */
-#include "Ren/Renderer/Camera.h"
+#include "Ren/Renderer/Camera.hpp"
 
 using namespace Ren;
 
